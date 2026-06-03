@@ -124,7 +124,7 @@ body {
   position: relative;
   min-width: 0;
 }
-.gear-fab {
+.more-fab {
   position: fixed;
   top: 12px; right: 12px;
   width: 34px; height: 34px;
@@ -133,11 +133,38 @@ body {
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  z-index: 101;
+  z-index: 201;
   color: var(--text3);
   transition: color 0.2s;
+  font-size: 16px; font-weight: 700; letter-spacing: 1px;
 }
-.gear-fab:hover { color: var(--purple); }
+.more-fab:hover, .more-fab.active { color: var(--purple); border-color: var(--purple-border); }
+.more-overlay {
+  display: none;
+  position: fixed;
+  top: 52px; right: 10px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  z-index: 200;
+  min-width: 160px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+.more-overlay.open { display: block; }
+.more-overlay-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  font-size: 14px; font-weight: 500; color: var(--text);
+  cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+  font-family: inherit;
+}
+.more-overlay-item:hover { background: var(--bg3); color: var(--purple); }
+.more-overlay-item svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--text3); }
+.more-overlay-backdrop {
+  display: none; position: fixed; inset: 0; z-index: 199;
+}
+.more-overlay-backdrop.open { display: block; }
 .nav-btn.active { color: var(--purple); }
 .nav-btn svg { width: 20px; height: 20px; }
 .nav-badge {
@@ -1067,15 +1094,23 @@ body {
 
   <div class="section-label">Add a Grade</div>
   <div class="card">
-    <div class="form-group">
-      <label class="form-label">Course</label>
-      <select class="form-select" id="grade-course-sel">
-        <option value="SOC 205">SOC 205 — Social Problems</option>
-        <option value="ECO 101">ECO 101 — Macroeconomics</option>
-        <option value="POL 211">POL 211 — American Government</option>
-        <option value="BIO 109">BIO 109 — Biology</option>
-        <option value="PSY 240">PSY 240 — Abnormal Psychology</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Course</label>
+        <select class="form-select" id="grade-course-sel" onchange="updateGradeCategories()">
+          <option value="SOC 205">SOC 205</option>
+          <option value="ECO 101">ECO 101</option>
+          <option value="POL 211">POL 211</option>
+          <option value="BIO 109">BIO 109</option>
+          <option value="PSY 240">PSY 240</option>
+        </select>
+      </div>
+      <div class="form-group" id="grade-category-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="grade-category-sel" onchange="applyGradeCategory()">
+          <option value="">— none —</option>
+        </select>
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label">Assignment Name</label>
@@ -1092,7 +1127,7 @@ body {
       </div>
       <div class="form-group">
         <label class="form-label">Weight %</label>
-        <input type="number" class="form-input" id="grade-weight" placeholder="e.g. 20" min="0" max="100">
+        <input type="number" class="form-input" id="grade-weight" placeholder="auto" min="0" max="100">
       </div>
     </div>
     <button class="btn btn-primary btn-full" onclick="addGrade()">+ Record Grade</button>
@@ -1615,19 +1650,27 @@ body {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
     Files
   </button>
-  <button class="nav-btn" onclick="showPage('degree', this)">
+</nav>
+
+<div class="more-overlay-backdrop" id="more-backdrop" onclick="closeMoreMenu()"></div>
+<div class="more-overlay" id="more-overlay">
+  <button class="more-overlay-item" onclick="closeMoreMenu(); showPage('degree', null)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 0 9 3 12 0v-5"/></svg>
     Degree
   </button>
-</nav>
-<button class="gear-fab" id="nav-settings-btn" onclick="showPage('settings', document.getElementById('nav-settings-btn'))" title="Settings">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-</button>
+  <button class="more-overlay-item" id="nav-settings-btn" onclick="closeMoreMenu(); showPage('settings', null)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Settings
+  </button>
+</div>
+<button class="more-fab" id="more-fab-btn" onclick="toggleMoreMenu()" title="More">···</button>
 
 <script>
 // ============================================
 // DATA
 // ============================================
+const COURSES_VERSION = 3;
+
 const COURSES_DEFAULT = [
   { id:'soc205', code:'SOC 205', name:'Social Problems', credits:3, risk:'high', prof:'Lynn Barrieau', email:'l_barrieau@mwcc.mass.edu', platform:'Blackboard + Email', link:'https://mwcc.blackboard.com', color:'#ff4444', abbr:'SOC' },
   { id:'eco101', code:'ECO 101', name:'Macroeconomics', credits:3, risk:'high', prof:'Dr. Michael Greenwood', email:'mgreenwood@mwcc.mass.edu', platform:'MyEconLab', link:'https://www.myeconlab.com', color:'#06d6a0', abbr:'ECO' },
@@ -1635,6 +1678,35 @@ const COURSES_DEFAULT = [
   { id:'bio109', code:'BIO 109', name:'Concepts in Biology', credits:4, risk:'high', prof:'TBD', email:'', platform:'Blackboard', link:'https://mwcc.blackboard.com', color:'#ffd166', abbr:'BIO' },
   { id:'psy240', code:'PSY 240', name:'Abnormal Psychology', credits:3, risk:'med', prof:'TBD', email:'', platform:'Blackboard', link:'https://mwcc.blackboard.com', color:'#a855f7', abbr:'PSY' }
 ];
+
+const COURSE_GRADING = {
+  'SOC 205': {
+    mode: 'percent',
+    categories: [
+      { name:'Chapter Questions', weight:25 },
+      { name:'Discussion Board',  weight:25 },
+      { name:'Midterm',           weight:25 },
+      { name:'Final',             weight:25 }
+    ]
+  },
+  'ECO 101': {
+    mode: 'percent',
+    categories: [
+      { name:'Quiz',    weight:30 },
+      { name:'Midterm', weight:35 },
+      { name:'Final',   weight:35 }
+    ]
+  },
+  'POL 211': {
+    mode: 'points',
+    total: 3200,
+    categories: [
+      { name:'Quiz',            points:1000 },
+      { name:'Participation',   points:1000 },
+      { name:'Research Paper',  points:1200 }
+    ]
+  }
+};
 
 const ASSIGNMENTS_DEFAULT = [
   { id:'a1', course:'SOC 205', name:'Ch. 1-4 Essay Questions', type:'Essay', due:'2026-06-05', time:120, status:'Not Started', notes:'Submit all chapters together. Email to l_barrieau@mwcc.mass.edu or Blackboard. No Google Docs.' },
@@ -1683,15 +1755,22 @@ function loadState() {
     const saved = localStorage.getItem('mwcc_state');
     if (saved) {
       state = { ...state, ...JSON.parse(saved) };
+      if ((state.coursesVersion || 0) < COURSES_VERSION) {
+        state.courses = COURSES_DEFAULT;
+        state.coursesVersion = COURSES_VERSION;
+        saveState();
+      }
     } else {
       state.assignments = ASSIGNMENTS_DEFAULT;
       state.courses = COURSES_DEFAULT;
+      state.coursesVersion = COURSES_VERSION;
       state.contacts = CONTACTS_DEFAULT;
       saveState();
     }
   } catch(e) {
     state.assignments = ASSIGNMENTS_DEFAULT;
     state.courses = COURSES_DEFAULT;
+    state.coursesVersion = COURSES_VERSION;
     state.contacts = CONTACTS_DEFAULT;
   }
 }
@@ -1762,7 +1841,7 @@ function showPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
 
   if (id === 'assignments') renderAssignments();
   if (id === 'courses') renderCourses();
@@ -1770,6 +1849,22 @@ function showPage(id, btn) {
   if (id === 'grades') renderGrades();
   if (id === 'files') renderFiles();
   if (id === 'settings') renderSettingsStatus();
+}
+
+function toggleMoreMenu() {
+  const overlay = document.getElementById('more-overlay');
+  const backdrop = document.getElementById('more-backdrop');
+  const fab = document.getElementById('more-fab-btn');
+  const open = overlay.classList.contains('open');
+  overlay.classList.toggle('open', !open);
+  backdrop.classList.toggle('open', !open);
+  fab.classList.toggle('active', !open);
+}
+
+function closeMoreMenu() {
+  document.getElementById('more-overlay').classList.remove('open');
+  document.getElementById('more-backdrop').classList.remove('open');
+  document.getElementById('more-fab-btn').classList.remove('active');
 }
 
 // ============================================
@@ -2306,7 +2401,7 @@ const FILES_DEFAULT = [
   { id:'f1', name:'SOC 205 Syllabus', course:'SOC 205', type:'📋 Syllabus', url:'https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/SOC205/syllabus-SOC205.pdf', semester:'Summer 2026', notes:'Due dates, late policy, professor contact. Login to GitHub to view.', dateAdded:'2026-06-01' },
   { id:'f2', name:'ECO 101 Syllabus', course:'ECO 101', type:'📋 Syllabus', url:'https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/ECO101/syllabus-ECO101.pdf', semester:'Summer 2026', notes:'MyEconLab schedule, grading breakdown', dateAdded:'2026-06-01' },
   { id:'f3', name:'POL 211 Syllabus', course:'POL 211', type:'📋 Syllabus', url:'https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/POL211/syllabus-POL211.pdf', semester:'Summer 2026', notes:'Quiz schedule, research paper details', dateAdded:'2026-06-01' },
-  { id:'f4', name:'POL 211 Research Paper Instructions', course:'POL 211', type:'📝 Assignment', url:'https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/POL211/syllabus-POL211.pdf', semester:'Summer 2026', notes:'5-6 pages, APA, 3 sources, topic approval required', dateAdded:'2026-06-01' },
+  { id:'f4', name:'POL 211 Research Paper Instructions', course:'POL 211', type:'📝 Assignment', url:'https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/POL211/research-paper-instructions-POL211.pdf', semester:'Summer 2026', notes:'5-6 pages, APA, 3 sources, topic approval required. 1200pts (37.5% of grade).', dateAdded:'2026-06-01' },
   { id:'f5', name:'SOC 205 Ch. 1-4 Assignment Questions', course:'SOC 205', type:'📝 Assignment', url:'', semester:'Summer 2026', notes:'Due June 5. Submit all together.', dateAdded:'2026-06-03' },
   { id:'f6', name:'MWCC Degree Audit', course:'Degree', type:'🎓 Degree', url:'', semester:'General', notes:'75% complete. 15 credits remaining after Summer 2026.', dateAdded:'2026-06-01' },
   { id:'f7', name:'Salem State BSW Degree Map', course:'Degree', type:'🎓 Degree', url:'', semester:'General', notes:'From Sharon German. Shows all transfer credits.', dateAdded:'2026-06-01' },
@@ -2500,6 +2595,37 @@ function deleteFile(id) {
 // ============================================
 // GRADES
 // ============================================
+function updateGradeCategories() {
+  const course = document.getElementById('grade-course-sel').value;
+  const sel = document.getElementById('grade-category-sel');
+  const grading = COURSE_GRADING[course];
+  sel.innerHTML = '<option value="">— none —</option>';
+  if (grading) {
+    grading.categories.forEach(cat => {
+      const label = grading.mode === 'points'
+        ? `${cat.name} (${cat.points} pts)`
+        : `${cat.name} (${cat.weight}%)`;
+      sel.innerHTML += `<option value="${cat.name}">${label}</option>`;
+    });
+  }
+  document.getElementById('grade-weight').value = '';
+}
+
+function applyGradeCategory() {
+  const course = document.getElementById('grade-course-sel').value;
+  const catName = document.getElementById('grade-category-sel').value;
+  const grading = COURSE_GRADING[course];
+  if (!grading || !catName) return;
+  const cat = grading.categories.find(c => c.name === catName);
+  if (!cat) return;
+  const weightInput = document.getElementById('grade-weight');
+  if (grading.mode === 'percent') {
+    weightInput.value = cat.weight;
+  } else {
+    weightInput.value = Math.round((cat.points / grading.total) * 100);
+  }
+}
+
 function addGrade() {
   const course = document.getElementById('grade-course-sel').value;
   const name = document.getElementById('grade-assign-name').value.trim();
@@ -2545,12 +2671,22 @@ function renderGrades() {
 
   courseSummary.innerHTML = courses.map(c => {
     const grades = (state.grades || []).filter(g => g.course === c);
+    const grading = COURSE_GRADING[c];
+    const breakdownHtml = grading ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">` +
+      grading.categories.map(cat => {
+        const label = grading.mode === 'points'
+          ? `${cat.name} · ${cat.points}pts`
+          : `${cat.name} · ${cat.weight}%`;
+        return `<span style="font-size:10px; padding:2px 7px; border-radius:20px; background:${courseColors[c]}18; color:${courseColors[c]}; border:1px solid ${courseColors[c]}33;">${label}</span>`;
+      }).join('') + `</div>` : '';
+
     if (grades.length === 0) {
       return `<div class="card-sm" style="margin-bottom:8px; border-left:3px solid ${courseColors[c]}44;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:13px; font-weight:700; color:${courseColors[c]};">${c}</span>
           <span style="font-size:11px; color:var(--text3);">No grades yet</span>
         </div>
+        ${breakdownHtml}
       </div>`;
     }
     const hasWeights = grades.some(g => g.weight != null);
@@ -2566,7 +2702,8 @@ function renderGrades() {
           <span style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; background:${lg.c}22; color:${lg.c}; border:1px solid ${lg.c}44;">${lg.l}</span>
         </div>
       </div>
-      <div style="font-size:11px; color:var(--text3); margin-top:4px;">${grades.length} grade${grades.length>1?'s':''} recorded</div>
+      <div style="font-size:11px; color:var(--text3); margin-top:2px;">${grades.length} grade${grades.length>1?'s':''} recorded${hasWeights?' · weighted avg':''}</div>
+      ${breakdownHtml}
     </div>`;
   }).join('');
 
@@ -2687,6 +2824,7 @@ renderDashboard();
 updateClock();
 setInterval(updateClock, 60000);
 if(document.getElementById("all-grades-list")) renderGrades();
+updateGradeCategories();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');
