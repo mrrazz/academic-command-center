@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #17171f;
+  --bg3: #1f1f2e;
+  --bg4: #27273a;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.15);
+  --text: #f0f0f5;
+  --text2: #9999bb;
+  --text3: #6666aa;
+  --red: #ff4444;
+  --red-bg: rgba(255,68,68,0.12);
+  --red-border: rgba(255,68,68,0.3);
+  --orange: #ff8c42;
+  --orange-bg: rgba(255,140,66,0.12);
+  --orange-border: rgba(255,140,66,0.3);
+  --yellow: #ffd166;
+  --yellow-bg: rgba(255,209,102,0.12);
+  --yellow-border: rgba(255,209,102,0.3);
+  --green: #06d6a0;
+  --green-bg: rgba(6,214,160,0.12);
+  --green-border: rgba(6,214,160,0.3);
+  --blue: #4cc9f0;
+  --blue-bg: rgba(76,201,240,0.12);
+  --blue-border: rgba(76,201,240,0.3);
+  --purple: #a855f7;
+  --purple-bg: rgba(168,85,247,0.12);
+  --purple-border: rgba(168,85,247,0.3);
+  --accent: #7c3aed;
+  --accent2: #a855f7;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f0f0f8;
+    --bg2: #ffffff;
+    --bg3: #e8e8f5;
+    --bg4: #ddddf0;
+    --border: rgba(0,0,0,0.08);
+    --border2: rgba(0,0,0,0.15);
+    --text: #0f0f1a;
+    --text2: #555577;
+    --text3: #8888aa;
+    --red: #dc2626;
+    --red-bg: rgba(220,38,38,0.08);
+    --red-border: rgba(220,38,38,0.25);
+    --orange: #ea580c;
+    --orange-bg: rgba(234,88,12,0.08);
+    --orange-border: rgba(234,88,12,0.25);
+    --yellow: #ca8a04;
+    --yellow-bg: rgba(202,138,4,0.08);
+    --yellow-border: rgba(202,138,4,0.25);
+    --green: #059669;
+    --green-bg: rgba(5,150,105,0.08);
+    --green-border: rgba(5,150,105,0.25);
+    --blue: #0284c7;
+    --blue-bg: rgba(2,132,199,0.08);
+    --blue-border: rgba(2,132,199,0.25);
+    --purple: #7c3aed;
+    --purple-bg: rgba(124,58,237,0.08);
+    --purple-border: rgba(124,58,237,0.25);
+    --shadow: 0 4px 24px rgba(0,0,0,0.1);
+  }
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-overflow-scrolling: touch;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex: 0 0 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px 6px;
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+  min-width: 60px;
+}
+.nav-btn.active { color: var(--purple); }
+.nav-btn svg { width: 20px; height: 20px; }
+.nav-badge {
+  position: absolute;
+  top: 6px; right: calc(50% - 18px);
+  background: var(--red);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* PAGES */
+.page { display: none; padding: 0 0 80px; min-height: 100vh; }
+.page.active { display: block; }
+
+/* HEADER */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.header-sub { font-size: 12px; color: var(--text3); }
+.header-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* CARDS */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 12px 16px 0;
+}
+.card-sm {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 20px 16px 8px;
+}
+
+/* PRIORITY ITEMS */
+.priority-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.priority-item:last-child { border-bottom: none; }
+.priority-item:hover { background: var(--bg3); }
+
+.priority-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.dot-red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+.dot-orange { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+.dot-yellow { background: var(--yellow); }
+.dot-green { background: var(--green); }
+.dot-blue { background: var(--blue); }
+
+.priority-content { flex: 1; min-width: 0; }
+.priority-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.priority-meta {
+  font-size: 12px;
+  color: var(--text2);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.priority-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.tag-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.tag-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.tag-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
+.tag-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.tag-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.tag-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+
+.priority-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--bg4); }
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent2);
+  color: white;
+}
+.btn-primary:hover { background: var(--accent2); }
+.btn-danger { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+.btn-success { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+.btn-full { width: 100%; display: block; text-align: center; padding: 12px; }
+
+/* COURSE CARDS */
+.course-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 12px 16px 0;
+  overflow: hidden;
+}
+.course-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+.course-badge {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+}
+.course-info { flex: 1; min-width: 0; }
+.course-name {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.course-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.course-risk {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.risk-high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.risk-med { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.risk-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+.course-body {
+  border-top: 1px solid var(--border);
+  padding: 14px 16px;
+  display: none;
+}
+.course-body.open { display: block; }
+.course-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.course-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+.course-stat-row:last-child { border-bottom: none; }
+.course-stat-val { color: var(--text); font-weight: 600; }
+
+/* ASSIGNMENT FORM */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg2);
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 20px 20px 40px;
+}
+.modal-handle {
+  width: 36px; height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--purple);
+}
+.form-select option { background: var(--bg2); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* STATS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 12px 16px;
+}
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+}
+.stat-num {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 10px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* QUICK LAUNCH */
+.launch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px;
+}
+.launch-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.15s;
+  font-family: inherit;
+  width: 100%;
+}
+.launch-btn:hover { border-color: var(--purple); background: var(--purple-bg); }
+.launch-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.launch-text { text-align: left; }
+.launch-name { font-size: 13px; font-weight: 600; }
+.launch-sub { font-size: 10px; color: var(--text2); }
+
+/* CONTACT CARDS */
+.contact-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 0 16px 10px;
+}
+.contact-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.contact-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.contact-name { font-size: 14px; font-weight: 700; }
+.contact-role { font-size: 11px; color: var(--text2); }
+.contact-actions { display: flex; gap: 8px; }
+
+/* DEGREE PROGRESS */
+.progress-bar-wrap {
+  background: var(--bg3);
+  border-radius: 20px;
+  height: 10px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.progress-bar {
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+  transition: width 0.5s ease;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.requirement-item:last-child { border-bottom: none; }
+.req-status {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+.req-done { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.req-progress { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.req-pending { background: var(--bg3); color: var(--text3); border: 1px solid var(--border); }
+.req-text { flex: 1; }
+.req-course { font-size: 11px; color: var(--text2); }
+
+/* ALERTS */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-text { flex: 1; line-height: 1.5; }
+.alert-red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+.alert-orange { background: var(--orange-bg); border: 1px solid var(--orange-border); color: var(--orange); }
+.alert-blue { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--blue); }
+
+/* GRADE TRACKER */
+.grade-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.grade-row:last-child { border-bottom: none; }
+.grade-course { flex: 1; font-size: 13px; font-weight: 600; }
+.grade-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+.grade-letter {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text3);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 16px; color: var(--text2); margin-bottom: 6px; }
+.empty-state p { font-size: 13px; line-height: 1.6; }
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 90;
+}
+.fab:hover { background: var(--accent2); transform: scale(1.05); }
+.fab:active { transform: scale(0.95); }
+
+/* FILTER TABS */
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.filter-tab {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.filter-tab.active {
+  background: var(--purple-bg);
+  border-color: var(--purple-border);
+  color: var(--purple);
+}
+
+/* CHECKLIST */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.check-item:last-child { border-bottom: none; }
+.check-box {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.check-box.checked {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.check-text { flex: 1; font-size: 14px; }
+.check-text.done { text-decoration: line-through; color: var(--text3); }
+
+/* SCROLLABLE AREA */
+.scroll-area {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* TOOLTIP / HELP */
+.help-text {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+/* SPINNER */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 999;
+  transition: transform 0.3s ease;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--green-border); color: var(--green); }
+.toast.error { border-color: var(--red-border); color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- PAGES -->
+
+<!-- PAGE: DASHBOARD -->
+<div class="page active" id="page-home">
+  <div class="header">
+    <div class="header-top">
+      <h1>⚡ Academic CC</h1>
+      <div class="header-date" id="live-date"></div>
+    </div>
+    <div class="header-sub" style="display:flex; align-items:center; gap:8px;"><span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:var(--purple-bg); color:var(--purple); border:1px solid var(--purple-border);">ACC</span>Michael Maxwell · MWCC Summer 2026</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-overdue" style="color:var(--red)">0</div>
+      <div class="stat-label">Overdue</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-due-soon" style="color:var(--orange)">0</div>
+      <div class="stat-label">Due Soon</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-complete" style="color:var(--green)">0</div>
+      <div class="stat-label">Done</div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div id="alerts-container" style="padding: 0 16px; margin-top: 4px;"></div>
+
+  <!-- PRIORITY LIST -->
+  <div class="section-label">🔴 Needs Action Now</div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div id="priority-list">
+      <div class="empty-state">
+        <div class="empty-state-icon">🎯</div>
+        <h3>All clear!</h3>
+        <p>Add assignments to start tracking.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK LAUNCH -->
+  <div class="section-label">🚀 Quick Launch</div>
+  <div class="launch-grid">
+    <a class="launch-btn" href="https://www.mwcc.edu" target="_blank">
+      <div class="launch-icon" style="background:var(--blue-bg)">🏫</div>
+      <div class="launch-text">
+        <div class="launch-name">MWCC Portal</div>
+        <div class="launch-sub">mwcc.edu</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="https://www.myeconlab.com" target="_blank">
+      <div class="launch-icon" style="background:var(--green-bg)">📊</div>
+      <div class="launch-text">
+        <div class="launch-name">MyEconLab</div>
+        <div class="launch-sub">ECO 101</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="https://ecampus.vitalsource.com" target="_blank">
+      <div class="launch-icon" style="background:var(--orange-bg)">📚</div>
+      <div class="launch-text">
+        <div class="launch-name">Bookshelf</div>
+        <div class="launch-sub">All digital books</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="https://studentaid.gov" target="_blank">
+      <div class="launch-icon" style="background:var(--purple-bg)">💰</div>
+      <div class="launch-text">
+        <div class="launch-name">FAFSA</div>
+        <div class="launch-sub">Financial Aid</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="https://salemstate.edu" target="_blank">
+      <div class="launch-icon" style="background:var(--red-bg)">🎓</div>
+      <div class="launch-text">
+        <div class="launch-name">Salem State</div>
+        <div class="launch-sub">BSW Transfer</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="mailto:s_martin@mwcc.mass.edu" target="_blank">
+      <div class="launch-icon" style="background:var(--yellow-bg)">✉️</div>
+      <div class="launch-text">
+        <div class="launch-name">Email Prof.</div>
+        <div class="launch-sub">Quick contact</div>
+      </div>
+    </a>
+  </div>
+
+  <div style="height:20px"></div>
+</div>
+
+<!-- PAGE: ASSIGNMENTS -->
+<div class="page" id="page-assignments">
+  <div class="header">
+    <div class="header-top">
+      <h1>📋 Assignments</h1>
+      <button class="btn btn-primary btn-sm" onclick="openAddAssignment()">+ Add</button>
+    </div>
+    <div class="header-sub">Track everything due</div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterAssignments('all', this)">All</button>
+    <button class="filter-tab" onclick="filterAssignments('overdue', this)">🔴 Overdue</button>
+    <button class="filter-tab" onclick="filterAssignments('pending', this)">⏳ Pending</button>
+    <button class="filter-tab" onclick="filterAssignments('done', this)">✅ Done</button>
+    <button class="filter-tab" onclick="filterAssignments('SOC 205', this)">SOC</button>
+    <button class="filter-tab" onclick="filterAssignments('ECO 101', this)">ECO</button>
+    <button class="filter-tab" onclick="filterAssignments('POL 211', this)">POL</button>
+    <button class="filter-tab" onclick="filterAssignments('BIO 109', this)">BIO</button>
+    <button class="filter-tab" onclick="filterAssignments('PSY 240', this)">PSY</button>
+  </div>
+
+  <div id="assignment-list" style="margin-top:12px;"></div>
+</div>
+
+<!-- PAGE: COURSES -->
+<div class="page" id="page-courses">
+  <div class="header">
+    <div class="header-top">
+      <h1>📘 Courses</h1>
+      <button class="btn btn-primary btn-sm" onclick="openAddCourse()">+ Add</button>
+    </div>
+    <div class="header-sub">Summer 2026 · 16 credits</div>
+  </div>
+
+  <div id="course-list" style="margin-top:4px;"></div>
+</div>
+
+<!-- PAGE: CONTACTS -->
+<div class="page" id="page-contacts">
+  <div class="header">
+    <div class="header-top">
+      <h1>👥 Contacts</h1>
+    </div>
+    <div class="header-sub">Professors & advisors</div>
+  </div>
+
+  <div style="margin-top:12px;" id="contacts-list"></div>
+
+  <!-- EMAIL TEMPLATES -->
+  <div class="section-label">📝 Email Templates</div>
+  <div class="card">
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button class="btn btn-full" onclick="copyTemplate('question')">📋 I have a question about...</button>
+      <button class="btn btn-full" onclick="copyTemplate('extension')">⏰ Requesting an extension...</button>
+      <button class="btn btn-full" onclick="copyTemplate('confirm')">✅ Confirming submission...</button>
+      <button class="btn btn-full" onclick="copyTemplate('topic')">📄 Topic approval request (POL 211)...</button>
+      <button class="btn btn-full" onclick="copyTemplate('syllabus')">📚 Syllabus confirmation...</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: DEGREE -->
+<div class="page" id="page-degree">
+  <div class="header">
+    <div class="header-top">
+      <h1>🎓 Degree Progress</h1>
+    </div>
+    <div class="header-sub">Michael Maxwell · MWCC AA → Salem State BSW</div>
+  </div>
+
+  <!-- MWCC PROGRESS -->
+  <div class="section-label">MWCC Associate in Arts</div>
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div style="font-size:13px; color:var(--text2);">Credits Complete</div>
+      <div style="font-family:'JetBrains Mono',monospace; font-weight:700; font-size:16px;">46 / 61</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" style="width:75%"></div>
+    </div>
+    <div style="font-size:11px; color:var(--text3); margin-top:4px;">75% complete · 15 credits remaining after Summer 2026</div>
+
+    <div class="divider"></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <div class="card-sm" style="text-align:center;">
+        <div style="font-size:20px; font-weight:700; color:var(--blue); font-family:'JetBrains Mono',monospace;">3.00</div>
+        <div style="font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px;">Overall GPA</div>
+      </div>
+      <div class="card-sm" style="text-align:center;">
+        <div style="font-size:20px; font-weight:700; color:var(--green); font-family:'JetBrains Mono',monospace;">3.56</div>
+        <div style="font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:0.5px;">LAS GPA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REMAINING REQUIREMENTS -->
+  <div class="section-label">Remaining MWCC Requirements</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>Lab Science Elective</div>
+        <div class="req-course">BIO 109 — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text">
+        <div>Statistics or Pre-Calculus</div>
+        <div class="req-course">MAT 143 or MAT 163 — Still needed</div>
+      </div>
+      <span class="priority-tag tag-orange">TODO</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text">
+        <div>Literature Elective I</div>
+        <div class="req-course">ENG 202/203/205 or similar</div>
+      </div>
+      <span class="priority-tag tag-orange">TODO</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text">
+        <div>Literature Elective II</div>
+        <div class="req-course">ENG 202/203/205 or similar</div>
+      </div>
+      <span class="priority-tag tag-orange">TODO</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text">
+        <div>LAS Capstone</div>
+        <div class="req-course">ENG 290 Advanced Writing & Research</div>
+      </div>
+      <span class="priority-tag tag-orange">TODO</span>
+    </div>
+  </div>
+
+  <!-- SALEM STATE BSW ALIGNMENT -->
+  <div class="section-label">Salem State BSW — Support Courses</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="requirement-item">
+      <div class="req-status req-done">✓</div>
+      <div class="req-text">
+        <div>SOC 110 Sociology</div>
+        <div class="req-course">Transferred from Monroe College</div>
+      </div>
+      <span class="priority-tag tag-green">DONE</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-done">✓</div>
+      <div class="req-text">
+        <div>PSY 101 General Psychology</div>
+        <div class="req-course">PSY 105 transferred</div>
+      </div>
+      <span class="priority-tag tag-green">DONE</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>SOC Elective</div>
+        <div class="req-course">SOC 205 Social Problems — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>PSY Elective</div>
+        <div class="req-course">PSY 240 Abnormal Psychology — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>POL Elective</div>
+        <div class="req-course">POL 211 American Government — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>ECO Elective</div>
+        <div class="req-course">ECO 101 Macroeconomics — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-progress">▶</div>
+      <div class="req-text">
+        <div>BIO Lab Science</div>
+        <div class="req-course">BIO 109 Concepts in Biology — In Progress</div>
+      </div>
+      <span class="priority-tag tag-blue">IP</span>
+    </div>
+  </div>
+
+  <!-- TRANSFER CONTACT -->
+  <div class="section-label">Transfer Counselor</div>
+  <div class="contact-card" style="margin:0 16px 12px;">
+    <div class="contact-header">
+      <div class="contact-avatar" style="background:var(--red-bg); color:var(--red);">SG</div>
+      <div>
+        <div class="contact-name">Sharon German</div>
+        <div class="contact-role">Transfer Admissions · Salem State University</div>
+      </div>
+    </div>
+    <div class="contact-actions">
+      <a class="btn btn-sm" href="tel:9785424888" style="text-decoration:none;">📞 978-542-4888</a>
+      <a class="btn btn-primary btn-sm" href="mailto:sgerman@salemstate.edu" style="text-decoration:none;">✉️ Email Sharon</a>
+    </div>
+  </div>
+
+  <div style="height:20px;"></div>
+</div>
+
+
+<!-- PAGE: GRADES -->
+<div class="page" id="page-grades">
+  <div class="header">
+    <div class="header-top">
+      <h1>📊 Grades</h1>
+    </div>
+    <div class="header-sub">Track every score · Summer 2026</div>
+  </div>
+
+  <div class="section-label">Course Standing</div>
+  <div id="grade-course-list" style="padding:0 16px;"></div>
+
+  <div class="section-label">Add a Grade</div>
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">Course</label>
+      <select class="form-select" id="grade-course-sel">
+        <option value="SOC 205">SOC 205 — Social Problems</option>
+        <option value="ECO 101">ECO 101 — Macroeconomics</option>
+        <option value="POL 211">POL 211 — American Government</option>
+        <option value="BIO 109">BIO 109 — Biology</option>
+        <option value="PSY 240">PSY 240 — Abnormal Psychology</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Assignment Name</label>
+      <input type="text" class="form-input" id="grade-assign-name" placeholder="e.g. Quiz 1">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Score Earned</label>
+        <input type="number" class="form-input" id="grade-score" placeholder="85" min="0" max="10000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Out Of</label>
+        <input type="number" class="form-input" id="grade-outof" placeholder="100" min="1" max="10000">
+      </div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="addGrade()">+ Record Grade</button>
+  </div>
+
+  <div class="section-label">All Recorded Grades</div>
+  <div id="all-grades-list" class="card" style="padding:8px 16px;">
+    <div class="empty-state" style="padding:20px;">
+      <div class="empty-state-icon">📊</div>
+      <h3>No grades yet</h3>
+      <p>Add grades above as you receive them.</p>
+    </div>
+  </div>
+
+  <div class="section-label">GPA Targets</div>
+  <div class="card">
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; text-align:center;">
+      <div class="card-sm">
+        <div style="font-size:18px; font-weight:700; color:var(--blue); font-family:'JetBrains Mono',monospace;">3.00</div>
+        <div style="font-size:10px; color:var(--text2);">Current GPA</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:18px; font-weight:700; color:var(--green); font-family:'JetBrains Mono',monospace;">2.70</div>
+        <div style="font-size:10px; color:var(--text2);">BSW Minimum</div>
+      </div>
+      <div class="card-sm">
+        <div style="font-size:18px; font-weight:700; color:var(--purple); font-family:'JetBrains Mono',monospace;">3.50+</div>
+        <div style="font-size:10px; color:var(--text2);">Transfer Goal</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;" class="alert alert-blue">
+      <span class="alert-icon">💡</span>
+      <div class="alert-text">POL 211 Quiz 1: 85/100 recorded. Keep adding grades as you get them — your running average updates automatically.</div>
+    </div>
+  </div>
+  <div style="height:20px;"></div>
+</div>
+
+<!-- PAGE: PLANNER -->
+<div class="page" id="page-planner">
+  <div class="header">
+    <div class="header-top">
+      <h1>🗓 Planner</h1>
+    </div>
+    <div class="header-sub">Tonight's plan + key dates</div>
+  </div>
+
+  <div class="section-label">Build Tonight's Plan</div>
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label">Hours available tonight</label>
+      <select class="form-select" id="planner-hours">
+        <option value="1">1 hour</option>
+        <option value="1.5">1.5 hours</option>
+        <option value="2" selected>2 hours</option>
+        <option value="2.5">2.5 hours</option>
+        <option value="3">3 hours</option>
+        <option value="4">4+ hours</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="buildPlan()">⚡ Build My Plan</button>
+  </div>
+  <div id="plan-output"></div>
+
+  <div class="section-label">Weekly Course Schedule</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="grade-row"><div class="grade-course" style="color:var(--blue);">Monday</div><div style="font-size:13px;">POL 211</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--green);">Tuesday</div><div style="font-size:13px;">ECO 101</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--red);">Wednesday</div><div style="font-size:13px;">SOC 205</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--yellow);">Thursday</div><div style="font-size:13px;">BIO 109</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--orange);">Friday</div><div style="font-size:13px;">Submissions + Quizzes</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--purple);">Saturday</div><div style="font-size:13px;">PSY 240 + Catch-up</div></div>
+    <div class="grade-row" style="border:none;"><div class="grade-course" style="color:var(--text3);">Sunday</div><div style="font-size:13px;">Reset + Dashboard</div></div>
+  </div>
+
+  <div class="section-label">Evening Block Template</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="grade-row"><div class="grade-course">6:00–6:45 PM</div><div style="font-size:12px; color:var(--text3);">Family reset / dinner</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--blue);">6:45–7:30 PM</div><div style="font-size:12px; color:var(--blue);">Light block — video / review</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--green);">7:30–8:15 PM</div><div style="font-size:12px; color:var(--green);">Focused work block</div></div>
+    <div class="grade-row"><div class="grade-course">8:15–8:30 PM</div><div style="font-size:12px; color:var(--text3);">Break / business check</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--purple);">8:30–9:15 PM</div><div style="font-size:12px; color:var(--purple);">Quiz / writing / submit</div></div>
+    <div class="grade-row" style="border:none;"><div class="grade-course">9:15–9:30 PM</div><div style="font-size:12px; color:var(--text3);">Shutdown + tomorrow's top 3</div></div>
+  </div>
+
+  <div class="section-label">💰 Financial Aid Tracker</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>FAFSA 2026–2027 Renewal</div><div class="req-course">File early — priority deadline varies</div></div>
+      <span class="priority-tag tag-orange">CHECK</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>MASSGrant State Aid</div><div class="req-course">File FAFSA early — funds run out fast</div></div>
+      <span class="priority-tag tag-orange">EARLY</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>MWCC Foundation Scholarships</div><div class="req-course">mwcc.edu/foundation — check dates</div></div>
+      <span class="priority-tag tag-blue">TODO</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>MA High Demand Scholarship</div><div class="req-course">Social Work qualifies — verify eligibility</div></div>
+      <span class="priority-tag tag-blue">TODO</span>
+    </div>
+    <div class="requirement-item">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>BOLD.org / Fastweb</div><div class="req-course">Adult learner, parent, social work, transfer</div></div>
+      <span class="priority-tag tag-blue">TODO</span>
+    </div>
+    <div class="requirement-item" style="border:none;">
+      <div class="req-status req-pending">○</div>
+      <div class="req-text"><div>SAP — Satisfactory Academic Progress</div><div class="req-course">Must pass 67%+ of attempted credits to keep aid</div></div>
+      <span class="priority-tag tag-red">WATCH</span>
+    </div>
+  </div>
+
+  <div class="section-label">⚠️ All Key Dates</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="grade-row"><div class="grade-course" style="color:var(--red); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 5</div><div style="font-size:12px;">SOC 205 Ch. 1–4 due</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--orange); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 8</div><div style="font-size:12px;">Last day 50% refund withdrawal</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--orange); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 12</div><div style="font-size:12px;">ECO Midterm + POL Quiz 2</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--yellow); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 19</div><div style="font-size:12px;">SOC 205 Ch. 5–8 due</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--yellow); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 20</div><div style="font-size:12px;">POL 211 Quiz 3</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--yellow); font-family:'JetBrains Mono',monospace; font-size:12px;">Jun 26</div><div style="font-size:12px;">POL 211 Quiz 4</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--red); font-family:'JetBrains Mono',monospace; font-size:12px;">Jul 3</div><div style="font-size:12px;">SOC Midterm + ECO Final (midnight)</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--red); font-family:'JetBrains Mono',monospace; font-size:12px;">Jul 21</div><div style="font-size:12px;">Last day to withdraw any course</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--orange); font-family:'JetBrains Mono',monospace; font-size:12px;">Jul 31</div><div style="font-size:12px;">SOC Ch. 13–15 + POL Quiz 10</div></div>
+    <div class="grade-row"><div class="grade-course" style="color:var(--purple); font-family:'JetBrains Mono',monospace; font-size:12px;">Aug 7</div><div style="font-size:12px;">POL 211 Research Paper due</div></div>
+    <div class="grade-row" style="border:none;"><div class="grade-course" style="color:var(--purple); font-family:'JetBrains Mono',monospace; font-size:12px;">Aug 8</div><div style="font-size:12px;">SOC 205 Final Exam</div></div>
+  </div>
+  <div style="height:20px;"></div>
+</div>
+
+
+<!-- PAGE: FILES -->
+<div class="page" id="page-files">
+  <div class="header">
+    <div class="header-top">
+      <h1>📁 File Manager</h1>
+      <button class="btn btn-primary btn-sm" onclick="openAddFile()">+ Add File</button>
+    </div>
+    <div class="header-sub">Syllabi · Assignments · Notes · Research</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div style="padding:12px 16px 0;">
+    <input type="text" class="form-input" id="file-search" placeholder="🔍 Search files..." oninput="renderFiles()">
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterFiles('all', this)">All</button>
+    <button class="filter-tab" onclick="filterFiles('SOC 205', this)">SOC</button>
+    <button class="filter-tab" onclick="filterFiles('ECO 101', this)">ECO</button>
+    <button class="filter-tab" onclick="filterFiles('POL 211', this)">POL</button>
+    <button class="filter-tab" onclick="filterFiles('BIO 109', this)">BIO</button>
+    <button class="filter-tab" onclick="filterFiles('PSY 240', this)">PSY</button>
+    <button class="filter-tab" onclick="filterFiles('Degree', this)">Degree</button>
+    <button class="filter-tab" onclick="filterFiles('📋 Syllabus', this)">Syllabi</button>
+    <button class="filter-tab" onclick="filterFiles('📝 Assignment', this)">Assignments</button>
+    <button class="filter-tab" onclick="filterFiles('📖 Textbook', this)">Textbooks</button>
+    <button class="filter-tab" onclick="filterFiles('🔍 Research', this)">Research</button>
+  </div>
+
+  <!-- GITHUB QUICK ACCESS -->
+  <div class="section-label">GitHub Repos</div>
+  <div style="padding:0 16px; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:4px;">
+    <a class="launch-btn" href="https://github.com/mrrazz/academic-command-center" target="_blank" style="padding:10px;">
+      <div class="launch-icon" style="background:var(--purple-bg); font-size:16px;">💻</div>
+      <div class="launch-text">
+        <div class="launch-name" style="font-size:12px;">mwcc-app</div>
+        <div class="launch-sub">Public · App code</div>
+      </div>
+    </a>
+    <a class="launch-btn" href="https://github.com/mrrazz/mwcc-files" target="_blank" style="padding:10px;">
+      <div class="launch-icon" style="background:var(--green-bg); font-size:16px;">🔒</div>
+      <div class="launch-text">
+        <div class="launch-name" style="font-size:12px;">mwcc-files</div>
+        <div class="launch-sub">🔒 Private · Must be logged in</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- HOW TO GET A LINK -->
+  <div class="card" style="margin-bottom:4px;">
+    <div style="font-size:12px; font-weight:700; color:var(--text2); margin-bottom:6px;">📋 How to add a file from GitHub:</div>
+    <div style="font-size:11px; color:var(--text3); line-height:1.8;">
+      1. Upload file to <strong style="color:var(--text2);">github.com/mrrazz/mwcc-files</strong><br>
+      2. Click the file to open the viewer<br>
+      3. Copy the <strong style="color:var(--text2);">URL from your browser bar</strong><br>
+      4. Paste into Add File → opens when you are logged into GitHub<br>
+      <span style="color:var(--green);">✓ Works on phone + laptop when logged in</span>
+    </div>
+  </div>
+
+  <!-- FILE LIST -->
+  <div class="section-label">Your Files</div>
+  <div id="file-list" style="padding:0 16px;"></div>
+
+  <div style="height:20px;"></div>
+</div>
+
+<!-- ADD FILE MODAL -->
+<div class="modal-overlay" id="modal-file">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="modal-file-title">Add File</h2>
+    <input type="hidden" id="edit-file-id">
+
+    <div class="form-group">
+      <label class="form-label">File Name</label>
+      <input type="text" class="form-input" id="file-name" placeholder="e.g. SOC 205 Syllabus Summer 2026">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Course</label>
+      <select class="form-select" id="file-course">
+        <option value="SOC 205">SOC 205 — Social Problems</option>
+        <option value="ECO 101">ECO 101 — Macroeconomics</option>
+        <option value="POL 211">POL 211 — American Government</option>
+        <option value="BIO 109">BIO 109 — Biology</option>
+        <option value="PSY 240">PSY 240 — Abnormal Psychology</option>
+        <option value="Degree">Degree / Transfer</option>
+        <option value="Financial">Financial Aid</option>
+        <option value="General">General</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">File Type</label>
+      <select class="form-select" id="file-type">
+        <option value="📋 Syllabus">📋 Syllabus</option>
+        <option value="📝 Assignment">📝 Assignment / Homework</option>
+        <option value="📖 Textbook">📖 Textbook / Chapter</option>
+        <option value="📢 Announcement">📢 Professor Announcement</option>
+        <option value="🗒️ Notes">🗒️ My Notes</option>
+        <option value="🖥️ Presentation">🖥️ Presentation / Slides</option>
+        <option value="🔍 Research">🔍 Research Source</option>
+        <option value="🔬 Lab">🔬 Lab Instructions</option>
+        <option value="🎓 Degree">🎓 Degree / Transfer Doc</option>
+        <option value="📄 Other">📄 Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">File URL (GitHub Raw link or any direct URL)</label>
+      <input type="url" class="form-input" id="file-url" placeholder="https://github.com/mrrazz/mwcc-files/blob/main/files/...">
+      <div class="help-text">Paste the GitHub file viewer URL (github.com/mrrazz/mwcc-files/blob/main/...). You must be logged into GitHub for private files to open. Also works with Google Drive share links.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Semester</label>
+      <select class="form-select" id="file-semester">
+        <option value="Summer 2026">Summer 2026</option>
+        <option value="Fall 2026">Fall 2026</option>
+        <option value="Spring 2027">Spring 2027</option>
+        <option value="General">General / Always needed</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <input type="text" class="form-input" id="file-notes" placeholder="e.g. Due dates on page 2">
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button class="btn btn-full" onclick="closeModal('modal-file')" style="flex:1;">Cancel</button>
+      <button class="btn btn-primary btn-full" onclick="saveFile()" style="flex:2;">Save File</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- PAGE: SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="header">
+    <div class="header-top">
+      <h1>⚙️ Settings</h1>
+    </div>
+    <div class="header-sub">Academic Command Center v1.0</div>
+  </div>
+
+  <!-- GITHUB PAT -->
+  <div class="section-label">🔒 GitHub Private File Access</div>
+  <div class="card">
+    <div style="font-size:13px; font-weight:600; margin-bottom:8px;">Personal Access Token (PAT)</div>
+    <div style="font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:12px;">
+      Your token is stored only on this device. It is never sent anywhere except directly to GitHub to open your private files. It is not visible after you save it.
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Enter Your GitHub PAT</label>
+      <div style="display:flex; gap:8px;">
+        <input type="password" class="form-input" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="flex:1; font-family:'JetBrains Mono',monospace;">
+        <button class="btn btn-primary" onclick="savePAT()" style="flex-shrink:0;">Save</button>
+      </div>
+      <div class="help-text">Goes to: github.com/settings/tokens → Generate new token (classic) → check repo → generate</div>
+    </div>
+
+    <div id="pat-status" style="margin-top:8px;"></div>
+
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button class="btn btn-success btn-full" onclick="testPAT()">🔗 Test Connection</button>
+      <button class="btn btn-danger btn-full" onclick="clearPAT()">🗑 Clear Token</button>
+    </div>
+  </div>
+
+  <!-- HOW FILES WORK -->
+  <div class="section-label">📁 How Private Files Work</div>
+  <div class="card">
+    <div style="font-size:12px; color:var(--text2); line-height:1.8;">
+      <div style="margin-bottom:8px;">Once your PAT is saved:</div>
+      1. Upload any file to <strong style="color:var(--text);">github.com/mrrazz/acc-files</strong><br>
+      2. Click the file → copy the URL from your browser<br>
+      3. Paste into Files tab → Add File<br>
+      4. App uses your PAT to open it privately<br>
+      5. Works on any device where you enter your PAT<br><br>
+      <div style="color:var(--green);">✓ Your files stay completely private</div>
+      <div style="color:var(--green);">✓ No Google. No third parties.</div>
+      <div style="color:var(--green);">✓ Your data. Your device. Your control.</div>
+    </div>
+  </div>
+
+  <!-- FILE LINK FORMAT -->
+  <div class="section-label">🔗 Correct Link Format</div>
+  <div class="card">
+    <div style="font-size:12px; color:var(--text2); margin-bottom:8px;">Use this format for private acc-files links:</div>
+    <div style="font-family:'JetBrains Mono',monospace; font-size:10px; background:var(--bg3); padding:10px; border-radius:8px; word-break:break-all; color:var(--green); line-height:1.8;">
+      https://github.com/mrrazz/acc-files/blob/main/files/summer-2026/SOC205/syllabus.pdf
+    </div>
+    <div style="font-size:11px; color:var(--text3); margin-top:8px;">Navigate to the file on GitHub → copy the URL from your address bar → paste into File Manager</div>
+  </div>
+
+  <!-- APP INFO -->
+  <div class="section-label">📱 App Information</div>
+  <div class="card" style="padding:8px 16px;">
+    <div class="course-stat-row"><span>App Name</span><span class="course-stat-val">Academic Command Center</span></div>
+    <div class="course-stat-row"><span>Version</span><span class="course-stat-val">1.0</span></div>
+    <div class="course-stat-row"><span>GitHub (App)</span><span class="course-stat-val" style="font-size:11px;">mrrazz/academic-command-center</span></div>
+    <div class="course-stat-row"><span>GitHub (Files)</span><span class="course-stat-val" style="font-size:11px;">mrrazz/acc-files 🔒</span></div>
+    <div class="course-stat-row"><span>Student</span><span class="course-stat-val">Michael Maxwell</span></div>
+    <div class="course-stat-row"><span>School</span><span class="course-stat-val">MWCC Summer 2026</span></div>
+    <div class="course-stat-row" style="border:none;"><span>Transfer Goal</span><span class="course-stat-val">Salem State BSW</span></div>
+  </div>
+
+  <!-- DANGER ZONE -->
+  <div class="section-label">⚠️ Data Management</div>
+  <div class="card">
+    <div style="font-size:12px; color:var(--text2); margin-bottom:12px;">All app data is stored locally on this device in your browser's localStorage.</div>
+    <button class="btn btn-danger btn-full" onclick="exportData()">📤 Export All Data (JSON backup)</button>
+    <div style="height:8px;"></div>
+    <button class="btn btn-full" onclick="importData()">📥 Import Data</button>
+    <div style="height:8px;"></div>
+    <button class="btn btn-danger btn-full" onclick="resetApp()">🗑 Reset All App Data</button>
+    <div class="help-text" style="margin-top:8px;">Reset removes all assignments, grades, files, and settings. Cannot be undone.</div>
+  </div>
+
+  <div style="height:20px;"></div>
+</div>
+
+
+<!-- MODALS -->
+
+<!-- ADD ASSIGNMENT MODAL -->
+<div class="modal-overlay" id="modal-assignment">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 id="modal-assignment-title">Add Assignment</h2>
+    <input type="hidden" id="edit-assignment-id">
+
+    <div class="form-group">
+      <label class="form-label">Course</label>
+      <select class="form-select" id="assign-course">
+        <option value="SOC 205">SOC 205 — Social Problems</option>
+        <option value="ECO 101">ECO 101 — Macroeconomics</option>
+        <option value="POL 211">POL 211 — American Government</option>
+        <option value="BIO 109">BIO 109 — Biology</option>
+        <option value="PSY 240">PSY 240 — Abnormal Psychology</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Assignment Name</label>
+      <input type="text" class="form-input" id="assign-name" placeholder="e.g. Ch. 1-4 Essay Questions">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <select class="form-select" id="assign-type">
+        <option value="Essay">Essay / Chapter Questions</option>
+        <option value="Discussion">Discussion Board</option>
+        <option value="Quiz">Quiz</option>
+        <option value="Exam">Exam / Midterm / Final</option>
+        <option value="Lab">Lab Assignment</option>
+        <option value="Paper">Research Paper</option>
+        <option value="Reading">Reading</option>
+        <option value="Homework">Homework</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Due Date</label>
+        <input type="date" class="form-input" id="assign-due">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Est. Time (min)</label>
+        <input type="number" class="form-input" id="assign-time" placeholder="60" min="5" max="480">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="assign-status">
+        <option value="Not Started">Not Started</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Submitted">Submitted</option>
+        <option value="Graded">Graded</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes (optional)</label>
+      <textarea class="form-textarea" id="assign-notes" placeholder="e.g. Submit all chapters together, not one at a time..."></textarea>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button class="btn btn-full" onclick="closeModal('modal-assignment')" style="flex:1;">Cancel</button>
+      <button class="btn btn-primary btn-full" onclick="saveAssignment()" style="flex:2;">Save Assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD COURSE MODAL -->
+<div class="modal-overlay" id="modal-course">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Add Course</h2>
+
+    <div class="form-group">
+      <label class="form-label">Course Code</label>
+      <input type="text" class="form-input" id="course-code" placeholder="e.g. BIO 109">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Course Name</label>
+      <input type="text" class="form-input" id="course-name-input" placeholder="e.g. Concepts in Biology">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Credits</label>
+        <input type="number" class="form-input" id="course-credits" placeholder="3" min="1" max="6">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Risk Level</label>
+        <select class="form-select" id="course-risk">
+          <option value="high">🔴 High</option>
+          <option value="med">🟠 Medium</option>
+          <option value="low">🟢 Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Professor Name</label>
+      <input type="text" class="form-input" id="course-prof" placeholder="e.g. Dr. Greenwood">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Professor Email</label>
+      <input type="email" class="form-input" id="course-email" placeholder="e.g. mgreenwood@mwcc.mass.edu">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Platform / URL</label>
+      <input type="text" class="form-input" id="course-platform" placeholder="e.g. Blackboard, MyEconLab">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Platform Link</label>
+      <input type="url" class="form-input" id="course-link" placeholder="https://...">
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button class="btn btn-full" onclick="closeModal('modal-course')" style="flex:1;">Cancel</button>
+      <button class="btn btn-primary btn-full" onclick="saveCourse()" style="flex:2;">Save Course</button>
+    </div>
+  </div>
+</div>
+
+<!-- ACADEMIC COMMAND CENTER v1.0 -->
+<!-- BOTTOM NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showPage('home', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    Home
+    <span class="nav-badge" id="nav-badge" style="display:none">0</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('assignments', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M4 6h16v14a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+    Tasks
+  </button>
+  <button class="nav-btn" onclick="showPage('courses', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    Courses
+  </button>
+  <button class="nav-btn" onclick="showPage('grades', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Grades
+  </button>
+  <button class="nav-btn" onclick="showPage('planner', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Plan
+  </button>
+  <button class="nav-btn" onclick="showPage('contacts', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    People
+  </button>
+  <button class="nav-btn" onclick="showPage('files', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+    Files
+  </button>
+  <button class="nav-btn" onclick="showPage('degree', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 0 9 3 12 0v-5"/></svg>
+    Degree
+  </button>
+  <button class="nav-btn" id="nav-settings-btn" onclick="showPage('settings', this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Settings
+  </button>
+</nav>
+
+<script>
+// ============================================
+// DATA
+// ============================================
+const COURSES_DEFAULT = [
+  { id:'soc205', code:'SOC 205', name:'Social Problems', credits:3, risk:'high', prof:'Lynn Barrieau', email:'l_barrieau@mwcc.mass.edu', platform:'Blackboard + Email', link:'https://www.mwcc.edu', color:'#ff4444', abbr:'SOC' },
+  { id:'eco101', code:'ECO 101', name:'Macroeconomics', credits:3, risk:'high', prof:'Dr. Michael Greenwood', email:'mgreenwood@mwcc.mass.edu', platform:'MyEconLab', link:'https://www.myeconlab.com', color:'#06d6a0', abbr:'ECO' },
+  { id:'pol211', code:'POL 211', name:'American Government', credits:3, risk:'med', prof:'Shane Martin', email:'s_martin@mwcc.mass.edu', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#4cc9f0', abbr:'POL' },
+  { id:'bio109', code:'BIO 109', name:'Concepts in Biology', credits:4, risk:'high', prof:'TBD', email:'', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#ffd166', abbr:'BIO' },
+  { id:'psy240', code:'PSY 240', name:'Abnormal Psychology', credits:3, risk:'med', prof:'TBD', email:'', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#a855f7', abbr:'PSY' }
+];
+
+const ASSIGNMENTS_DEFAULT = [
+  { id:'a1', course:'SOC 205', name:'Ch. 1-4 Essay Questions', type:'Essay', due:'2026-06-05', time:120, status:'Not Started', notes:'Submit all chapters together. Email to l_barrieau@mwcc.mass.edu or Blackboard. No Google Docs.' },
+  { id:'a2', course:'SOC 205', name:'Ch. 1-4 Discussion Board', type:'Discussion', due:'2026-06-05', time:30, status:'Not Started', notes:'Answer directly on Blackboard. 3+ sentences per post. One per chapter + Intro.' },
+  { id:'a3', course:'ECO 101', name:'Ch. 8 Quiz', type:'Quiz', due:'2026-06-12', time:45, status:'Not Started', notes:'Open book in MyEconLab. Complete before Midterm.' },
+  { id:'a4', course:'ECO 101', name:'Midterm — Ch. 4, 7, 8', type:'Exam', due:'2026-06-12', time:120, status:'Not Started', notes:'ONE ATTEMPT. 120 minutes. No retakes. Complete Ch.8 quiz first!' },
+  { id:'a5', course:'POL 211', name:'Quiz 2 — Federalism', type:'Quiz', due:'2026-06-12', time:30, status:'Not Started', notes:'20 questions, 100 pts. Read OER Ch.5, Gibbons v. Ogden, McCulloch v. Maryland, New Deal.' },
+  { id:'a6', course:'POL 211', name:'Quiz 1 — American Founding', type:'Quiz', due:'2026-05-29', time:30, status:'Submitted', notes:'Completed June 1. Score: 85/100.' },
+  { id:'a7', course:'SOC 205', name:'Ch. 5-8 Essay + Discussion', type:'Essay', due:'2026-06-19', time:150, status:'Not Started', notes:'' },
+  { id:'a8', course:'POL 211', name:'Quiz 3 — Civil Liberties', type:'Quiz', due:'2026-06-20', time:30, status:'Not Started', notes:'No work due 6/19 Juneteenth. Week ends 6/20.' },
+  { id:'a9', course:'ECO 101', name:'Ch. 18 Quiz', type:'Quiz', due:'2026-06-15', time:30, status:'Not Started', notes:'Open book MyEconLab. Unlimited attempts.' },
+  { id:'a10', course:'POL 211', name:'Research Paper', type:'Paper', due:'2026-08-07', time:480, status:'Not Started', notes:'Topic approval required first. 5-6 pages. APA. Min 3 sources. NO AI. Email s_martin@mwcc.mass.edu for topic approval ASAP — first come first serve.' },
+  { id:'a11', course:'ECO 101', name:'Final Exam — Ch. 18,19,21', type:'Exam', due:'2026-07-03', time:120, status:'Not Started', notes:'ONE ATTEMPT. 120 minutes. Before midnight July 3.' },
+  { id:'a12', course:'SOC 205', name:'Midterm — Ch. 1-8', type:'Exam', due:'2026-07-03', time:90, status:'Not Started', notes:'Multiple choice + short answer. No time limit stated.' }
+];
+
+const CONTACTS_DEFAULT = [
+  { id:'c1', name:'Lynn Barrieau', role:'Professor · SOC 205', email:'l_barrieau@mwcc.mass.edu', phone:'', initials:'LB', color:'#ff4444' },
+  { id:'c2', name:'Dr. Michael Greenwood', role:'Professor · ECO 101', email:'mgreenwood@mwcc.mass.edu', phone:'', initials:'MG', color:'#06d6a0' },
+  { id:'c3', name:'Shane Martin', role:'Professor · POL 211', email:'s_martin@mwcc.mass.edu', phone:'978-632-6600', initials:'SM', color:'#4cc9f0' },
+  { id:'c4', name:'Elaine Murray', role:'Academic Advisor · MWCC', email:'e_murray@mwcc.mass.edu', phone:'978-630-9583', initials:'EM', color:'#ffd166' },
+  { id:'c5', name:'Sharon German', role:'Transfer Counselor · Salem State', email:'sgerman@salemstate.edu', phone:'978-542-4888', initials:'SG', color:'#a855f7' },
+  { id:'c6', name:'Student Financial Services', role:'Financial Aid · MWCC', email:'sfs@mwcc.edu', phone:'978-630-9169', initials:'FA', color:'#ff8c42' }
+];
+
+const EMAIL_TEMPLATES = {
+  question: `Subject: Question about [ASSIGNMENT] — [YOUR NAME]\n\nProfessor [NAME],\n\nI hope you are doing well. I have a question regarding [ASSIGNMENT/TOPIC].\n\n[Your question here]\n\nThank you for your time. I look forward to your response.\n\nBest regards,\nMichael Maxwell\n[COURSE CODE]`,
+  extension: `Subject: Extension Request — [ASSIGNMENT] — Michael Maxwell\n\nProfessor [NAME],\n\nI am writing to respectfully request a brief extension on [ASSIGNMENT], currently due [DATE].\n\n[Brief, honest reason]\n\nI understand your deadlines are firm and I take full responsibility for managing my time. I am committed to submitting quality work and would greatly appreciate any flexibility you can offer.\n\nThank you for your consideration.\n\nBest regards,\nMichael Maxwell\n[COURSE CODE]`,
+  confirm: `Subject: Assignment Submission Confirmation — [ASSIGNMENT]\n\nProfessor [NAME],\n\nI am writing to confirm that I have submitted [ASSIGNMENT] for [COURSE CODE] via [Blackboard/email] on [DATE].\n\nPlease let me know if you did not receive it or if there are any issues with my submission.\n\nThank you,\nMichael Maxwell`,
+  topic: `Subject: Research Paper Topic Approval Request — POL 211 — Michael Maxwell\n\nProfessor Martin,\n\nI am writing to request approval for my research paper topic for POL 211: Introduction to American Government.\n\nProposed Topic: [YOUR TOPIC]\n\nBrief rationale: [1-2 sentences on why you chose this topic]\n\nPlease let me know if this topic is approved or if you have suggestions for refinement. I understand topics are first come, first serve and I want to secure my topic as soon as possible.\n\nThank you,\nMichael Maxwell\nPOL 211 — W2B`,
+  syllabus: `Subject: Syllabus Confirmation — Michael Maxwell — [COURSE]\n\nProfessor [NAME],\n\nI have read and understood the syllabus for [COURSE]. I am aware of the due dates, late work policy, and all submission guidelines. I look forward to a successful semester.\n\nThank you,\nMichael Maxwell\n[COURSE CODE]`
+};
+
+// ============================================
+// STATE
+// ============================================
+let state = {
+  assignments: [],
+  courses: [],
+  contacts: [],
+  currentFilter: 'all'
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('mwcc_state');
+    if (saved) {
+      state = { ...state, ...JSON.parse(saved) };
+    } else {
+      state.assignments = ASSIGNMENTS_DEFAULT;
+      state.courses = COURSES_DEFAULT;
+      state.contacts = CONTACTS_DEFAULT;
+      saveState();
+    }
+  } catch(e) {
+    state.assignments = ASSIGNMENTS_DEFAULT;
+    state.courses = COURSES_DEFAULT;
+    state.contacts = CONTACTS_DEFAULT;
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('mwcc_state', JSON.stringify(state));
+  } catch(e) {}
+}
+
+// ============================================
+// UTILITIES
+// ============================================
+function genId() {
+  return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+}
+
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function daysUntil(dateStr) {
+  const due = new Date(dateStr + 'T23:59:59');
+  const now = new Date();
+  const diff = due - now;
+  return Math.ceil(diff / (1000*60*60*24));
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+function getPriority(assignment) {
+  if (assignment.status === 'Submitted' || assignment.status === 'Graded') return 5;
+  const days = daysUntil(assignment.due);
+  if (days < 0) return 1;
+  if (days <= 2) return 2;
+  if (days <= 7) return 3;
+  return 4;
+}
+
+function getPriorityLabel(p) {
+  return ['','OVERDUE','DUE SOON','THIS WEEK','UPCOMING','DONE'][p] || '';
+}
+
+function getPriorityTagClass(p) {
+  return ['','tag-red','tag-orange','tag-yellow','tag-blue','tag-green'][p] || 'tag-blue';
+}
+
+function getDotClass(p) {
+  return ['','dot-red','dot-orange','dot-yellow','dot-blue','dot-green'][p] || 'dot-blue';
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ============================================
+// NAVIGATION
+// ============================================
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+
+  if (id === 'assignments') renderAssignments();
+  if (id === 'courses') renderCourses();
+  if (id === 'contacts') renderContacts();
+  if (id === 'grades') renderGrades();
+  if (id === 'files') renderFiles();
+  if (id === 'settings') renderSettingsStatus();
+}
+
+// ============================================
+// LIVE CLOCK
+// ============================================
+function updateClock() {
+  const el = document.getElementById('live-date');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+}
+
+// ============================================
+// DASHBOARD
+// ============================================
+function renderDashboard() {
+  const all = state.assignments;
+  const overdue = all.filter(a => getPriority(a) === 1);
+  const soon = all.filter(a => getPriority(a) === 2);
+  const done = all.filter(a => a.status === 'Submitted' || a.status === 'Graded');
+
+  document.getElementById('stat-overdue').textContent = overdue.length;
+  document.getElementById('stat-due-soon').textContent = soon.length;
+  document.getElementById('stat-complete').textContent = done.length;
+
+  const badge = document.getElementById('nav-badge');
+  const urgent = overdue.length + soon.length;
+  if (urgent > 0) {
+    badge.textContent = urgent;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Alerts
+  const alerts = document.getElementById('alerts-container');
+  let alertHTML = '';
+  if (overdue.length > 0) {
+    alertHTML += `<div class="alert alert-red"><span class="alert-icon">🚨</span><div class="alert-text"><strong>${overdue.length} overdue assignment${overdue.length>1?'s':''}.</strong> Check if still submittable — act now.</div></div>`;
+  }
+
+  const withdrawDeadline = daysUntil('2026-07-21');
+  if (withdrawDeadline > 0 && withdrawDeadline <= 14) {
+    alertHTML += `<div class="alert alert-orange"><span class="alert-icon">⚠️</span><div class="alert-text">Last day to withdraw: <strong>July 21</strong> (${withdrawDeadline} days). Affects financial aid.</div></div>`;
+  }
+
+  alerts.innerHTML = alertHTML;
+
+  // Priority list
+  const urgent_items = [...overdue, ...soon].sort((a,b) => getPriority(a) - getPriority(b));
+  const list = document.getElementById('priority-list');
+
+  if (urgent_items.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎯</div><h3>Looking good!</h3><p>No overdue or urgent items right now.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = urgent_items.slice(0,8).map(a => {
+    const p = getPriority(a);
+    const days = daysUntil(a.due);
+    const daysLabel = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Due today!' : `${days}d left`;
+    return `<div class="priority-item">
+      <div class="priority-dot ${getDotClass(p)}"></div>
+      <div class="priority-content">
+        <div class="priority-title">${a.name}</div>
+        <div class="priority-meta">
+          <span>${a.course}</span>
+          <span>${formatDate(a.due)}</span>
+          <span style="color:${p===1?'var(--red)':p===2?'var(--orange)':'var(--yellow)'}">${daysLabel}</span>
+        </div>
+      </div>
+      <div class="priority-action">
+        <span class="priority-tag ${getPriorityTagClass(p)}">${getPriorityLabel(p)}</span>
+        <button class="btn btn-sm btn-success" onclick="markDone('${a.id}')">✓ Done</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function markDone(id) {
+  const a = state.assignments.find(x => x.id === id);
+  if (a) {
+    a.status = 'Submitted';
+    saveState();
+    renderDashboard();
+    renderAssignments();
+    showToast('✅ Marked as submitted!', 'success');
+  }
+}
+
+// ============================================
+// ASSIGNMENTS
+// ============================================
+function renderAssignments(filter) {
+  if (filter) state.currentFilter = filter;
+  const f = state.currentFilter;
+
+  let items = [...state.assignments];
+
+  if (f === 'overdue') items = items.filter(a => getPriority(a) === 1);
+  else if (f === 'pending') items = items.filter(a => a.status === 'Not Started' || a.status === 'In Progress');
+  else if (f === 'done') items = items.filter(a => a.status === 'Submitted' || a.status === 'Graded');
+  else if (f !== 'all') items = items.filter(a => a.course === f);
+
+  items.sort((a,b) => {
+    const pa = getPriority(a), pb = getPriority(b);
+    if (pa !== pb) return pa - pb;
+    return new Date(a.due) - new Date(b.due);
+  });
+
+  const list = document.getElementById('assignment-list');
+  if (items.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📋</div><h3>Nothing here</h3><p>No assignments match this filter.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(a => {
+    const p = getPriority(a);
+    const days = daysUntil(a.due);
+    const daysLabel = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Due today!' : `${days}d left`;
+    const isDone = a.status === 'Submitted' || a.status === 'Graded';
+    const course = state.courses.find(c => c.code === a.course);
+    const color = course ? course.color : '#888';
+
+    return `<div class="card" style="margin-bottom:0; margin-top:8px; border-left: 3px solid ${color};">
+      <div style="display:flex; align-items:flex-start; gap:10px;">
+        <div style="flex:1; min-width:0;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+            <span class="priority-tag ${getPriorityTagClass(p)}">${getPriorityLabel(p)}</span>
+            <span style="font-size:11px; color:var(--text3);">${a.type}</span>
+          </div>
+          <div style="font-size:14px; font-weight:700; margin-bottom:4px; ${isDone?'text-decoration:line-through; opacity:0.6':''};">${a.name}</div>
+          <div style="font-size:12px; color:var(--text2); display:flex; gap:10px; flex-wrap:wrap;">
+            <span style="color:${color}; font-weight:600;">${a.course}</span>
+            <span>📅 ${formatDate(a.due)}</span>
+            <span style="color:${p===1?'var(--red)':p===2?'var(--orange)':p===3?'var(--yellow)':'var(--text3)'};">${daysLabel}</span>
+            ${a.time ? `<span>⏱ ${a.time}min</span>` : ''}
+          </div>
+          ${a.notes ? `<div style="font-size:11px; color:var(--text3); margin-top:6px; line-height:1.5; border-top:1px solid var(--border); padding-top:6px;">${a.notes}</div>` : ''}
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+          ${!isDone ? `<button class="btn btn-sm btn-success" onclick="markDone('${a.id}')">✓</button>` : '<span style="font-size:18px;">✅</span>'}
+          <button class="btn btn-sm" onclick="editAssignment('${a.id}')">✏️</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteAssignment('${a.id}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterAssignments(filter, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderAssignments(filter);
+}
+
+function openAddAssignment() {
+  document.getElementById('modal-assignment-title').textContent = 'Add Assignment';
+  document.getElementById('edit-assignment-id').value = '';
+  document.getElementById('assign-name').value = '';
+  document.getElementById('assign-type').value = 'Essay';
+  document.getElementById('assign-due').value = '';
+  document.getElementById('assign-time').value = '';
+  document.getElementById('assign-status').value = 'Not Started';
+  document.getElementById('assign-notes').value = '';
+  document.getElementById('modal-assignment').classList.add('open');
+}
+
+function editAssignment(id) {
+  const a = state.assignments.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('modal-assignment-title').textContent = 'Edit Assignment';
+  document.getElementById('edit-assignment-id').value = id;
+  document.getElementById('assign-course').value = a.course;
+  document.getElementById('assign-name').value = a.name;
+  document.getElementById('assign-type').value = a.type;
+  document.getElementById('assign-due').value = a.due;
+  document.getElementById('assign-time').value = a.time || '';
+  document.getElementById('assign-status').value = a.status;
+  document.getElementById('assign-notes').value = a.notes || '';
+  document.getElementById('modal-assignment').classList.add('open');
+}
+
+function saveAssignment() {
+  const name = document.getElementById('assign-name').value.trim();
+  const due = document.getElementById('assign-due').value;
+  if (!name || !due) { showToast('Name and due date required', 'error'); return; }
+
+  const editId = document.getElementById('edit-assignment-id').value;
+  const data = {
+    course: document.getElementById('assign-course').value,
+    name,
+    type: document.getElementById('assign-type').value,
+    due,
+    time: parseInt(document.getElementById('assign-time').value) || 0,
+    status: document.getElementById('assign-status').value,
+    notes: document.getElementById('assign-notes').value.trim()
+  };
+
+  if (editId) {
+    const idx = state.assignments.findIndex(x => x.id === editId);
+    if (idx > -1) state.assignments[idx] = { ...state.assignments[idx], ...data };
+  } else {
+    data.id = genId();
+    state.assignments.push(data);
+  }
+
+  saveState();
+  closeModal('modal-assignment');
+  renderDashboard();
+  renderAssignments();
+  showToast(editId ? '✏️ Assignment updated' : '✅ Assignment added', 'success');
+}
+
+function deleteAssignment(id) {
+  if (!confirm('Delete this assignment?')) return;
+  state.assignments = state.assignments.filter(x => x.id !== id);
+  saveState();
+  renderDashboard();
+  renderAssignments();
+  showToast('🗑 Deleted', '');
+}
+
+// ============================================
+// COURSES
+// ============================================
+function renderCourses() {
+  const list = document.getElementById('course-list');
+  list.innerHTML = state.courses.map(c => {
+    const courseAssignments = state.assignments.filter(a => a.course === c.code);
+    const pending = courseAssignments.filter(a => a.status === 'Not Started' || a.status === 'In Progress').length;
+    const overdue = courseAssignments.filter(a => getPriority(a) === 1).length;
+
+    return `<div class="course-card">
+      <div class="course-header" onclick="toggleCourse('${c.id}')">
+        <div class="course-badge" style="background:${c.color}22; color:${c.color}; border:1px solid ${c.color}44;">${c.abbr}</div>
+        <div class="course-info">
+          <div class="course-name">${c.code} — ${c.name}</div>
+          <div class="course-meta">${c.prof} · ${c.credits} credits · ${pending} pending${overdue>0?` · <span style="color:var(--red)">${overdue} overdue</span>`:''}</div>
+        </div>
+        <span class="course-risk risk-${c.risk}">${c.risk==='high'?'HIGH':c.risk==='med'?'MED':'LOW'}</span>
+      </div>
+      <div class="course-body" id="course-body-${c.id}">
+        <div class="course-links">
+          <a class="btn btn-sm" href="${c.link}" target="_blank" style="text-decoration:none; text-align:center;">📚 Open Course</a>
+          <a class="btn btn-sm" href="mailto:${c.email}" style="text-decoration:none; text-align:center;">✉️ Email Prof</a>
+        </div>
+        <div class="course-stat-row"><span>Professor</span><span class="course-stat-val">${c.prof}</span></div>
+        <div class="course-stat-row"><span>Email</span><span class="course-stat-val" style="font-size:11px;">${c.email||'Unknown'}</span></div>
+        <div class="course-stat-row"><span>Platform</span><span class="course-stat-val">${c.platform}</span></div>
+        <div class="course-stat-row"><span>Total Assignments</span><span class="course-stat-val">${courseAssignments.length}</span></div>
+        <div class="course-stat-row"><span>Pending</span><span class="course-stat-val" style="color:var(--orange)">${pending}</span></div>
+        <div class="course-stat-row" style="border:none;"><span>Overdue</span><span class="course-stat-val" style="color:${overdue>0?'var(--red)':'var(--green)'}">${overdue}</span></div>
+        ${!c.email ? `<div style="margin-top:10px;" class="alert alert-orange"><span class="alert-icon">⚠️</span><div class="alert-text">Professor info missing — upload syllabus!</div></div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCourse(id) {
+  const body = document.getElementById('course-body-' + id);
+  body.classList.toggle('open');
+}
+
+function openAddCourse() {
+  document.getElementById('modal-course').classList.add('open');
+}
+
+function saveCourse() {
+  const code = document.getElementById('course-code').value.trim();
+  const name = document.getElementById('course-name-input').value.trim();
+  if (!code || !name) { showToast('Course code and name required', 'error'); return; }
+
+  const abbr = code.split(' ')[0];
+  const colors = ['#ff4444','#06d6a0','#4cc9f0','#ffd166','#a855f7','#ff8c42'];
+  const color = colors[state.courses.length % colors.length];
+
+  state.courses.push({
+    id: genId(),
+    code,
+    name,
+    credits: parseInt(document.getElementById('course-credits').value) || 3,
+    risk: document.getElementById('course-risk').value,
+    prof: document.getElementById('course-prof').value.trim(),
+    email: document.getElementById('course-email').value.trim(),
+    platform: document.getElementById('course-platform').value.trim(),
+    link: document.getElementById('course-link').value.trim() || 'https://mwcc.blackboard.com',
+    color,
+    abbr
+  });
+
+  saveState();
+  closeModal('modal-course');
+  renderCourses();
+  showToast('📘 Course added!', 'success');
+}
+
+// ============================================
+// CONTACTS
+// ============================================
+function renderContacts() {
+  const list = document.getElementById('contacts-list');
+  list.innerHTML = state.contacts.map(c => `
+    <div class="contact-card">
+      <div class="contact-header">
+        <div class="contact-avatar" style="background:${c.color}22; color:${c.color};">${c.initials}</div>
+        <div>
+          <div class="contact-name">${c.name}</div>
+          <div class="contact-role">${c.role}</div>
+        </div>
+      </div>
+      <div class="contact-actions">
+        ${c.phone ? `<a class="btn btn-sm" href="tel:${c.phone.replace(/\D/g,'')}" style="text-decoration:none;">📞</a>` : ''}
+        ${c.email ? `<a class="btn btn-primary btn-sm" href="mailto:${c.email}" style="text-decoration:none; flex:1; text-align:center;">✉️ ${c.email}</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function copyTemplate(type) {
+  const template = EMAIL_TEMPLATES[type];
+  if (!template) return;
+  navigator.clipboard.writeText(template).then(() => {
+    showToast('📋 Template copied! Paste into your email.', 'success');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = template;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 Template copied!', 'success');
+  });
+}
+
+// ============================================
+// MODALS
+// ============================================
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ============================================
+// INIT
+// ============================================
+
+
+
+// ============================================
+// SETTINGS & PAT MANAGEMENT
+// ============================================
+
+function savePAT() {
+  const pat = document.getElementById('pat-input').value.trim();
+  if (!pat || !pat.startsWith('ghp_') && !pat.startsWith('github_pat_')) {
+    showToast('Invalid token format. Should start with ghp_', 'error');
+    return;
+  }
+  localStorage.setItem('acc_github_pat', pat);
+  document.getElementById('pat-input').value = '';
+  document.getElementById('pat-status').innerHTML = '<div class="alert alert-blue" style="margin:0;"><span class="alert-icon">🔒</span><div class="alert-text">Token saved securely on this device. Click Test Connection to verify.</div></div>';
+  showToast('🔒 PAT saved!', 'success');
+}
+
+function getPAT() {
+  return localStorage.getItem('acc_github_pat') || '';
+}
+
+function clearPAT() {
+  if (!confirm('Remove your GitHub token from this device?')) return;
+  localStorage.removeItem('acc_github_pat');
+  document.getElementById('pat-status').innerHTML = '<div class="alert alert-orange" style="margin:0;"><span class="alert-icon">⚠️</span><div class="alert-text">Token cleared. Private files will require re-authentication.</div></div>';
+  showToast('Token cleared', '');
+}
+
+async function testPAT() {
+  const pat = getPAT();
+  if (!pat) {
+    showToast('No token saved yet', 'error');
+    return;
+  }
+  const statusEl = document.getElementById('pat-status');
+  statusEl.innerHTML = '<div class="alert alert-blue" style="margin:0;"><span class="alert-icon">🔄</span><div class="alert-text">Testing connection to GitHub...</div></div>';
+
+  try {
+    const response = await fetch('https://api.github.com/repos/mrrazz/acc-files', {
+      headers: {
+        'Authorization': 'token ' + pat,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      statusEl.innerHTML = '<div class="alert" style="margin:0; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green);"><span class="alert-icon">✅</span><div class="alert-text"><strong>Connected!</strong> Access confirmed to ' + data.full_name + ' · ' + (data.private ? '🔒 Private' : '🌐 Public') + '</div></div>';
+      showToast('✅ GitHub connected!', 'success');
+    } else if (response.status === 401) {
+      statusEl.innerHTML = '<div class="alert alert-red" style="margin:0;"><span class="alert-icon">❌</span><div class="alert-text">Token invalid or expired. Generate a new one at github.com/settings/tokens</div></div>';
+    } else if (response.status === 404) {
+      statusEl.innerHTML = '<div class="alert alert-red" style="margin:0;"><span class="alert-icon">❌</span><div class="alert-text">Repository not found. Check that acc-files repo exists.</div></div>';
+    }
+  } catch(e) {
+    statusEl.innerHTML = '<div class="alert alert-orange" style="margin:0;"><span class="alert-icon">⚠️</span><div class="alert-text">Network error. Check your connection and try again.</div></div>';
+  }
+}
+
+function openFileById(id) {
+  const f = (state.files || []).find(x => x.id === id);
+  if (!f || !f.url) return;
+  openPrivateFile(f.url);
+}
+
+function openPrivateFile(url) {
+  const pat = getPAT();
+  if (!pat) {
+    window.open(url, '_blank');
+    return;
+  }
+
+  // Convert blob URL to raw API URL for authenticated access
+  // https://github.com/mrrazz/acc-files/blob/main/files/... 
+  // → https://api.github.com/repos/mrrazz/acc-files/contents/files/...
+  if (url.includes('github.com/mrrazz/acc-files/blob/')) {
+    const path = url.split('/blob/main/')[1];
+    if (path) {
+      const apiUrl = 'https://api.github.com/repos/mrrazz/acc-files/contents/' + path;
+      fetchAndOpenFile(apiUrl, pat, url);
+      return;
+    }
+  }
+  window.open(url, '_blank');
+}
+
+async function fetchAndOpenFile(apiUrl, pat, fallbackUrl) {
+  showToast('🔄 Opening private file...', '');
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Authorization': 'token ' + pat,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.download_url) {
+        // Fetch actual file content
+        const fileResponse = await fetch(data.download_url, {
+          headers: { 'Authorization': 'token ' + pat }
+        });
+        const blob = await fileResponse.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        window.open(objectUrl, '_blank');
+        showToast('✅ File opened!', 'success');
+      }
+    } else {
+      showToast('Could not open file. Check your PAT.', 'error');
+      window.open(fallbackUrl, '_blank');
+    }
+  } catch(e) {
+    showToast('Network error opening file', 'error');
+    window.open(fallbackUrl, '_blank');
+  }
+}
+
+// EXPORT / IMPORT / RESET
+function exportData() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'acc-backup-' + today() + '.json';
+  a.click();
+  showToast('📤 Data exported!', 'success');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (confirm('This will replace all current data. Continue?')) {
+          state = imported;
+          saveState();
+          renderDashboard();
+          showToast('📥 Data imported!', 'success');
+        }
+      } catch(err) {
+        showToast('Invalid backup file', 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function resetApp() {
+  if (!confirm('Reset ALL app data? This cannot be undone.')) return;
+  if (!confirm('Are you absolutely sure? All assignments, grades, and files will be deleted.')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+function renderSettingsStatus() {
+  const pat = getPAT();
+  const statusEl = document.getElementById('pat-status');
+  if (!statusEl) return;
+  if (pat) {
+    statusEl.innerHTML = '<div class="alert" style="margin:0; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green);"><span class="alert-icon">🔒</span><div class="alert-text">Token active on this device. Click Test Connection to verify it still works.</div></div>';
+  } else {
+    statusEl.innerHTML = '<div class="alert alert-orange" style="margin:0;"><span class="alert-icon">⚠️</span><div class="alert-text">No token saved. Enter your GitHub PAT above to enable private file access.</div></div>';
+  }
+}
+
+
+// ============================================
+// FILE MANAGER
+// ============================================
+
+const FILES_DEFAULT = [
+  { id:'f1', name:'SOC 205 Syllabus — Summer 2026', course:'SOC 205', type:'📋 Syllabus', url:'https://github.com/mrrazz/mwcc-files/blob/main/files/summer-2026/SOC205/syllabus-soc205-summer2026.pdf', semester:'Summer 2026', notes:'Due dates, late policy, professor contact. Login to GitHub to view.', dateAdded:'2026-06-01' },
+  { id:'f2', name:'ECO 101 Syllabus — Summer 2026', course:'ECO 101', type:'📋 Syllabus', url:'', semester:'Summer 2026', notes:'MyEconLab schedule, grading breakdown', dateAdded:'2026-06-01' },
+  { id:'f3', name:'POL 211 Syllabus — Summer 2026', course:'POL 211', type:'📋 Syllabus', url:'', semester:'Summer 2026', notes:'Quiz schedule, research paper details', dateAdded:'2026-06-01' },
+  { id:'f4', name:'POL 211 Research Paper Instructions', course:'POL 211', type:'📝 Assignment', url:'', semester:'Summer 2026', notes:'5-6 pages, APA, 3 sources, topic approval required', dateAdded:'2026-06-01' },
+  { id:'f5', name:'SOC 205 Ch. 1-4 Assignment Questions', course:'SOC 205', type:'📝 Assignment', url:'', semester:'Summer 2026', notes:'Due June 5. Submit all together.', dateAdded:'2026-06-03' },
+  { id:'f6', name:'MWCC Degree Audit', course:'Degree', type:'🎓 Degree', url:'', semester:'General', notes:'75% complete. 15 credits remaining after Summer 2026.', dateAdded:'2026-06-01' },
+  { id:'f7', name:'Salem State BSW Degree Map', course:'Degree', type:'🎓 Degree', url:'', semester:'General', notes:'From Sharon German. Shows all transfer credits.', dateAdded:'2026-06-01' },
+  { id:'f8', name:'BIO 109 Syllabus — Summer 2026', course:'BIO 109', type:'📋 Syllabus', url:'', semester:'Summer 2026', notes:'Professor TBD — upload when available', dateAdded:'2026-06-01' },
+  { id:'f9', name:'PSY 240 Syllabus — Summer 2026', course:'PSY 240', type:'📋 Syllabus', url:'', semester:'Summer 2026', notes:'Professor TBD — upload when available', dateAdded:'2026-06-01' }
+];
+
+let fileFilter = 'all';
+
+function initFiles() {
+  if (!state.files) {
+    state.files = FILES_DEFAULT;
+    saveState();
+  }
+}
+
+function filterFiles(f, btn) {
+  fileFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderFiles();
+}
+
+function renderFiles() {
+  initFiles();
+  const search = (document.getElementById('file-search') || {}).value || '';
+  const q = search.toLowerCase();
+
+  let items = [...state.files];
+
+  if (fileFilter !== 'all') {
+    if (fileFilter.includes('📋') || fileFilter.includes('📝') || fileFilter.includes('📖') || fileFilter.includes('🔍')) {
+      items = items.filter(f => f.type === fileFilter);
+    } else {
+      items = items.filter(f => f.course === fileFilter);
+    }
+  }
+
+  if (q) {
+    items = items.filter(f =>
+      f.name.toLowerCase().includes(q) ||
+      f.course.toLowerCase().includes(q) ||
+      f.type.toLowerCase().includes(q) ||
+      (f.notes||'').toLowerCase().includes(q)
+    );
+  }
+
+  const courseColors = {
+    'SOC 205':'#ff4444','ECO 101':'#06d6a0','POL 211':'#4cc9f0',
+    'BIO 109':'#ffd166','PSY 240':'#a855f7','Degree':'#a855f7',
+    'Financial':'#ff8c42','General':'#888'
+  };
+
+  const list = document.getElementById('file-list');
+  if (!list) return;
+
+  if (items.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📁</div><h3>No files found</h3><p>Add files using the + button above, or try a different filter.</p></div>`;
+    return;
+  }
+
+  // Group by course
+  const grouped = {};
+  items.forEach(f => {
+    if (!grouped[f.course]) grouped[f.course] = [];
+    grouped[f.course].push(f);
+  });
+
+  let html = '';
+  Object.keys(grouped).sort().forEach(course => {
+    const color = courseColors[course] || '#888';
+    const files = grouped[course];
+
+    html += `<div style="margin-bottom:16px;">
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:${color}; padding:8px 0 6px; border-bottom:1px solid ${color}33; margin-bottom:8px;">${course} — ${files.length} file${files.length>1?'s':''}</div>`;
+
+    files.forEach(f => {
+      const hasUrl = f.url && f.url.trim().length > 0;
+      const isGithub = f.url && f.url.includes('github.com/mrrazz/mwcc-files');
+
+      html += `<div class="card-sm" style="margin-bottom:8px; border-left:3px solid ${color}${hasUrl?'':'44'}; ${!hasUrl?'opacity:0.7':''}">
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+          <div style="font-size:20px; flex-shrink:0; margin-top:1px;">${f.type.split(' ')[0]}</div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:13px; font-weight:700; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${f.name}</div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:${f.notes?'4px':'0'};">
+              <span style="font-size:10px; font-weight:600; padding:2px 6px; border-radius:20px; background:${color}22; color:${color}; border:1px solid ${color}44;">${f.type.substring(f.type.indexOf(' ')+1)}</span>
+              <span style="font-size:10px; color:var(--text3);">${f.semester}</span>
+              ${isGithub ? '<span style="font-size:10px; color:var(--green);">🔒 Private GitHub</span>' : ''}
+              ${!hasUrl ? '<span style="font-size:10px; color:var(--orange);">⚠️ No link yet</span>' : ''}
+            </div>
+            ${f.notes ? `<div style="font-size:11px; color:var(--text3); line-height:1.4;">${f.notes}</div>` : ''}
+          </div>
+          <div style="display:flex; flex-direction:column; gap:5px; flex-shrink:0;">
+            ${hasUrl ? '<button class="btn btn-sm btn-success file-open-btn" data-file-id="' + f.id + '">📂 Open</button>' : '<button class="btn btn-sm file-edit-btn" data-file-id="' + f.id + '" style="font-size:10px;">Add Link</button>'}
+            <button class="btn btn-sm" onclick="editFile('${f.id}')">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteFile('${f.id}')">🗑</button>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  list.innerHTML = html;
+
+  // Attach click handlers via delegation (avoids inline onclick escaping issues)
+  list.querySelectorAll('.file-open-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const fileId = this.getAttribute('data-file-id');
+      openFileById(fileId);
+    });
+  });
+  list.querySelectorAll('.file-edit-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const fileId = this.getAttribute('data-file-id');
+      editFile(fileId);
+    });
+  });
+}
+
+function openAddFile() {
+  initFiles();
+  document.getElementById('modal-file-title').textContent = 'Add File';
+  document.getElementById('edit-file-id').value = '';
+  document.getElementById('file-name').value = '';
+  document.getElementById('file-course').value = 'SOC 205';
+  document.getElementById('file-type').value = '📋 Syllabus';
+  document.getElementById('file-url').value = '';
+  document.getElementById('file-semester').value = 'Summer 2026';
+  document.getElementById('file-notes').value = '';
+  document.getElementById('modal-file').classList.add('open');
+}
+
+function editFile(id) {
+  initFiles();
+  const f = state.files.find(x => x.id === id);
+  if (!f) return;
+  document.getElementById('modal-file-title').textContent = 'Edit File';
+  document.getElementById('edit-file-id').value = id;
+  document.getElementById('file-name').value = f.name;
+  document.getElementById('file-course').value = f.course;
+  document.getElementById('file-type').value = f.type;
+  document.getElementById('file-url').value = f.url || '';
+  document.getElementById('file-semester').value = f.semester;
+  document.getElementById('file-notes').value = f.notes || '';
+  document.getElementById('modal-file').classList.add('open');
+}
+
+function saveFile() {
+  initFiles();
+  const name = document.getElementById('file-name').value.trim();
+  if (!name) { showToast('File name required', 'error'); return; }
+
+  const editId = document.getElementById('edit-file-id').value;
+  const data = {
+    name,
+    course: document.getElementById('file-course').value,
+    type: document.getElementById('file-type').value,
+    url: document.getElementById('file-url').value.trim(),
+    semester: document.getElementById('file-semester').value,
+    notes: document.getElementById('file-notes').value.trim(),
+    dateAdded: today()
+  };
+
+  if (editId) {
+    const idx = state.files.findIndex(x => x.id === editId);
+    if (idx > -1) state.files[idx] = { ...state.files[idx], ...data };
+    showToast('✏️ File updated', 'success');
+  } else {
+    data.id = genId();
+    state.files.push(data);
+    showToast('📁 File added!', 'success');
+  }
+
+  saveState();
+  closeModal('modal-file');
+  renderFiles();
+}
+
+function deleteFile(id) {
+  if (!confirm('Remove this file from your manager?')) return;
+  state.files = (state.files || []).filter(f => f.id !== id);
+  saveState();
+  renderFiles();
+  showToast('🗑 Removed', '');
+}
+
+
+// ============================================
+// GRADES
+// ============================================
+function addGrade() {
+  const course = document.getElementById('grade-course-sel').value;
+  const name = document.getElementById('grade-assign-name').value.trim();
+  const score = parseFloat(document.getElementById('grade-score').value);
+  const outof = parseFloat(document.getElementById('grade-outof').value);
+  if (!name || isNaN(score) || isNaN(outof) || outof <= 0) {
+    showToast('Fill in all grade fields', 'error'); return;
+  }
+  if (!state.grades) state.grades = [];
+  state.grades.push({ id: genId(), course, name, score, outof, pct: Math.round((score/outof)*100) });
+  saveState();
+  renderGrades();
+  document.getElementById('grade-assign-name').value = '';
+  document.getElementById('grade-score').value = '';
+  document.getElementById('grade-outof').value = '';
+  showToast('📊 Grade recorded!', 'success');
+}
+
+function letterGrade(pct) {
+  if (pct >= 93) return {l:'A', c:'var(--green)'};
+  if (pct >= 90) return {l:'A-', c:'var(--green)'};
+  if (pct >= 87) return {l:'B+', c:'var(--blue)'};
+  if (pct >= 83) return {l:'B', c:'var(--blue)'};
+  if (pct >= 80) return {l:'B-', c:'var(--blue)'};
+  if (pct >= 77) return {l:'C+', c:'var(--yellow)'};
+  if (pct >= 73) return {l:'C', c:'var(--yellow)'};
+  if (pct >= 70) return {l:'C-', c:'var(--yellow)'};
+  if (pct >= 67) return {l:'D+', c:'var(--orange)'};
+  if (pct >= 60) return {l:'D', c:'var(--orange)'};
+  return {l:'F', c:'var(--red)'};
+}
+
+function renderGrades() {
+  if (!state.grades) state.grades = [];
+
+  // Course standing cards
+  const courseSummary = document.getElementById('grade-course-list');
+  const courses = ['SOC 205','ECO 101','POL 211','BIO 109','PSY 240'];
+  const courseColors = {'SOC 205':'#ff4444','ECO 101':'#06d6a0','POL 211':'#4cc9f0','BIO 109':'#ffd166','PSY 240':'#a855f7'};
+
+  courseSummary.innerHTML = courses.map(c => {
+    const grades = (state.grades || []).filter(g => g.course === c);
+    if (grades.length === 0) {
+      return `<div class="card-sm" style="margin-bottom:8px; border-left:3px solid ${courseColors[c]}44;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:13px; font-weight:700; color:${courseColors[c]};">${c}</span>
+          <span style="font-size:11px; color:var(--text3);">No grades yet</span>
+        </div>
+      </div>`;
+    }
+    const avg = Math.round(grades.reduce((s,g) => s + g.pct, 0) / grades.length);
+    const lg = letterGrade(avg);
+    return `<div class="card-sm" style="margin-bottom:8px; border-left:3px solid ${courseColors[c]};">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:13px; font-weight:700; color:${courseColors[c]};">${c}</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700;">${avg}%</span>
+          <span style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; background:${lg.c}22; color:${lg.c}; border:1px solid ${lg.c}44;">${lg.l}</span>
+        </div>
+      </div>
+      <div style="font-size:11px; color:var(--text3); margin-top:4px;">${grades.length} grade${grades.length>1?'s':''} recorded</div>
+    </div>`;
+  }).join('');
+
+  // All grades list
+  const allList = document.getElementById('all-grades-list');
+  if (!state.grades.length) {
+    allList.innerHTML = '<div class="empty-state" style="padding:20px;"><div class="empty-state-icon">📊</div><h3>No grades yet</h3><p>Add grades above as you receive them.</p></div>';
+    return;
+  }
+
+  const sorted = [...state.grades].sort((a,b) => b.pct - a.pct);
+  allList.innerHTML = sorted.map(g => {
+    const lg = letterGrade(g.pct);
+    const courseColor = {'SOC 205':'#ff4444','ECO 101':'#06d6a0','POL 211':'#4cc9f0','BIO 109':'#ffd166','PSY 240':'#a855f7'}[g.course] || '#888';
+    return `<div class="grade-row">
+      <div style="flex:1; min-width:0;">
+        <div style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.name}</div>
+        <div style="font-size:11px; color:${courseColor};">${g.course}</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; margin-right:8px;">${g.score}/${g.outof}</div>
+      <div style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; background:${lg.c}22; color:${lg.c}; border:1px solid ${lg.c}44; margin-right:6px;">${g.pct}%</div>
+      <div style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:20px; background:${lg.c}22; color:${lg.c};">${lg.l}</div>
+      <button class="btn btn-sm btn-danger" style="margin-left:6px;" onclick="deleteGrade('${g.id}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteGrade(id) {
+  if (!confirm('Remove this grade?')) return;
+  state.grades = (state.grades || []).filter(g => g.id !== id);
+  saveState();
+  renderGrades();
+  showToast('Grade removed', '');
+}
+
+// ============================================
+// STUDY PLANNER
+// ============================================
+function buildPlan() {
+  const hours = parseFloat(document.getElementById('planner-hours').value);
+  const mins = hours * 60;
+
+  const pending = state.assignments
+    .filter(a => a.status === 'Not Started' || a.status === 'In Progress')
+    .sort((a,b) => getPriority(a) - getPriority(b))
+    .slice(0, 6);
+
+  if (pending.length === 0) {
+    document.getElementById('plan-output').innerHTML = '<div class="card"><div class="empty-state" style="padding:20px;"><div class="empty-state-icon">🎉</div><h3>Nothing pending!</h3><p>All caught up.</p></div></div>';
+    return;
+  }
+
+  let plan = [];
+  let usedMins = 0;
+  const BREAK = 15;
+
+  for (const a of pending) {
+    const taskMins = a.time || 45;
+    if (usedMins + taskMins <= mins) {
+      plan.push({...a, allocatedMins: taskMins});
+      usedMins += taskMins;
+      if (usedMins < mins - BREAK) usedMins += 0;
+    }
+  }
+
+  const courseColors = {'SOC 205':'#ff4444','ECO 101':'#06d6a0','POL 211':'#4cc9f0','BIO 109':'#ffd166','PSY 240':'#a855f7'};
+
+  let html = `<div class="card" style="margin-top:0;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div style="font-size:14px; font-weight:700;">Tonight's Plan</div>
+      <div style="font-size:12px; color:var(--text2);">${usedMins} of ${mins} min used</div>
+    </div>`;
+
+  let startMin = 6 * 60 + 45;
+  plan.forEach((a, i) => {
+    const startH = Math.floor(startMin / 60);
+    const startM = startMin % 60;
+    const endMin = startMin + a.allocatedMins;
+    const endH = Math.floor(endMin / 60);
+    const endM = endMin % 60;
+    const fmt = (h,m) => `${h>12?h-12:h}:${m.toString().padStart(2,'0')} ${h>=12?'PM':'AM'}`;
+    const p = getPriority(a);
+    const color = courseColors[a.course] || '#888';
+
+    html += `<div style="display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text3); min-width:80px; padding-top:2px;">${fmt(startH,startM)}<br>${fmt(endH,endM)}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px; font-weight:700; margin-bottom:2px;">${a.name}</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <span style="font-size:10px; font-weight:600; color:${color};">${a.course}</span>
+          <span class="priority-tag ${getPriorityTagClass(p)}" style="font-size:10px;">${getPriorityLabel(p)}</span>
+          <span style="font-size:10px; color:var(--text3);">⏱ ${a.allocatedMins}min</span>
+        </div>
+      </div>
+    </div>`;
+
+    startMin = endMin;
+    if (i < plan.length - 1) startMin += 5;
+  });
+
+  const remaining = pending.filter(a => !plan.find(p => p.id === a.id));
+  html += `</div>`;
+
+  if (remaining.length > 0) {
+    html += `<div class="card" style="margin-top:8px; background:var(--bg3);">
+      <div style="font-size:12px; font-weight:700; color:var(--text2); margin-bottom:8px;">⏭ Save for later</div>
+      ${remaining.map(a => `<div style="font-size:12px; color:var(--text3); padding:4px 0;">${a.name} — ${a.course}</div>`).join('')}
+    </div>`;
+  }
+
+  document.getElementById('plan-output').innerHTML = html;
+}
+
+
+loadState();
+initFiles();
+renderDashboard();
+updateClock();
+setInterval(updateClock, 60000);
+if(document.getElementById("all-grades-list")) renderGrades();
+</script>
+</body>
+</html>
