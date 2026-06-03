@@ -101,23 +101,37 @@ body {
 }
 .nav::-webkit-scrollbar { display: none; }
 .nav-btn {
-  flex: 0 0 64px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 8px 4px 6px;
+  padding: 8px 2px 6px;
   background: none;
   border: none;
   color: var(--text3);
   cursor: pointer;
   font-family: inherit;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 500;
   transition: color 0.2s;
   position: relative;
-  min-width: 60px;
+  min-width: 0;
 }
+.gear-fab {
+  position: fixed;
+  top: 12px; right: 12px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  color: var(--text3);
+  transition: color 0.2s;
+}
+.gear-fab:hover { color: var(--purple); }
 .nav-btn.active { color: var(--purple); }
 .nav-btn svg { width: 20px; height: 20px; }
 .nav-badge {
@@ -1070,6 +1084,10 @@ body {
         <label class="form-label">Out Of</label>
         <input type="number" class="form-input" id="grade-outof" placeholder="100" min="1" max="10000">
       </div>
+      <div class="form-group">
+        <label class="form-label">Weight %</label>
+        <input type="number" class="form-input" id="grade-weight" placeholder="e.g. 20" min="0" max="100">
+      </div>
     </div>
     <button class="btn btn-primary btn-full" onclick="addGrade()">+ Record Grade</button>
   </div>
@@ -1595,22 +1613,21 @@ body {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 0 9 3 12 0v-5"/></svg>
     Degree
   </button>
-  <button class="nav-btn" id="nav-settings-btn" onclick="showPage('settings', this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-    Settings
-  </button>
 </nav>
+<button class="gear-fab" id="nav-settings-btn" onclick="showPage('settings', document.getElementById('nav-settings-btn'))" title="Settings">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+</button>
 
 <script>
 // ============================================
 // DATA
 // ============================================
 const COURSES_DEFAULT = [
-  { id:'soc205', code:'SOC 205', name:'Social Problems', credits:3, risk:'high', prof:'Lynn Barrieau', email:'l_barrieau@mwcc.mass.edu', platform:'Blackboard + Email', link:'https://www.mwcc.edu', color:'#ff4444', abbr:'SOC' },
+  { id:'soc205', code:'SOC 205', name:'Social Problems', credits:3, risk:'high', prof:'Lynn Barrieau', email:'l_barrieau@mwcc.mass.edu', platform:'Blackboard + Email', link:'https://mwcc.blackboard.com', color:'#ff4444', abbr:'SOC' },
   { id:'eco101', code:'ECO 101', name:'Macroeconomics', credits:3, risk:'high', prof:'Dr. Michael Greenwood', email:'mgreenwood@mwcc.mass.edu', platform:'MyEconLab', link:'https://www.myeconlab.com', color:'#06d6a0', abbr:'ECO' },
-  { id:'pol211', code:'POL 211', name:'American Government', credits:3, risk:'med', prof:'Shane Martin', email:'s_martin@mwcc.mass.edu', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#4cc9f0', abbr:'POL' },
-  { id:'bio109', code:'BIO 109', name:'Concepts in Biology', credits:4, risk:'high', prof:'TBD', email:'', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#ffd166', abbr:'BIO' },
-  { id:'psy240', code:'PSY 240', name:'Abnormal Psychology', credits:3, risk:'med', prof:'TBD', email:'', platform:'Blackboard', link:'https://www.mwcc.edu', color:'#a855f7', abbr:'PSY' }
+  { id:'pol211', code:'POL 211', name:'American Government', credits:3, risk:'med', prof:'Shane Martin', email:'s_martin@mwcc.mass.edu', platform:'Blackboard', link:'https://mwcc.blackboard.com', color:'#4cc9f0', abbr:'POL' },
+  { id:'bio109', code:'BIO 109', name:'Concepts in Biology', credits:4, risk:'high', prof:'TBD', email:'', platform:'Blackboard', link:'https://mwcc.blackboard.com', color:'#ffd166', abbr:'BIO' },
+  { id:'psy240', code:'PSY 240', name:'Abnormal Psychology', credits:3, risk:'med', prof:'TBD', email:'', platform:'Blackboard', link:'https://mwcc.blackboard.com', color:'#a855f7', abbr:'PSY' }
 ];
 
 const ASSIGNMENTS_DEFAULT = [
@@ -1991,7 +2008,7 @@ function renderCourses() {
       </div>
       <div class="course-body" id="course-body-${c.id}">
         <div class="course-links">
-          <a class="btn btn-sm" href="${c.link}" target="_blank" style="text-decoration:none; text-align:center;">📚 Open Course</a>
+          <a class="btn btn-sm" href="${c.link}" target="_blank" style="text-decoration:none; text-align:center;">📚 ${c.platform}</a>
           <a class="btn btn-sm" href="mailto:${c.email}" style="text-decoration:none; text-align:center;">✉️ Email Prof</a>
         </div>
         <div class="course-stat-row"><span>Professor</span><span class="course-stat-val">${c.prof}</span></div>
@@ -2482,16 +2499,19 @@ function addGrade() {
   const name = document.getElementById('grade-assign-name').value.trim();
   const score = parseFloat(document.getElementById('grade-score').value);
   const outof = parseFloat(document.getElementById('grade-outof').value);
+  const weightRaw = document.getElementById('grade-weight').value;
+  const weight = weightRaw !== '' ? parseFloat(weightRaw) : null;
   if (!name || isNaN(score) || isNaN(outof) || outof <= 0) {
     showToast('Fill in all grade fields', 'error'); return;
   }
   if (!state.grades) state.grades = [];
-  state.grades.push({ id: genId(), course, name, score, outof, pct: Math.round((score/outof)*100) });
+  state.grades.push({ id: genId(), course, name, score, outof, pct: Math.round((score/outof)*100), weight });
   saveState();
   renderGrades();
   document.getElementById('grade-assign-name').value = '';
   document.getElementById('grade-score').value = '';
   document.getElementById('grade-outof').value = '';
+  document.getElementById('grade-weight').value = '';
   showToast('📊 Grade recorded!', 'success');
 }
 
@@ -2527,7 +2547,10 @@ function renderGrades() {
         </div>
       </div>`;
     }
-    const avg = Math.round(grades.reduce((s,g) => s + g.pct, 0) / grades.length);
+    const hasWeights = grades.some(g => g.weight != null);
+    const avg = hasWeights
+      ? (() => { const tw = grades.reduce((s,g) => s+(g.weight||1),0); return Math.round(grades.reduce((s,g) => s+g.pct*(g.weight||1),0)/tw); })()
+      : Math.round(grades.reduce((s,g) => s+g.pct,0)/grades.length);
     const lg = letterGrade(avg);
     return `<div class="card-sm" style="margin-bottom:8px; border-left:3px solid ${courseColors[c]};">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2555,7 +2578,7 @@ function renderGrades() {
     return `<div class="grade-row">
       <div style="flex:1; min-width:0;">
         <div style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${g.name}</div>
-        <div style="font-size:11px; color:${courseColor};">${g.course}</div>
+        <div style="font-size:11px; color:${courseColor};">${g.course}${g.weight!=null?` · <span style="color:var(--text3)">${g.weight}% weight</span>`:''}</div>
       </div>
       <div style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; margin-right:8px;">${g.score}/${g.outof}</div>
       <div style="font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; background:${lg.c}22; color:${lg.c}; border:1px solid ${lg.c}44; margin-right:6px;">${g.pct}%</div>
