@@ -1978,97 +1978,16 @@ const QUIZ_BANK = [
 // ============================================
 /*
   Study resources are read-only reference content shown on the Study page below
-  the quizzes — chapter questions, study guides, key-term lists, etc. Unlike
-  QUIZ_BANK (interactive MC), these are for reading/prep. Add more by pushing
-  objects: { id, course, name, kind, tag, chapters:[{ n, qs:[strings] }] }.
-  SOC 205 chapter questions below are the real essay prompts from Prof.
-  Barrieau's assignment PDFs (deduplicated 2026-07-02).
+  the quizzes. Add PRACTICE material we author here with the shape:
+  { id, course, name, kind, tag, chapters:[{ n, qs:[strings] }] }.
+
+  IMPORTANT (privacy rule): real course-provided material — exam questions,
+  the professor's actual assignment/chapter questions, anything literally from
+  the course — must NOT live here, because this repo is PUBLIC. Keep that
+  content LOCAL only (see ~/Downloads study folder). This array holds
+  practice-only content. (SOC 205 chapter questions were removed 2026-07-02.)
 */
-const STUDY_RESOURCES = [
-  { id:'soc205-cq-5-8', course:'SOC 205', name:'Chapter Questions 5–8', kind:'Essay Questions', tag:'Midterm Ch. 1–8', chapters:[
-    { n:5, qs:[
-      'What are the four types of partner violence identified in the text?',
-      'What factors contribute to domestic violence and abuse?',
-      'Explain the marital decline and marital resiliency perspective.',
-      'Explain how structural functionalism, conflict theory, and symbolic interaction help us understand the family institution, divorce, domestic violence, and abuse.',
-      'Describe the effects of violence and abuse on victims.'
-    ]},
-    { n:6, qs:[
-      'How is poverty measured?',
-      'What are some criticisms of the U.S. Poverty Line?',
-      'What are international and U.S. strategies aimed at reducing poverty and economic inequality?',
-      'What are five common myths about welfare in the United States?',
-      'Describe the Occupy Wall Street movement and what it was intended to do.'
-    ]},
-    { n:7, qs:[
-      'What are criticisms of capitalism?',
-      'Describe work/life conflict.',
-      'Explain what worker cooperatives are.',
-      'What is the Family and Medical Leave Act?',
-      'What are the four principles of McDonaldization?'
-    ]},
-    { n:8, qs:[
-      'According to the structural functionalist perspective, what are the functions of education?',
-      'What is a self-fulfilling prophecy?',
-      'What are the four reasons given as to why Black and Hispanic students, in general, do not perform as well in school as their white and Asian counterparts?',
-      'What is value-added measurement, and why are there concerns about its use?',
-      'What are the benefits and drawbacks to school choice?'
-    ]}
-  ]},
-  { id:'soc205-cq-9-12', course:'SOC 205', name:'Chapter Questions 9–12', kind:'Essay Questions', tag:'Submit as a group', chapters:[
-    { n:9, qs:[
-      'Explain the idea that race is socially constructed.',
-      'What are the five categories used to identify the race composition in the United States?',
-      'How is color blindness a form of racism?',
-      'What are witness studies?',
-      'Explain what microaggressions are and provide three examples.'
-    ]},
-    { n:10, qs:[
-      'Explain the differences between structural and cultural sexism.',
-      'What is the masculine overcompensation thesis and what were the conclusions?',
-      'What is the wage gap in the 10 most common occupations for men and women?',
-      'What are the social-psychological costs of gender socialization?',
-      'Explain the difference between the glass ceiling and the glass escalator.'
-    ]},
-    { n:11, qs:[
-      'What cultural and structural changes in society have led to an increase in legal and social support for the LGBTQ community?',
-      'What is the Defense of Marriage Act, and how did United States v. Windsor impact it?',
-      'Explain the decision in Obergefell v. Hodges.',
-      'Explain gender non-conformity.',
-      'Why was the It Gets Better Project started?'
-    ]},
-    { n:12, qs:[
-      'Discuss ways in which structural functionalism, conflict theory, and symbolic interactionism can be applied to the study of population and aging.',
-      'Describe problems related to the aging of the population, including ageism, employment, and retirement concerns.',
-      'Describe strategies to curb global population growth and reform Social Security.',
-      'Explain the club sandwich generation.',
-      'What is the demographic transition theory?'
-    ]}
-  ]},
-  { id:'soc205-cq-13-15', course:'SOC 205', name:'Chapter Questions 13–15', kind:'Essay Questions', tag:'Submit as a group', chapters:[
-    { n:13, qs:[
-      'Give an example of an environmental problem that crosses international borders.',
-      'Briefly describe the following environmental problems: depletion of natural resources; global warming and climate change; and environmental illness.',
-      'Describe various strategies and efforts to restore and protect the environment.',
-      'How do free trade agreements and transnational corporations contribute to environmental issues?',
-      'What is greenwashing?'
-    ]},
-    { n:14, qs:[
-      'List features of the Technological Revolution.',
-      'According to Kuhn, what is the scientific process?',
-      'Describe and give examples of the ways in which technology transforms aspects of the human experience.',
-      'Assess the positive and negative effects of science and technology on society.',
-      'What is meant by the commercialization of technology?'
-    ]},
-    { n:15, qs:[
-      'Identify trends in global conflict over the past century.',
-      'Explain how war can be an outcome of other social problems.',
-      'Assess the pros and cons of various anti-terrorism strategies.',
-      'Provide examples of other social problems that occur as a consequence of war.',
-      'Argue for a policy change that would help create a more peaceful world.'
-    ]}
-  ]}
-];
+const STUDY_RESOURCES = [];
 
 // ============================================
 // STATE
