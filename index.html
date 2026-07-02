@@ -1819,7 +1819,7 @@ const ASSIGNMENTS_DEFAULT = [
   { id:'a9', course:'ECO 101', name:'Ch. 18 Quiz', type:'Quiz', due:'2026-06-15', time:30, status:'Not Started', notes:'Open book MyEconLab. Unlimited attempts.' },
   { id:'a10', course:'POL 211', name:'Research Paper', type:'Paper', due:'2026-08-07', time:480, status:'Not Started', notes:'Topic approval required first. 5-6 pages. APA. Min 3 sources. NO AI. Email s_martin@mwcc.mass.edu for topic approval ASAP — first come first serve.' },
   { id:'a11', course:'ECO 101', name:'Final Exam — Ch. 18,19,21', type:'Exam', due:'2026-07-03', time:120, status:'Not Started', notes:'ONE ATTEMPT. 120 minutes. Before midnight July 3.' },
-  { id:'a12', course:'SOC 205', name:'Midterm — Ch. 1-8', type:'Exam', due:'2026-07-03', time:90, status:'Not Started', notes:'Multiple choice + short answer. No time limit stated.' }
+  { id:'a12', course:'SOC 205', name:'Midterm — Ch. 1-8', type:'Exam', due:'2026-07-06', time:90, status:'Not Started', notes:'DATE CHANGE (6/28): now due JULY 6 (was July 3). Available on Blackboard. EMAIL ANSWERS ONLY to l_barrieau@mwcc.mass.edu — number your responses correctly. No Blackboard upload option. Multiple choice + short answer.' }
 ];
 
 const CONTACTS_DEFAULT = [
@@ -1843,10 +1843,21 @@ const EMAIL_TEMPLATES = {
 // QUIZ BANK
 // ============================================
 /*
-  PROFESSOR-STYLE QUESTION RULES  (the "logic" every quiz in this app follows)
-  Modeled on real POL 211 (Prof. Shane Martin) quizzes. When authoring or
-  generating new questions for ANY course, follow these rules so practice
-  matches the real thing:
+  PROFESSOR-STYLE QUESTION RULES  (the "logic" EVERY quiz in this app follows)
+  These are the universal tutor-testing guidelines — they apply to ALL courses
+  (POL 211, SOC 205, ECO 101, BIO 109, PSY 240, and any added later), not just
+  the course they were first modeled on. Originally derived from real POL 211
+  (Prof. Shane Martin) quizzes. Whenever authoring or generating practice
+  questions for ANY course, follow these rules so practice matches the real thing:
+
+   0. ★ CARDINAL RULE — WORK FROM THE SOURCE, NO AD-LIBS. Whenever at all
+      possible, draw BOTH the questions AND the answers from the provided
+      textbook or supplied course material — not from general/background
+      knowledge. The point of practice is to match the actual course, so the
+      source text is the authority. Do NOT invent facts, questions, or answer
+      choices. If the needed material isn't available, say so and mark the item
+      as UNVERIFIED rather than guessing — an ad-libbed question is worse than
+      no question. (Rules 7 and 9 are specific applications of this.)
 
    1. FIVE options (a–e), never four. Guessing odds are 20%, not 25%.
    2. Homogeneous distractors: every wrong answer is a real term from the
@@ -1860,6 +1871,9 @@ const EMAIL_TEMPLATES = {
    6. Reasoning stems, not just definitions ("It is difficult to X because...").
    7. Textbook-anchored where possible ("According to the textbook, ...").
    8. Every item has a short `explain` so review teaches, not just scores.
+   9. Grade to the COURSE'S OWN textbook/answer key, not outside nuance. (POL 211
+      keys "racial" as the controversial gerrymandering answer even though racial
+      gerrymandering is illegal — the textbook's answer wins.)
 
   DATA SHAPE — add more quizzes/courses by pushing objects with this shape:
    {
@@ -1957,6 +1971,103 @@ const QUIZ_BANK = [
         answer: 1, explain: 'Midterm losses track the <strong>president\'s standing with the public</strong> and <strong>the economy</strong> — the two dominate the size of the swing.' }
     ]
   }
+];
+
+// ============================================
+// STUDY RESOURCES  (reference material embedded in the app — non-quiz)
+// ============================================
+/*
+  Study resources are read-only reference content shown on the Study page below
+  the quizzes — chapter questions, study guides, key-term lists, etc. Unlike
+  QUIZ_BANK (interactive MC), these are for reading/prep. Add more by pushing
+  objects: { id, course, name, kind, tag, chapters:[{ n, qs:[strings] }] }.
+  SOC 205 chapter questions below are the real essay prompts from Prof.
+  Barrieau's assignment PDFs (deduplicated 2026-07-02).
+*/
+const STUDY_RESOURCES = [
+  { id:'soc205-cq-5-8', course:'SOC 205', name:'Chapter Questions 5–8', kind:'Essay Questions', tag:'Midterm Ch. 1–8', chapters:[
+    { n:5, qs:[
+      'What are the four types of partner violence identified in the text?',
+      'What factors contribute to domestic violence and abuse?',
+      'Explain the marital decline and marital resiliency perspective.',
+      'Explain how structural functionalism, conflict theory, and symbolic interaction help us understand the family institution, divorce, domestic violence, and abuse.',
+      'Describe the effects of violence and abuse on victims.'
+    ]},
+    { n:6, qs:[
+      'How is poverty measured?',
+      'What are some criticisms of the U.S. Poverty Line?',
+      'What are international and U.S. strategies aimed at reducing poverty and economic inequality?',
+      'What are five common myths about welfare in the United States?',
+      'Describe the Occupy Wall Street movement and what it was intended to do.'
+    ]},
+    { n:7, qs:[
+      'What are criticisms of capitalism?',
+      'Describe work/life conflict.',
+      'Explain what worker cooperatives are.',
+      'What is the Family and Medical Leave Act?',
+      'What are the four principles of McDonaldization?'
+    ]},
+    { n:8, qs:[
+      'According to the structural functionalist perspective, what are the functions of education?',
+      'What is a self-fulfilling prophecy?',
+      'What are the four reasons given as to why Black and Hispanic students, in general, do not perform as well in school as their white and Asian counterparts?',
+      'What is value-added measurement, and why are there concerns about its use?',
+      'What are the benefits and drawbacks to school choice?'
+    ]}
+  ]},
+  { id:'soc205-cq-9-12', course:'SOC 205', name:'Chapter Questions 9–12', kind:'Essay Questions', tag:'Submit as a group', chapters:[
+    { n:9, qs:[
+      'Explain the idea that race is socially constructed.',
+      'What are the five categories used to identify the race composition in the United States?',
+      'How is color blindness a form of racism?',
+      'What are witness studies?',
+      'Explain what microaggressions are and provide three examples.'
+    ]},
+    { n:10, qs:[
+      'Explain the differences between structural and cultural sexism.',
+      'What is the masculine overcompensation thesis and what were the conclusions?',
+      'What is the wage gap in the 10 most common occupations for men and women?',
+      'What are the social-psychological costs of gender socialization?',
+      'Explain the difference between the glass ceiling and the glass escalator.'
+    ]},
+    { n:11, qs:[
+      'What cultural and structural changes in society have led to an increase in legal and social support for the LGBTQ community?',
+      'What is the Defense of Marriage Act, and how did United States v. Windsor impact it?',
+      'Explain the decision in Obergefell v. Hodges.',
+      'Explain gender non-conformity.',
+      'Why was the It Gets Better Project started?'
+    ]},
+    { n:12, qs:[
+      'Discuss ways in which structural functionalism, conflict theory, and symbolic interactionism can be applied to the study of population and aging.',
+      'Describe problems related to the aging of the population, including ageism, employment, and retirement concerns.',
+      'Describe strategies to curb global population growth and reform Social Security.',
+      'Explain the club sandwich generation.',
+      'What is the demographic transition theory?'
+    ]}
+  ]},
+  { id:'soc205-cq-13-15', course:'SOC 205', name:'Chapter Questions 13–15', kind:'Essay Questions', tag:'Submit as a group', chapters:[
+    { n:13, qs:[
+      'Give an example of an environmental problem that crosses international borders.',
+      'Briefly describe the following environmental problems: depletion of natural resources; global warming and climate change; and environmental illness.',
+      'Describe various strategies and efforts to restore and protect the environment.',
+      'How do free trade agreements and transnational corporations contribute to environmental issues?',
+      'What is greenwashing?'
+    ]},
+    { n:14, qs:[
+      'List features of the Technological Revolution.',
+      'According to Kuhn, what is the scientific process?',
+      'Describe and give examples of the ways in which technology transforms aspects of the human experience.',
+      'Assess the positive and negative effects of science and technology on society.',
+      'What is meant by the commercialization of technology?'
+    ]},
+    { n:15, qs:[
+      'Identify trends in global conflict over the past century.',
+      'Explain how war can be an outcome of other social problems.',
+      'Assess the pros and cons of various anti-terrorism strategies.',
+      'Provide examples of other social problems that occur as a consequence of war.',
+      'Argue for a policy change that would help create a more peaceful world.'
+    ]}
+  ]}
 ];
 
 // ============================================
@@ -3058,39 +3169,78 @@ function courseColor(code) {
 function renderStudy() {
   closeQuiz();
   const listEl = document.getElementById('quiz-list');
-  document.getElementById('study-sub').textContent = "Practice quizzes in your professors' style";
-
-  if (!QUIZ_BANK.length) {
-    listEl.innerHTML = `<div class="card" style="text-align:center; color:var(--text2);">No practice quizzes yet.</div>`;
-    return;
-  }
-
-  // group by course
-  const byCourse = {};
-  QUIZ_BANK.forEach(qz => { (byCourse[qz.course] = byCourse[qz.course] || []).push(qz); });
+  document.getElementById('study-sub').textContent = "Practice quizzes & study resources";
 
   let html = '';
-  Object.keys(byCourse).forEach(course => {
-    html += `<div class="section-label">${course}</div>`;
-    byCourse[course].forEach(qz => {
-      const best = state.quizScores?.[qz.id];
-      const total = qz.questions.length;
-      const bestPct = best != null ? Math.round((best / total) * 100) : null;
-      const bestColor = bestPct == null ? 'var(--text3)' : bestPct >= 80 ? 'var(--green)' : bestPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+
+  // ---- Practice quizzes (interactive MC) ----
+  html += `<div class="section-label">📝 Practice Quizzes</div>`;
+  if (!QUIZ_BANK.length) {
+    html += `<div class="card" style="text-align:center; color:var(--text2);">No practice quizzes yet.</div>`;
+  } else {
+    const byCourse = {};
+    QUIZ_BANK.forEach(qz => { (byCourse[qz.course] = byCourse[qz.course] || []).push(qz); });
+    Object.keys(byCourse).forEach(course => {
+      byCourse[course].forEach(qz => {
+        const best = state.quizScores?.[qz.id];
+        const total = qz.questions.length;
+        const bestPct = best != null ? Math.round((best / total) * 100) : null;
+        const bestColor = bestPct == null ? 'var(--text3)' : bestPct >= 80 ? 'var(--green)' : bestPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+        html += `
+          <div class="quiz-card" onclick="openQuiz('${qz.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(course)};">
+            <div class="quiz-card-head">
+              <div>
+                <div class="quiz-card-title">${course} · ${qz.name}</div>
+                <div class="quiz-card-sub">${qz.topic}</div>
+              </div>
+              <div class="quiz-best" style="color:${bestColor};">${best != null ? best + '/' + total : '—'}</div>
+            </div>
+            <div class="quiz-meta">${total} questions · 5 options each${bestPct != null ? ' · best ' + bestPct + '%' : ' · not attempted'}</div>
+          </div>`;
+      });
+    });
+  }
+
+  // ---- Study resources (read-only reference: chapter questions, guides) ----
+  if (typeof STUDY_RESOURCES !== 'undefined' && STUDY_RESOURCES.length) {
+    html += `<div class="section-label" style="margin-top:12px;">📄 Study Resources</div>`;
+    STUDY_RESOURCES.forEach(r => {
+      const nq = r.chapters.reduce((s, c) => s + c.qs.length, 0);
       html += `
-        <div class="quiz-card" onclick="openQuiz('${qz.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(course)};">
+        <div class="quiz-card" onclick="toggleResource('${r.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(r.course)};">
           <div class="quiz-card-head">
             <div>
-              <div class="quiz-card-title">${qz.name}</div>
-              <div class="quiz-card-sub">${qz.topic}</div>
+              <div class="quiz-card-title">${r.course} · ${r.name}</div>
+              <div class="quiz-card-sub">${r.kind}${r.tag ? ' · ' + r.tag : ''}</div>
             </div>
-            <div class="quiz-best" style="color:${bestColor};">${best != null ? best + '/' + total : '—'}</div>
+            <div class="quiz-best" id="res-caret-${r.id}" style="color:var(--text3);">▸</div>
           </div>
-          <div class="quiz-meta">${total} questions · 5 options each${bestPct != null ? ' · best ' + bestPct + '%' : ' · not attempted'}</div>
+          <div class="quiz-meta">${r.chapters.length} chapters · ${nq} questions</div>
+          <div id="res-body-${r.id}" style="display:none; margin-top:10px;" onclick="event.stopPropagation()">${renderResourceBody(r)}</div>
         </div>`;
     });
-  });
+  }
+
   listEl.innerHTML = html;
+}
+
+function renderResourceBody(r) {
+  return r.chapters.map(c => `
+    <div style="margin-bottom:12px;">
+      <div style="font-weight:700; font-size:13px; color:var(--text); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">Chapter ${c.n}</div>
+      <ol style="margin:0; padding-left:18px; color:var(--text2); font-size:13px; line-height:1.55;">
+        ${c.qs.map(q => `<li style="margin-bottom:5px;">${q}</li>`).join('')}
+      </ol>
+    </div>`).join('');
+}
+
+function toggleResource(id) {
+  const body = document.getElementById('res-body-' + id);
+  const caret = document.getElementById('res-caret-' + id);
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (caret) caret.textContent = open ? '▸' : '▾';
 }
 
 function shuffle(arr) {
