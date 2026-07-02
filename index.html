@@ -757,6 +757,76 @@ body {
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.success { border-color: var(--green-border); color: var(--green); }
 .toast.error { border-color: var(--red-border); color: var(--red); }
+
+/* ===== ASSIGNMENT DONE CHECKBOX ===== */
+.assign-check {
+  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 7px;
+  border: 2px solid var(--border2); background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 800; color: #fff; cursor: pointer;
+  margin-top: 1px; transition: transform .1s, background .12s, border-color .12s;
+}
+.assign-check:hover { border-color: var(--green); }
+.assign-check.checked { background: var(--green); border-color: var(--green); }
+.assign-check:active { transform: scale(0.88); }
+
+/* ===== QUIZ / STUDY ===== */
+.quiz-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 12px 16px 0;
+}
+.quiz-card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.quiz-card-title { font-size: 15px; font-weight: 700; color: var(--text); }
+.quiz-card-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.quiz-meta { font-size: 11px; color: var(--text3); margin-top: 8px; font-family:'JetBrains Mono',monospace; }
+.quiz-best { font-family:'JetBrains Mono',monospace; font-size: 13px; font-weight: 700; }
+
+.quiz-progress-bar { height: 6px; background: var(--bg4); border-radius: 3px; overflow: hidden; margin: 12px 16px 0; }
+.quiz-progress-fill { height: 100%; background: var(--purple); transition: width .25s ease; }
+
+.q-block { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin: 12px 16px 0; }
+.q-num { font-family:'JetBrains Mono',monospace; font-size: 11px; font-weight: 700; color: var(--purple); letter-spacing: 1px; }
+.q-stem { font-size: 14px; font-weight: 600; color: var(--text); margin: 6px 0 12px; line-height: 1.45; }
+.q-stem .except { color: var(--orange); font-weight: 700; }
+
+.opt {
+  display: flex; align-items: flex-start; gap: 10px;
+  border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 11px 12px; margin-bottom: 8px; cursor: pointer;
+  transition: background .12s, border-color .12s;
+  font-size: 13px; line-height: 1.4; color: var(--text);
+}
+.opt:hover { background: var(--bg3); }
+.opt.selected { border-color: var(--purple); background: var(--purple-bg); }
+.opt-letter {
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center;
+  font-family:'JetBrains Mono',monospace; font-size: 11px; font-weight: 700; color: var(--text2);
+}
+.opt.selected .opt-letter { background: var(--purple); border-color: var(--purple); color: #fff; }
+/* graded states */
+.opt.correct { border-color: var(--green-border); background: var(--green-bg); }
+.opt.correct .opt-letter { background: var(--green); border-color: var(--green); color: #fff; }
+.opt.wrong { border-color: var(--red-border); background: var(--red-bg); }
+.opt.wrong .opt-letter { background: var(--red); border-color: var(--red); color: #fff; }
+.opt.locked { cursor: default; }
+.opt.locked:hover { background: inherit; }
+.q-explain {
+  font-size: 12px; color: var(--text2); line-height: 1.5;
+  margin-top: 6px; padding: 10px 12px;
+  background: var(--bg3); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--purple);
+}
+.q-explain strong { color: var(--text); }
+
+.quiz-result { text-align: center; padding: 20px 16px 4px; }
+.quiz-score-big { font-family:'JetBrains Mono',monospace; font-size: 42px; font-weight: 700; line-height: 1; }
+.quiz-score-pct { font-size: 14px; color: var(--text2); margin-top: 6px; }
+.quiz-actions { display: flex; gap: 8px; margin: 12px 16px 0; }
+.quiz-actions .btn { flex: 1; }
 </style>
 </head>
 <body>
@@ -1405,6 +1475,31 @@ body {
 
 
 
+<!-- PAGE: STUDY -->
+<div class="page" id="page-study">
+  <div class="header">
+    <div class="header-top">
+      <h1>🎓 Study</h1>
+      <button class="btn btn-sm" id="quiz-back-btn" onclick="closeQuiz()" style="display:none;">← Quizzes</button>
+    </div>
+    <div class="header-sub" id="study-sub">Practice quizzes in your professors' style</div>
+  </div>
+
+  <!-- Quiz list -->
+  <div id="quiz-list"></div>
+
+  <!-- Active quiz (hidden until a quiz is opened) -->
+  <div id="quiz-runner" style="display:none;">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div></div>
+    <div id="quiz-questions"></div>
+    <div class="quiz-actions" id="quiz-submit-wrap">
+      <button class="btn btn-primary btn-full" onclick="submitQuiz()">Submit &amp; Grade</button>
+    </div>
+    <div id="quiz-result-wrap"></div>
+    <div style="height:24px;"></div>
+  </div>
+</div>
+
 <!-- PAGE: SETTINGS -->
 <div class="page" id="page-settings">
   <div class="header">
@@ -1654,6 +1749,10 @@ body {
 
 <div class="more-overlay-backdrop" id="more-backdrop" onclick="closeMoreMenu()"></div>
 <div class="more-overlay" id="more-overlay">
+  <button class="more-overlay-item" onclick="closeMoreMenu(); showPage('study', null)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20l9-5-9-5-9 5 9 5z"/><path d="M12 20v-5"/><path d="M12 10V4l9 5"/><path d="M6 12v4c0 1 2.5 3 6 3s6-2 6-3v-4"/></svg>
+    Study
+  </button>
   <button class="more-overlay-item" onclick="closeMoreMenu(); showPage('degree', null)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 0 9 3 12 0v-5"/></svg>
     Degree
@@ -1741,12 +1840,133 @@ const EMAIL_TEMPLATES = {
 };
 
 // ============================================
+// QUIZ BANK
+// ============================================
+/*
+  PROFESSOR-STYLE QUESTION RULES  (the "logic" every quiz in this app follows)
+  Modeled on real POL 211 (Prof. Shane Martin) quizzes. When authoring or
+  generating new questions for ANY course, follow these rules so practice
+  matches the real thing:
+
+   1. FIVE options (a–e), never four. Guessing odds are 20%, not 25%.
+   2. Homogeneous distractors: every wrong answer is a real term from the
+      SAME family as the right one (e.g. reapportionment / redistricting /
+      gerrymandering / malapportionment all together). No throwaway options.
+   3. Length-matched: the correct answer is NOT the longest / most detailed.
+   4. Twin answers: include near-identical choices that differ by ONE precise
+      word or a reordered phrase, to test exact recall.
+   5. EXCEPT / negative stems on some items ("all of the following EXCEPT").
+      Mark these with type:'except' so the UI can flag the word.
+   6. Reasoning stems, not just definitions ("It is difficult to X because...").
+   7. Textbook-anchored where possible ("According to the textbook, ...").
+   8. Every item has a short `explain` so review teaches, not just scores.
+
+  DATA SHAPE — add more quizzes/courses by pushing objects with this shape:
+   {
+     id, course, name, topic,
+     questions: [
+       { q:'stem', type:'standard'|'except', options:[5 strings], answer:index0-4, explain:'why' }
+     ]
+   }
+*/
+const QUIZ_BANK = [
+  {
+    id: 'pol211-q5',
+    course: 'POL 211',
+    name: 'Quiz 5 — Congress',
+    topic: 'The Legislative Branch',
+    questions: [
+      { q: 'The Constitution requires that all bills for raising revenue originate in:', type:'standard',
+        options: ['The Senate', 'The House of Representatives', 'The Rules Committee', 'The Appropriations Committee', 'A joint session of Congress'],
+        answer: 1, explain: '<strong>Article I, Section 7</strong> — revenue (tax) bills must begin in the House. The Senate may amend them, but cannot originate them.' },
+
+      { q: 'Cloture, the procedure used to cut off a filibuster and end debate in the Senate, currently requires:', type:'standard',
+        options: ['A simple majority of 51 votes', 'A two-thirds vote of those present', '60 votes (three-fifths of the full Senate)', 'A unanimous consent agreement', 'Approval of the Rules Committee'],
+        answer: 2, explain: 'Under <strong>Senate Rule XXII</strong>, ending debate on legislation takes three-fifths of the full Senate = <strong>60 votes</strong>. Don\'t confuse with the two-thirds threshold used for treaties or overriding a veto.' },
+
+      { q: 'Reapportionment refers to:', type:'standard',
+        options: ['Redrawing district boundaries within a state', 'Reassigning members to new committees', 'The reallocation of House seats among the states after each census', 'Drawing districts to favor one political party', 'Adjusting the number of senators per state'],
+        answer: 2, explain: '<strong>Reapportionment</strong> = redistributing the 435 House seats among the states by population every 10 years. Compare: <em>redistricting</em> (drawing the lines) and <em>gerrymandering</em> (drawing them to favor a group).' },
+
+      { q: 'All of the following are powers exercised by the House of Representatives alone EXCEPT:', type:'except',
+        options: ['Originating revenue bills', 'Bringing articles of impeachment', 'Choosing the president if no candidate wins an Electoral College majority', 'Confirming presidential appointments', 'Initiating the impeachment process'],
+        answer: 3, explain: '<strong>Confirmation of appointments is a Senate power.</strong> Originating revenue bills, impeaching, and choosing the president in a deadlocked Electoral College all belong to the House.' },
+
+      { q: 'The Speaker of the House is:', type:'standard',
+        options: ['Elected by the full House and, by custom, the leader of the majority party', 'Appointed by the president', 'The longest-serving member of the majority party', 'Selected by the Rules Committee', 'Chosen by a joint session of Congress'],
+        answer: 0, explain: 'The whole House formally elects the Speaker, but because the majority party has the votes, the Speaker is effectively the majority party\'s leader.' },
+
+      { q: 'The "power of the purse" refers to Congress\'s constitutional authority to:', type:'standard',
+        options: ['Declare war', 'Levy taxes and control federal spending', 'Confirm judicial appointments', 'Regulate interstate commerce', 'Override presidential vetoes'],
+        answer: 1, explain: 'The <strong>power of the purse</strong> is Congress\'s control over taxing and spending — a central check on the executive branch.' },
+
+      { q: 'A conference committee is best described as:', type:'standard',
+        options: ['A standing committee that reviews the annual budget', 'A temporary joint committee that reconciles differing House and Senate versions of a bill', 'A committee that schedules debate on the floor', 'A select committee that investigates scandals', 'The Committee of the Whole'],
+        answer: 1, explain: 'When the two chambers pass different versions of the same bill, a <strong>conference committee</strong> (members from both chambers) works out a single compromise version.' },
+
+      { q: 'The advantages of incumbency in congressional elections are attributed to all of the following EXCEPT:', type:'except',
+        options: ['Greater name recognition', 'Casework and constituency service', 'The franking privilege', 'Superior access to campaign funds', 'Constitutional term limits'],
+        answer: 4, explain: 'There are <strong>no term limits</strong> on members of Congress — that would <em>reduce</em> incumbency, not cause it. The others all help incumbents win re-election.' },
+
+      { q: 'According to the textbook, ______ gerrymandering has been struck down by the courts, while federal courts have declined to police ______ gerrymandering.', type:'standard',
+        options: ['partisan; racial', 'racial; partisan', 'incumbent; geographic', 'geographic; incumbent', 'gender-based; racial'],
+        answer: 1, explain: '<strong>Racial</strong> gerrymandering violates the 14th Amendment and Voting Rights Act. In <em>Rucho v. Common Cause</em> (2019) the Supreme Court held <strong>partisan</strong> gerrymandering claims are non-justiciable in federal court.' },
+
+      { q: 'Congressional oversight is best defined as:', type:'standard',
+        options: ['The power to declare laws unconstitutional', 'Congress\'s monitoring of the bureaucracy to ensure laws are carried out as intended', 'The Senate\'s review of treaties', 'The president\'s supervision of executive agencies', 'The Rules Committee\'s control over floor debate'],
+        answer: 1, explain: '<strong>Oversight</strong> is Congress checking the executive branch and agencies — through hearings, investigations, and budget control — to make sure its laws are faithfully executed.' },
+
+      { q: 'Giving each state two senators regardless of its population reflects the constitutional principle of:', type:'standard',
+        options: ['Proportional representation', 'Equal representation of the states in the Senate', 'Descriptive representation', 'Substantive representation', 'Malapportionment'],
+        answer: 1, explain: 'The <strong>Great (Connecticut) Compromise</strong> gave every state equal representation in the Senate and population-based representation in the House.' },
+
+      { q: 'In the House, the committee that sets the terms of debate — time limits and whether amendments are allowed — is the:', type:'standard',
+        options: ['Ways and Means Committee', 'Appropriations Committee', 'Rules Committee', 'Budget Committee', 'Committee of the Whole'],
+        answer: 2, explain: 'The <strong>Rules Committee</strong> is powerful because it controls the conditions under which a bill reaches the floor — including how long it is debated and whether it can be amended.' },
+
+      { q: 'A member of Congress who votes according to her own judgment of the national interest, even against constituents\' expressed wishes, is acting as a:', type:'standard',
+        options: ['Delegate', 'Trustee', 'Whip', 'Politico', 'Partisan'],
+        answer: 1, explain: 'A <strong>trustee</strong> uses independent judgment; a <strong>delegate</strong> mirrors constituents\' stated preferences; a <em>politico</em> blends both.' },
+
+      { q: 'A treaty negotiated by the president takes effect only if it is approved by:', type:'standard',
+        options: ['A simple majority of the House', 'A simple majority of the Senate', 'Two-thirds of the Senate', 'Two-thirds of both chambers', 'The Senate Foreign Relations Committee'],
+        answer: 2, explain: '<strong>Article II</strong> — treaties require the advice and consent of <strong>two-thirds of the Senate</strong>. (Contrast the 60-vote cloture threshold and the simple majority for most legislation.)' },
+
+      { q: 'The constitutional process for removing a federal official from office is:', type:'standard',
+        options: ['The Senate impeaches and the House convicts', 'The House impeaches and the Senate tries and convicts', 'Either chamber may impeach and the Supreme Court convicts', 'The House impeaches and the Supreme Court convicts', 'A joint session votes to convict'],
+        answer: 1, explain: 'The <strong>House impeaches</strong> (brings charges by majority vote); the <strong>Senate tries</strong> the case and convicts with a two-thirds vote.' },
+
+      { q: 'The detailed work of gathering information, holding hearings, and revising legislation falls primarily to:', type:'standard',
+        options: ['The Committee of the Whole', 'Standing committees', 'Conference committees', 'Party caucuses', 'The Rules Committee'],
+        answer: 1, explain: '<strong>Standing committees</strong> are the permanent, subject-area workhorses of Congress where most bills are studied and marked up.' },
+
+      { q: 'The single best explanation for the decline of bipartisan cooperation in Congress in recent decades is:', type:'standard',
+        options: ['An increasing number of members who refuse to identify with either party', 'Rising party polarization and ideological sorting', 'The public paying less attention to Congress', 'The Supreme Court limiting congressional power', 'Recent reforms that weakened the filibuster'],
+        answer: 1, explain: 'The parties have become more internally unified and further apart ideologically — <strong>polarization and hyperpartisanship</strong> — making cross-party deals harder.' },
+
+      { q: 'The number of seats a state holds in the House of Representatives:', type:'standard',
+        options: ['Is fixed at two per state', 'Is set by the state legislature', 'Is reapportioned according to population after each decennial census', 'Was permanently frozen by a constitutional amendment', 'Increases automatically at every election'],
+        answer: 2, explain: 'Total House seats are capped at 435; how they are divided among the states is <strong>reapportioned every ten years</strong> based on the census.' },
+
+      { q: 'The "necessary and proper" (elastic) clause gives Congress the power to:', type:'standard',
+        options: ['Regulate commerce among the states', 'Make the laws needed to carry out its enumerated powers', 'Declare acts of the president unconstitutional', 'Override state constitutions at will', 'Levy any tax without limit'],
+        answer: 1, explain: 'Article I, Section 8 — the <strong>elastic clause</strong> is the basis of Congress\'s <em>implied powers</em>, letting it pass laws needed to execute its listed powers.' },
+
+      { q: 'The president\'s party usually loses seats in midterm elections; the size of that loss is most strongly associated with:', type:'standard',
+        options: ['Whether the president campaigns nationally for candidates', 'The president\'s approval rating and the state of the economy', 'How the Supreme Court has ruled on the president\'s policies', 'Whether the president\'s party controls both chambers', 'The number of open (retirement) seats that cycle'],
+        answer: 1, explain: 'Midterm losses track the <strong>president\'s standing with the public</strong> and <strong>the economy</strong> — the two dominate the size of the swing.' }
+    ]
+  }
+];
+
+// ============================================
 // STATE
 // ============================================
 let state = {
   assignments: [],
   courses: [],
   contacts: [],
+  quizScores: {},
   currentFilter: 'all'
 };
 
@@ -1848,6 +2068,7 @@ function showPage(id, btn) {
   if (id === 'contacts') renderContacts();
   if (id === 'grades') renderGrades();
   if (id === 'files') renderFiles();
+  if (id === 'study') renderStudy();
   if (id === 'settings') renderSettingsStatus();
 }
 
@@ -1944,16 +2165,19 @@ function renderDashboard() {
   }).join('');
 }
 
-function markDone(id) {
+function toggleDone(id) {
   const a = state.assignments.find(x => x.id === id);
-  if (a) {
-    a.status = 'Submitted';
-    saveState();
-    renderDashboard();
-    renderAssignments();
-    showToast('✅ Marked as submitted!', 'success');
-  }
+  if (!a) return;
+  const isDone = a.status === 'Submitted' || a.status === 'Graded';
+  a.status = isDone ? 'Not Started' : 'Submitted';
+  saveState();
+  renderDashboard();
+  renderAssignments();
+  showToast(isDone ? 'Unchecked — back to your list' : '✅ Marked as done', isDone ? '' : 'success');
 }
+
+// kept for backward compatibility
+function markDone(id) { toggleDone(id); }
 
 // ============================================
 // ASSIGNMENTS
@@ -1991,6 +2215,7 @@ function renderAssignments(filter) {
 
     return `<div class="card" style="margin-bottom:0; margin-top:8px; border-left: 3px solid ${color};">
       <div style="display:flex; align-items:flex-start; gap:10px;">
+        <button class="assign-check ${isDone?'checked':''}" onclick="toggleDone('${a.id}')" title="${isDone?'Mark as not done':'Mark as done'}" aria-label="Toggle done">${isDone?'✓':''}</button>
         <div style="flex:1; min-width:0;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
             <span class="priority-tag ${getPriorityTagClass(p)}">${getPriorityLabel(p)}</span>
@@ -2006,7 +2231,6 @@ function renderAssignments(filter) {
           ${a.notes ? `<div style="font-size:11px; color:var(--text3); margin-top:6px; line-height:1.5; border-top:1px solid var(--border); padding-top:6px;">${a.notes}</div>` : ''}
         </div>
         <div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
-          ${!isDone ? `<button class="btn btn-sm btn-success" onclick="markDone('${a.id}')">✓</button>` : '<span style="font-size:18px;">✅</span>'}
           <button class="btn btn-sm" onclick="editAssignment('${a.id}')">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="deleteAssignment('${a.id}')">🗑</button>
         </div>
@@ -2817,6 +3041,181 @@ function buildPlan() {
   document.getElementById('plan-output').innerHTML = html;
 }
 
+// ============================================
+// STUDY / QUIZ ENGINE
+// ============================================
+let activeQuiz = null;      // the quiz object being taken
+let quizOrder = [];         // question indices in (shuffled) display order
+let quizAnswers = [];       // selected option index per displayed question (null = unanswered)
+let quizGraded = false;
+
+function courseColor(code) {
+  const c = (state.courses || []).find(x => x.code === code);
+  return c ? c.color : 'var(--purple)';
+}
+
+// LIST VIEW — every quiz in the bank, grouped by course
+function renderStudy() {
+  closeQuiz();
+  const listEl = document.getElementById('quiz-list');
+  document.getElementById('study-sub').textContent = "Practice quizzes in your professors' style";
+
+  if (!QUIZ_BANK.length) {
+    listEl.innerHTML = `<div class="card" style="text-align:center; color:var(--text2);">No practice quizzes yet.</div>`;
+    return;
+  }
+
+  // group by course
+  const byCourse = {};
+  QUIZ_BANK.forEach(qz => { (byCourse[qz.course] = byCourse[qz.course] || []).push(qz); });
+
+  let html = '';
+  Object.keys(byCourse).forEach(course => {
+    html += `<div class="section-label">${course}</div>`;
+    byCourse[course].forEach(qz => {
+      const best = state.quizScores?.[qz.id];
+      const total = qz.questions.length;
+      const bestPct = best != null ? Math.round((best / total) * 100) : null;
+      const bestColor = bestPct == null ? 'var(--text3)' : bestPct >= 80 ? 'var(--green)' : bestPct >= 60 ? 'var(--yellow)' : 'var(--red)';
+      html += `
+        <div class="quiz-card" onclick="openQuiz('${qz.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(course)};">
+          <div class="quiz-card-head">
+            <div>
+              <div class="quiz-card-title">${qz.name}</div>
+              <div class="quiz-card-sub">${qz.topic}</div>
+            </div>
+            <div class="quiz-best" style="color:${bestColor};">${best != null ? best + '/' + total : '—'}</div>
+          </div>
+          <div class="quiz-meta">${total} questions · 5 options each${bestPct != null ? ' · best ' + bestPct + '%' : ' · not attempted'}</div>
+        </div>`;
+    });
+  });
+  listEl.innerHTML = html;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function openQuiz(id) {
+  activeQuiz = QUIZ_BANK.find(q => q.id === id);
+  if (!activeQuiz) return;
+  quizOrder = shuffle(activeQuiz.questions.map((_, i) => i));
+  quizAnswers = quizOrder.map(() => null);
+  quizGraded = false;
+
+  document.getElementById('quiz-list').style.display = 'none';
+  document.getElementById('quiz-runner').style.display = 'block';
+  document.getElementById('quiz-back-btn').style.display = 'inline-block';
+  document.getElementById('study-sub').textContent = activeQuiz.name;
+  document.getElementById('quiz-result-wrap').innerHTML = '';
+  document.getElementById('quiz-submit-wrap').style.display = 'flex';
+  renderQuizQuestions();
+  window.scrollTo(0, 0);
+}
+
+function closeQuiz() {
+  activeQuiz = null; quizGraded = false;
+  const runner = document.getElementById('quiz-runner');
+  const list = document.getElementById('quiz-list');
+  const back = document.getElementById('quiz-back-btn');
+  if (runner) runner.style.display = 'none';
+  if (list) list.style.display = 'block';
+  if (back) back.style.display = 'none';
+}
+
+const LETTERS = ['a', 'b', 'c', 'd', 'e'];
+
+function renderQuizQuestions() {
+  let html = '';
+  quizOrder.forEach((qi, displayIdx) => {
+    const item = activeQuiz.questions[qi];
+    const sel = quizAnswers[displayIdx];
+    let stem = item.q;
+    if (item.type === 'except') stem = stem.replace(/\bEXCEPT\b/, '<span class="except">EXCEPT</span>');
+
+    html += `<div class="q-block">
+      <div class="q-num">QUESTION ${displayIdx + 1}</div>
+      <div class="q-stem">${stem}</div>`;
+
+    item.options.forEach((opt, oi) => {
+      let cls = 'opt';
+      if (quizGraded) {
+        cls += ' locked';
+        if (oi === item.answer) cls += ' correct';
+        else if (oi === sel) cls += ' wrong';
+      } else if (oi === sel) {
+        cls += ' selected';
+      }
+      const click = quizGraded ? '' : ` onclick="selectOption(${displayIdx}, ${oi})"`;
+      html += `<div class="${cls}"${click}>
+          <span class="opt-letter">${LETTERS[oi]}</span>
+          <span>${opt}</span>
+        </div>`;
+    });
+
+    if (quizGraded) {
+      html += `<div class="q-explain"><strong>${sel === item.answer ? '✓ Correct.' : (sel == null ? '○ Skipped.' : '✕ Not quite.')}</strong> ${item.explain}</div>`;
+    }
+    html += `</div>`;
+  });
+  document.getElementById('quiz-questions').innerHTML = html;
+  updateQuizProgress();
+}
+
+function selectOption(displayIdx, oi) {
+  if (quizGraded) return;
+  quizAnswers[displayIdx] = oi;
+  renderQuizQuestions();
+}
+
+function updateQuizProgress() {
+  const answered = quizAnswers.filter(a => a != null).length;
+  const pct = Math.round((answered / quizAnswers.length) * 100);
+  document.getElementById('quiz-progress-fill').style.width = pct + '%';
+}
+
+function submitQuiz() {
+  const unanswered = quizAnswers.filter(a => a == null).length;
+  if (unanswered > 0 && !quizGraded) {
+    if (!confirm(`${unanswered} question${unanswered > 1 ? 's' : ''} still blank. Grade anyway?`)) return;
+  }
+  quizGraded = true;
+
+  let correct = 0;
+  quizOrder.forEach((qi, displayIdx) => {
+    if (quizAnswers[displayIdx] === activeQuiz.questions[qi].answer) correct++;
+  });
+  const total = quizOrder.length;
+  const pct = Math.round((correct / total) * 100);
+
+  // persist best score
+  if (!state.quizScores) state.quizScores = {};
+  if (state.quizScores[activeQuiz.id] == null || correct > state.quizScores[activeQuiz.id]) {
+    state.quizScores[activeQuiz.id] = correct;
+    saveState();
+  }
+
+  const color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--yellow)' : 'var(--red)';
+  const msg = pct >= 80 ? 'Solid — you\'re quiz-ready.' : pct >= 60 ? 'Getting there. Review the misses below.' : 'Keep drilling — read the explanations under each miss.';
+  document.getElementById('quiz-submit-wrap').style.display = 'none';
+  document.getElementById('quiz-result-wrap').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-score-big" style="color:${color};">${correct}/${total}</div>
+      <div class="quiz-score-pct">${pct}% · ${msg}</div>
+    </div>
+    <div class="quiz-actions">
+      <button class="btn" onclick="openQuiz('${activeQuiz.id}')">↻ Retake (reshuffle)</button>
+      <button class="btn btn-primary" onclick="renderStudy()">✓ Done</button>
+    </div>`;
+
+  renderQuizQuestions();
+  window.scrollTo(0, 0);
+}
 
 loadState();
 initFiles();
