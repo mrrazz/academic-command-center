@@ -6,3 +6,6 @@
 
 # Local Claude Code machine settings
 .claude/settings.local.json
+
+# Local project instructions (not for the public repo)
+CLAUDE.md

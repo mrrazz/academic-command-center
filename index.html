@@ -381,6 +381,24 @@ input,select,textarea{font-family:inherit}
 .row.is-done .check-toggle{background:var(--green);border-color:var(--green)}
 .row.is-done .check-toggle svg{opacity:1}
 
+/* assignment type badge */
+.atype{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text3);background:var(--surface-2);padding:3px 8px;border-radius:6px;flex:0 0 auto;white-space:nowrap}
+
+/* ---------- Assignment detail ---------- */
+.ad-due{display:flex;align-items:center;gap:8px;margin-top:2px}
+.ad-due .mono.over{color:var(--red)}.ad-due .mono.soon{color:var(--orange)}
+.ad-sec{margin-top:16px}
+.ad-sec .ml{margin-bottom:6px}
+.ad-text{font-size:14px;line-height:1.55;color:var(--text)}
+.ad-empty{font-size:13px;color:var(--text3);font-style:italic}
+.ad-res{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface-hi);margin-bottom:7px;font-size:13.5px;font-weight:500;color:var(--text)}
+.ad-res:last-child{margin-bottom:0}
+a.ad-res:hover{border-color:var(--amber-line);color:var(--amber-ink)}
+.ad-res svg{width:15px;height:15px;flex:0 0 auto;color:var(--text3)}
+.ad-res-text{color:var(--text2);font-weight:400}
+.modal-body textarea{resize:vertical;min-height:64px;line-height:1.5}
+.tutor-btn.full{margin-left:0;width:100%;justify-content:center;padding:11px 13px}
+
 /* ---------- Planner ---------- */
 .plan-group{margin-bottom:18px}
 .plan-label{display:flex;align-items:baseline;gap:9px;margin:0 2px 9px}
@@ -593,6 +611,7 @@ input,select,textarea{font-family:inherit}
       <!-- ASSIGNMENTS -->
       <section class="view" id="view-assignments">
         <div class="chips" id="asgChips"></div>
+        <div class="chips" id="asgTypeChips" style="margin-top:-6px"></div>
         <div id="asgSlot"></div>
       </section>
 
@@ -757,31 +776,10 @@ function seedState(){
       {code:'BIO 109', name:'Introductory Biology',          prof:'Prof. Okafor',       grade:69},
       {code:'PSY 240', name:'Abnormal Psychology',           prof:'Prof. Bennett',      grade:88}
     ],
-    assignments:[
-      {id:uid(), course:'SOC 205', title:'Reading Response 5',        due:todayISO(-2), status:'todo'},
-      {id:uid(), course:'ECO 101', title:'Problem Set 7',             due:todayISO(-1), status:'todo'},
-      {id:uid(), course:'BIO 109', title:'Lab Report 3',              due:todayISO(1),  status:'todo'},
-      {id:uid(), course:'PSY 240', title:'Discussion Post — DSM-5',   due:todayISO(2),  status:'todo'},
-      {id:uid(), course:'POL 211', title:'Quiz 5 — Congress',         due:todayISO(3),  status:'todo'},
-      {id:uid(), course:'ECO 101', title:'Ch 21 Reading',             due:todayISO(4),  status:'todo'},
-      {id:uid(), course:'POL 211', title:'Research Paper',            due:todayISO(9),  status:'todo'},
-      {id:uid(), course:'BIO 109', title:'Chapter 4 Quiz',            due:todayISO(12), status:'todo'},
-      {id:uid(), course:'SOC 205', title:'Reading Response 4',        due:todayISO(-6), status:'done'},
-      {id:uid(), course:'PSY 240', title:'Reflection 2',              due:todayISO(-5), status:'done'},
-      {id:uid(), course:'ECO 101', title:'Problem Set 6',             due:todayISO(-4), status:'done'}
-    ],
-    files:[
-      {id:uid(), name:'POL211_Congress_notes.pdf', course:'POL 211', size:'240 KB', date:todayISO(-3)},
-      {id:uid(), name:'ECO101_Ch21_summary.md',    course:'ECO 101', size:'12 KB',  date:todayISO(-1)},
-      {id:uid(), name:'BIO109_lab3_data.xlsx',     course:'BIO 109', size:'88 KB',  date:todayISO(0)}
-    ],
-    checklists:{
-      'POL 211':[{t:'Re-read Congress chapter',done:false},{t:'Retake Quiz 5 (aim 90%+)',done:false},{t:'Outline research paper',done:false},{t:'Review key terms',done:false}],
-      'ECO 101':[{t:'Finish Problem Set 7',done:false},{t:'Read Chapter 21',done:false},{t:'Drill Ch 21 quiz',done:false},{t:'Review growth graphs',done:false}],
-      'SOC 205':[{t:'Draft Reading Response 5',done:false},{t:'Review conflict theory',done:false},{t:'Skim next chapter',done:false},{t:'Post discussion reply',done:false}],
-      'BIO 109':[{t:'Finish Lab Report 3',done:false},{t:'Review mitosis diagram',done:false},{t:'Flashcards: cell terms',done:false},{t:'Email professor re: grade',done:false}],
-      'PSY 240':[{t:'Write DSM-5 discussion post',done:false},{t:'Read comorbidity section',done:false},{t:'Flashcards: disorders',done:false},{t:'Review etiology notes',done:false}]
-    },
+    // Assignments, files, and checklists start empty — add your real ones with the + button.
+    assignments:[],
+    files:[],
+    checklists:{},
     quizScores:{},
     pat:'',
     grades:[]
@@ -898,13 +896,24 @@ function renderDashboard(){
 /* ============================================================
    ASSIGNMENTS
    ============================================================ */
+const ASG_TYPES={
+  homework:  {label:'Homework',         short:'HW'},
+  writing:   {label:'Writing',          short:'Writing'},
+  discussion:{label:'Board Discussion', short:'Board'}
+};
+function asgType(a){return ASG_TYPES[a&&a.type]?a.type:'homework';}
+
 let asgFilter='open';
+let asgTypeFilter='all';
 function renderAssignments(){
   const filters=[['open','Open'],['over','Overdue'],['soon','Due soon'],['done','Done'],['all','All']];
   document.getElementById('asgChips').innerHTML=filters.map(([k,l])=>`<button class="chip ${asgFilter===k?'active':''}" onclick="setAsgFilter('${k}')">${l}</button>`).join('');
+  const typeChips=[['all','All types'],['homework','Homework'],['writing','Writing'],['discussion','Board Discussion']];
+  document.getElementById('asgTypeChips').innerHTML=typeChips.map(([k,l])=>`<button class="chip ${asgTypeFilter===k?'active':''}" onclick="setAsgType('${k}')">${l}</button>`).join('');
   let items=state.assignments.slice();
   items = items.filter(a=>{
     const n=daysUntil(a.due);
+    if(asgTypeFilter!=='all' && asgType(a)!==asgTypeFilter) return false;
     if(asgFilter==='open')return a.status!=='done';
     if(asgFilter==='over')return a.status!=='done'&&n<0;
     if(asgFilter==='soon')return a.status!=='done'&&n>=0&&n<=3;
@@ -912,19 +921,78 @@ function renderAssignments(){
     return true;
   }).sort((a,b)=>{if((a.status==='done')!==(b.status==='done'))return a.status==='done'?1:-1;return daysUntil(a.due)-daysUntil(b.due);});
   const slot=document.getElementById('asgSlot');
-  if(!items.length){slot.innerHTML=`<div class="rows"><div class="empty">${svg('smile')}<div class="big">Nothing here.</div>No assignments match this filter.</div></div>`;return;}
+  if(!items.length){
+    const empty = state.assignments.length
+      ? `No assignments match this filter.`
+      : `Add your first assignment with the + button.`;
+    slot.innerHTML=`<div class="rows"><div class="empty">${svg('smile')}<div class="big">Nothing here.</div>${empty}</div></div>`;return;
+  }
   slot.innerHTML=`<div class="rows">${items.map(a=>{
-    const dl=dueLabel(a.due); const u=urgencyClass(a); const dn=a.status==='done';
-    return `<div class="row ${dn?'is-done':''}">
-      <button class="check-toggle" onclick="toggleAsg('${a.id}')">${svg('check')}</button>
+    const dl=dueLabel(a.due); const dn=a.status==='done';
+    return `<div class="row ${dn?'is-done':''}" onclick="openAsgDetail('${a.id}')">
+      <button class="check-toggle" onclick="event.stopPropagation();toggleAsg('${a.id}')" aria-label="Toggle done">${svg('check')}</button>
       <span class="ctag">${esc(a.course.split(' ')[0])}</span>
       <span class="rtitle">${esc(a.title)}</span>
+      <span class="atype">${esc(ASG_TYPES[asgType(a)].short)}</span>
       <span class="rdue ${dn?'':dl.cls}">${dn?'✓':dl.txt}</span>
     </div>`;
   }).join('')}</div>`;
 }
 function setAsgFilter(k){asgFilter=k;renderAssignments();}
+function setAsgType(k){asgTypeFilter=k;renderAssignments();}
 function toggleAsg(id){const a=state.assignments.find(x=>x.id===id);if(!a)return;a.status=a.status==='done'?'todo':'done';saveState();renderAssignments();}
+function deleteAsg(id){
+  if(!confirm('Delete this assignment?'))return;
+  state.assignments=state.assignments.filter(a=>a.id!==id);
+  saveState();closeModal();renderAssignments();
+}
+
+/* -- Assignment detail: what's being asked, resources, tutor mode -- */
+function renderResourceLink(r){
+  let label=r, url=null;
+  if(r.includes('|')){const p=r.split('|');label=p[0].trim();url=p.slice(1).join('|').trim();}
+  else if(/^https?:\/\//i.test(r.trim())){url=r.trim();label=r.trim();}
+  if(url) return `<a class="ad-res" href="${esc(url)}" target="_blank" rel="noopener">${svg('jump')}<span>${esc(label)}</span></a>`;
+  return `<div class="ad-res ad-res-text">${esc(label)}</div>`;
+}
+function openAsgDetail(id){
+  const a=state.assignments.find(x=>x.id===id);if(!a)return;
+  const dl=dueLabel(a.due); const dn=a.status==='done'; const cc=courseColor(a.course);
+  const ty=ASG_TYPES[asgType(a)];
+  const res=Array.isArray(a.resources)?a.resources:[];
+  const detailHTML = (a.details&&a.details.trim())
+    ? `<div class="ad-text">${esc(a.details).replace(/\n/g,'<br>')}</div>`
+    : `<div class="ad-empty">No description yet — tap Edit to add what's being asked.</div>`;
+  const resHTML = res.length ? res.map(renderResourceLink).join('')
+    : `<div class="ad-empty">No resources added yet — tap Edit to add links or materials.</div>`;
+  openModal(`
+    <div class="modal-head">
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="mono" style="font-size:12px;font-weight:700;color:${cc}">${esc(a.course)}</span>
+          <span class="atype">${esc(ty.label)}</span>
+        </div>
+        <h3 style="margin-top:5px">${esc(a.title)}</h3>
+      </div>
+      <button class="icon-btn" onclick="closeModal()" style="width:34px;height:34px;flex:0 0 auto">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ad-due"><span class="ml">Due</span><span class="mono ${dn?'':dl.cls}" style="font-weight:600">${dn?'Done ✓':dl.txt+' · '+fmtDue(a.due)}</span></div>
+      <div class="ad-sec"><div class="ml">What's being asked</div>${detailHTML}</div>
+      <div class="ad-sec"><div class="ml">Resources</div>${resHTML}</div>
+      <button class="tutor-btn full" style="margin-top:16px" onclick="closeModal();openCourseTutor('${a.course}')">${svg('tutor')}Open tutor mode for ${esc(a.course)}</button>
+    </div>
+    <div class="modal-foot" style="flex-wrap:wrap">
+      <button class="btn" onclick="toggleAsg('${a.id}');closeModal()">${dn?'Mark as open':'Mark done'}</button>
+      <button class="btn" onclick="closeModal();openAsgModal('${a.id}')">Edit</button>
+      <button class="btn btn-danger" onclick="deleteAsg('${a.id}')">Delete</button>
+    </div>`);
+}
+function openCourseTutor(code){
+  openCourse=code; tutorTab='quizzes';
+  go('courses');
+  setTimeout(()=>{const el=document.getElementById('tutor-'+cssId(code));const card=el&&el.closest('.course-card');if(card)card.scrollIntoView({behavior:'smooth',block:'start'});},80);
+}
 
 /* ============================================================
    COURSES + TUTOR MODE
@@ -1173,19 +1241,39 @@ function courseOptions(sel){return state.courses.map(c=>`<option value="${esc(c.
 
 function fabAction(){ if(currentView==='files') openFileModal(); else openAsgModal(); }
 
-function openAsgModal(){
+function openAsgModal(id){
+  const edit=id?state.assignments.find(a=>a.id===id):null;
+  const typeOpts=Object.keys(ASG_TYPES).map(k=>`<option value="${k}" ${asgType(edit||{type:'homework'})===k?'selected':''}>${ASG_TYPES[k].label}</option>`).join('');
+  const resVal=edit&&Array.isArray(edit.resources)?edit.resources.join('\n'):'';
   openModal(`
-    <div class="modal-head"><h3>Add assignment</h3><button class="icon-btn" onclick="closeModal()" style="width:34px;height:34px">✕</button></div>
+    <div class="modal-head"><h3>${edit?'Edit assignment':'Add assignment'}</h3><button class="icon-btn" onclick="closeModal()" style="width:34px;height:34px">✕</button></div>
     <div class="modal-body">
-      <label class="fl">Course</label><label class="field"><select id="m_course">${courseOptions()}</select></label>
-      <label class="fl">Title</label><label class="field"><input id="m_title" placeholder="e.g. Problem Set 8"></label>
-      <label class="fl">Due date</label><label class="field"><input id="m_due" type="date" value="${todayISO(1)}"></label>
+      <label class="fl">Course</label><label class="field"><select id="m_course">${courseOptions(edit?edit.course:'')}</select></label>
+      <label class="fl">Title</label><label class="field"><input id="m_title" placeholder="e.g. Problem Set 8" value="${edit?esc(edit.title):''}"></label>
+      <label class="fl">Type</label><label class="field"><select id="m_type">${typeOpts}</select></label>
+      <label class="fl">Due date</label><label class="field"><input id="m_due" type="date" value="${edit?esc(edit.due):todayISO(1)}"></label>
+      <label class="fl">What's being asked</label><label class="field"><textarea id="m_details" placeholder="Paste or type the assignment instructions…">${edit?esc(edit.details||''):''}</textarea></label>
+      <label class="fl">Resources <span style="text-transform:none;letter-spacing:0;color:var(--text3)">— one per line; optional "Label | https://…"</span></label><label class="field"><textarea id="m_res" placeholder="Chapter 21 reading&#10;Rubric | https://…">${esc(resVal)}</textarea></label>
     </div>
-    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveAsg()">Add</button></div>`);
+    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveAsg('${edit?edit.id:''}')">${edit?'Save':'Add'}</button></div>`);
 }
-function saveAsg(){const t=document.getElementById('m_title').value.trim();if(!t){document.getElementById('m_title').focus();return;}
-  state.assignments.push({id:uid(),course:document.getElementById('m_course').value,title:t,due:document.getElementById('m_due').value||todayISO(1),status:'todo'});
-  saveState();closeModal();go(currentView==='dashboard'?'dashboard':'assignments');}
+function saveAsg(id){
+  const t=document.getElementById('m_title').value.trim();
+  if(!t){document.getElementById('m_title').focus();return;}
+  const data={
+    course:document.getElementById('m_course').value,
+    title:t,
+    type:document.getElementById('m_type').value,
+    due:document.getElementById('m_due').value||todayISO(1),
+    details:document.getElementById('m_details').value.trim(),
+    resources:document.getElementById('m_res').value.split('\n').map(s=>s.trim()).filter(Boolean)
+  };
+  const existing=id?state.assignments.find(a=>a.id===id):null;
+  if(existing) Object.assign(existing,data);
+  else state.assignments.push({id:uid(),status:'todo',...data});
+  saveState();closeModal();
+  if(currentView==='assignments')renderAssignments(); else go('assignments');
+}
 
 function openCourseModal(){
   openModal(`
