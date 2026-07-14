@@ -764,30 +764,381 @@ function closeSheet(){document.getElementById('overflowSheet').classList.remove(
 /* ============================================================
    STATE + SEED
    ============================================================ */
-const LS_KEY='acc_state_v2';
+const LS_KEY='acc_state_v3';
 let state={};
 function todayISO(off){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10);}
 let _uid=0; const uid=()=> 'a'+(Date.now().toString(36))+(_uid++);
 
 function seedState(){
   const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return {
-    theme: dark?'dark':'light',
-    courses:[
-      {code:'SOC 205', name:'Social Problems',     prof:'Prof. Lynn Barrieau',   grade:null},
-      {code:'POL 211', name:'American Government',  prof:'Prof. Shane Martin',    grade:null},
-      {code:'PSY 240', name:'Abnormal Psychology', prof:'Prof. Sheila Murphy',   grade:null},
-      {code:'BIO 109', name:'Concepts in Biology', prof:'Prof. Paula Packard',   grade:null},
-      {code:'ECO 101', name:'Macroeconomics',      prof:'Dr. Michael Greenwood', grade:null}
-    ],
-    // Assignments, files, and checklists start empty — add your real ones with the + button.
-    assignments:[],
-    files:[],
-    checklists:{},
-    quizScores:{},
-    pat:'',
-    grades:[]
-  };
+  const SEED = {
+  "courses": [
+    {
+      "code": "SOC 205",
+      "name": "Social Problems",
+      "prof": "Prof. Lynn Barrieau",
+      "grade": null,
+      "finalGrade": null
+    },
+    {
+      "code": "POL 211",
+      "name": "American Government",
+      "prof": "Prof. Shane Martin",
+      "grade": null,
+      "finalGrade": null
+    },
+    {
+      "code": "PSY 240",
+      "name": "Abnormal Psychology",
+      "prof": "Prof. Sheila Murphy",
+      "grade": null,
+      "finalGrade": null
+    },
+    {
+      "code": "BIO 109",
+      "name": "Concepts in Biology",
+      "prof": "Prof. Paula Packard",
+      "grade": null,
+      "finalGrade": null
+    },
+    {
+      "code": "ECO 101",
+      "name": "Macroeconomics",
+      "prof": "Dr. Michael Greenwood",
+      "grade": null,
+      "finalGrade": "A-"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "acc000",
+      "course": "POL 211",
+      "title": "Quiz 8 — The Courts",
+      "type": "homework",
+      "due": "2026-07-17",
+      "status": "todo",
+      "details": "OER Chapter 4: The Federal and State Courts. Complete Quiz 8 on Blackboard by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com",
+        "OER Chapter 4: The Federal and State Courts"
+      ]
+    },
+    {
+      "id": "acc001",
+      "course": "POL 211",
+      "title": "Quiz 9 — Parties & Interest Groups",
+      "type": "homework",
+      "due": "2026-07-24",
+      "status": "todo",
+      "details": "Political Parties and Interest Groups. No OER reading this week, but Quiz 9 is due on Blackboard by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc002",
+      "course": "POL 211",
+      "title": "Quiz 10 — Public Policy",
+      "type": "homework",
+      "due": "2026-07-31",
+      "status": "todo",
+      "details": "OER Chapter 6: Introduction to Foreign Policy (Domestic & Foreign Policy). Complete Quiz 10 on Blackboard by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com",
+        "OER Chapter 6: Introduction to Foreign Policy"
+      ]
+    },
+    {
+      "id": "acc003",
+      "course": "POL 211",
+      "title": "Week 8 Discussion — Current Events + Video Lecture",
+      "type": "discussion",
+      "due": "2026-07-17",
+      "status": "todo",
+      "details": "Two Discussion Board posts this week (counts toward Participation, ~1000 pts of the grade). (1) Current Events: find and paste a link to a reputable news article connected to the week's topic (the American legal system / courts). (2) Video Lecture Discussion: watch the posted lecture(s) and post at least one comment. Post early in the week, then come back mid/late week to reply to classmates.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc004",
+      "course": "POL 211",
+      "title": "Week 9 Discussion — Current Events + Video Lecture",
+      "type": "discussion",
+      "due": "2026-07-24",
+      "status": "todo",
+      "details": "Two Discussion Board posts this week (Participation). (1) Current Events: link a reputable news article tied to the week's topic (parties & interest groups). (2) Video Lecture Discussion: watch the posted lecture(s) and comment. Post early, then reply to classmates mid/late week.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc005",
+      "course": "POL 211",
+      "title": "Week 10 Discussion — Current Events + Video Lecture",
+      "type": "discussion",
+      "due": "2026-07-31",
+      "status": "todo",
+      "details": "Two Discussion Board posts this week (Participation). (1) Current Events: link a reputable news article tied to the week's topic (domestic & foreign policy). (2) Video Lecture Discussion: watch the posted lecture(s) and comment. Post early, then reply to classmates mid/late week.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc006",
+      "course": "POL 211",
+      "title": "Research Paper",
+      "type": "writing",
+      "due": "2026-08-07",
+      "status": "todo",
+      "details": "The full prompt is on Blackboard (and in your private notes) — kept off this public page. Topic must be professor-approved (first come, first served).",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc007",
+      "course": "SOC 205",
+      "title": "Ch 9–12 Chapter Questions (essays)",
+      "type": "writing",
+      "due": "2026-07-17",
+      "status": "todo",
+      "details": "The full prompt is on Blackboard (and in your private notes) — kept off this public page.",
+      "resources": [
+        "Textbook: Understanding Social Problems 10e (Mooney, Knox & Schacht)",
+        "Email Prof. Barrieau | mailto:l_barrieau@mwcc.mass.edu"
+      ]
+    },
+    {
+      "id": "acc008",
+      "course": "SOC 205",
+      "title": "Ch 9–12 Discussion Board",
+      "type": "discussion",
+      "due": "2026-07-17",
+      "status": "todo",
+      "details": "Answer the discussion board question for each of Chapters 9–12 directly on Blackboard (thoughtful, at least three sentences each).",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc009",
+      "course": "SOC 205",
+      "title": "Ch 13–15 Chapter Questions (essays)",
+      "type": "writing",
+      "due": "2026-07-31",
+      "status": "todo",
+      "details": "The full prompt is on Blackboard (and in your private notes) — kept off this public page.",
+      "resources": [
+        "Textbook: Understanding Social Problems 10e",
+        "Email Prof. Barrieau | mailto:l_barrieau@mwcc.mass.edu"
+      ]
+    },
+    {
+      "id": "acc00a",
+      "course": "SOC 205",
+      "title": "Ch 13–15 Discussion Board",
+      "type": "discussion",
+      "due": "2026-07-31",
+      "status": "todo",
+      "details": "Answer the discussion board questions for Chapters 13–15 on Blackboard.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00b",
+      "course": "SOC 205",
+      "title": "Final Exam (Ch 9–16)",
+      "type": "homework",
+      "due": "2026-08-14",
+      "status": "todo",
+      "details": "Final exam covering Chapters 9–16. Multiple choice + short answer; posted ~1–2 weeks in advance.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00c",
+      "course": "PSY 240",
+      "title": "Syllabus Agreement",
+      "type": "homework",
+      "due": "2026-07-18",
+      "status": "todo",
+      "details": "Read the syllabus and upload the syllabus agreement on Blackboard by 11:59 pm. (Tip: mention the \"carrot\" in the comment box for 5 bonus points on your lowest exam.)",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00d",
+      "course": "PSY 240",
+      "title": "Four Ds Practice (extra credit)",
+      "type": "homework",
+      "due": "2026-07-18",
+      "status": "todo",
+      "details": "Optional extra credit — up to 10 pts on your lowest exam grade. Complete the 3 practice examples (Pica, Bulimia Nervosa, Dissociative Identity Disorder): for each, explain how it shows Deviance, Distress, Dysfunction, and Danger. Save as a Word doc and EMAIL it to Prof. Murphy with your name, course, and \"Carrot\" in the subject line. Due Saturday of Week 1. No late extra credit.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com",
+        "Email Prof. Murphy | mailto:s_murphy@mwcc.mass.edu"
+      ]
+    },
+    {
+      "id": "acc00e",
+      "course": "PSY 240",
+      "title": "Intro Yourselves — Discussion (extra credit)",
+      "type": "discussion",
+      "due": "2026-07-22",
+      "status": "todo",
+      "details": "Optional extra credit — up to 10 bonus points on your lowest exam grade. On the Discussion Board, introduce yourself (name, nickname, pronouns if you wish) and answer: why you are taking this course; what fascinates you about abnormal psychology; topics you would like to study; your major and career plans. Post EARLY — you must reply to/interact with classmates before the deadline.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00f",
+      "course": "PSY 240",
+      "title": "Time Log — Week 1",
+      "type": "homework",
+      "due": "2026-07-21",
+      "status": "todo",
+      "details": "Submit the Week 1 (Jul 13–18) attendance/time log. Due Tuesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00g",
+      "course": "PSY 240",
+      "title": "Assignment A (written)",
+      "type": "writing",
+      "due": "2026-07-25",
+      "status": "todo",
+      "details": "Upload Written Assignment A (choice of topics; 15% of grade). Accepted formats: .docx/.doc/.rtf/.odt only — NOT Pages or PDF. APA 7th; follow the rubric.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com",
+        "Writing Lab (Blackboard)"
+      ]
+    },
+    {
+      "id": "acc00h",
+      "course": "PSY 240",
+      "title": "Time Log — Week 2",
+      "type": "homework",
+      "due": "2026-07-28",
+      "status": "todo",
+      "details": "Submit the Week 2 (Jul 19–25) time log. Due Tuesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00i",
+      "course": "PSY 240",
+      "title": "Midterm Exam",
+      "type": "homework",
+      "due": "2026-08-01",
+      "status": "todo",
+      "details": "Midterm exam (Chapters 1, 3, 4, 5). Work alone, textbook only. Study guide posted ~1 week before. Due Saturday 8/1 by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00j",
+      "course": "PSY 240",
+      "title": "Time Log — Week 3",
+      "type": "homework",
+      "due": "2026-08-04",
+      "status": "todo",
+      "details": "Submit the Week 3 (Jul 26–Aug 1) time log. Due Tuesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00k",
+      "course": "PSY 240",
+      "title": "Discussion Board — initial post (Lindsay Clancy)",
+      "type": "discussion",
+      "due": "2026-08-05",
+      "status": "todo",
+      "details": "Post your initial discussion: \"Lindsay Clancy: Guilty of Murder or NGRI/GBMI.\" Share your opinion backed by scholarly research in APA style. You must post before you can see classmates' posts.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00l",
+      "course": "PSY 240",
+      "title": "Discussion Board — reply to 3 classmates",
+      "type": "discussion",
+      "due": "2026-08-08",
+      "status": "todo",
+      "details": "Reply to at least 3 classmates with thoughtful, respectful responses. The board closes at the deadline — late replies are not accepted.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00m",
+      "course": "PSY 240",
+      "title": "Time Log — Week 4",
+      "type": "homework",
+      "due": "2026-08-11",
+      "status": "todo",
+      "details": "Submit the Week 4 (Aug 2–8) time log. Due Tuesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00n",
+      "course": "PSY 240",
+      "title": "Assignment B (written)",
+      "type": "writing",
+      "due": "2026-08-12",
+      "status": "todo",
+      "details": "Upload Written Assignment B (15% of grade). .docx/.doc/.rtf/.odt only; APA 7th; follow the rubric. Due Wednesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com",
+        "Writing Lab (Blackboard)"
+      ]
+    },
+    {
+      "id": "acc00o",
+      "course": "PSY 240",
+      "title": "Time Log — Week 5",
+      "type": "homework",
+      "due": "2026-08-18",
+      "status": "todo",
+      "details": "Submit the Week 5 (Aug 9–15) time log. Due Tuesday by 11:59 pm.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    },
+    {
+      "id": "acc00p",
+      "course": "PSY 240",
+      "title": "Final Exam",
+      "type": "homework",
+      "due": "2026-08-19",
+      "status": "todo",
+      "details": "Final exam (Chapters 12 & 13). NOTE: the syllabus text says \"August 1,\" which is a typo — the last class is Wed Aug 19. Verify the exact date on Blackboard.",
+      "resources": [
+        "Blackboard | https://mwcc.blackboard.com"
+      ]
+    }
+  ],
+  "files": [],
+  "checklists": {},
+  "quizScores": {},
+  "pat": "",
+  "grades": []
+};
+  const s = JSON.parse(JSON.stringify(SEED));
+  s.theme = dark ? 'dark' : 'light';
+  return s;
 }
 function loadState(){
   try{const raw=localStorage.getItem(LS_KEY); state = raw?JSON.parse(raw):seedState();}
