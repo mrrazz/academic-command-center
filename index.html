@@ -1538,6 +1538,14 @@ const KEY_TERMS = [
   ]},
   { course: 'PSY 240', terms: [
     { term: 'DSM-5', definition: 'The Diagnostic and Statistical Manual of Mental Disorders, 5th edition — the standard classification system for mental disorders.' },
+    { term: 'The Four Ds', definition: 'The criteria used to judge abnormality: Deviance, Distress, Dysfunction, and Danger.' },
+    { term: 'Deviance', definition: 'Straying from a society\'s norms — behavior that is statistically or culturally atypical.' },
+    { term: 'Distress', definition: 'Unpleasant, upsetting suffering (psychological and/or physical). Alone it is not enough to label behavior abnormal.' },
+    { term: 'Dysfunction', definition: 'Impairment that interferes with daily functioning — social, occupational, or self-care.' },
+    { term: 'Danger', definition: 'Behavior that poses a threat of harm to oneself or others. The 4th D; usually the exception, not the rule.' },
+    { term: 'Moral treatment', definition: 'A 19th-century movement (Pinel, Tuke, Dix) toward humane, respectful care of the mentally ill.' },
+    { term: 'Somatogenic perspective', definition: 'The view that abnormal behavior has biological/physical causes (e.g., Kraepelin).' },
+    { term: 'Psychogenic perspective', definition: 'The view that abnormal behavior has psychological causes (e.g., Freud, hypnosis).' },
     { term: 'Comorbidity', definition: 'The simultaneous presence of two or more disorders in a single individual.' },
     { term: 'Etiology', definition: 'The cause or origin of a disease or condition.' }
   ]}
@@ -1744,6 +1752,65 @@ const QUIZ_BANK = [
       { q: 'Colaba plans to hire more workers to meet rising demand for its product. Christopher argues this will only raise the wage bill and cut profits. Which fact would MOST weaken his argument?', type:'standard',
         options: ['Colaba recently restructured its shop floor, shortening the production cycle and cutting defective units', 'Colaba already uses an efficient assembly-line method it adopted years ago', 'The distribution network for the product is highly fragmented', 'Turnover on Colaba\'s R&D team is above the industry average', 'Colaba\'s earnings growth has slowed over the last few quarters'],
         answer: 0, explain: 'Rising <strong>labor productivity</strong> is what makes added workers profitable rather than pure cost. Only the shop-floor improvement shows workers now producing more sellable output; the efficient assembly line is a pre-existing static fact, and the rest are neutral or strengthen his case.' }
+    ]
+  },
+  {
+    id: 'psy240-ch1',
+    course: 'PSY 240',
+    name: 'Ch 1 — Abnormal Psychology: Past & Present',
+    topic: 'Defining abnormality (the 4 Ds), history of treatment, research methods (practice)',
+    questions: [
+      { q: 'The "four Ds" commonly used to define abnormal behavior are:', type:'standard',
+        options: ['Deviance, distress, dysfunction, and danger','Deviance, distress, dysfunction, and diagnosis','Deviance, denial, dysfunction, and danger','Distress, dysfunction, danger, and disability','Deviance, distress, delusion, and danger'],
+        answer: 0, explain: 'The four Ds are <strong>Deviance, Distress, Dysfunction, and Danger</strong>. Danger is the 4th D many clinicians add; it is not part of the DSM-5 core definition.' },
+
+      { q: 'In the four-D model, <em>deviance</em> refers to behavior that is:', type:'standard',
+        options: ['Harmful to oneself or others','Different from a society\'s norms — statistically or culturally atypical','Unpleasant and distressing to the person','Interfering with daily functioning','Caused by a biological imbalance'],
+        answer: 1, explain: '<strong>Deviance</strong> = straying from social/cultural norms (a norm-based, statistical idea). Danger, distress, and dysfunction are the other three Ds.' },
+
+      { q: 'Which of the four Ds is generally the "exception, not the rule" and is NOT part of the DSM-5 definition, although clinicians often add it?', type:'standard',
+        options: ['Deviance','Distress','Dysfunction','Danger','Diagnosis'],
+        answer: 3, explain: '<strong>Danger</strong> is added by many clinicians but is not in the DSM-5 definition. Most people with mental disorders are not dangerous — danger is the exception, not the rule.' },
+
+      { q: 'A person who can no longer hold a job, keep up hygiene, or pay bills because of their symptoms is primarily showing which D?', type:'standard',
+        options: ['Deviance','Distress','Dysfunction / impairment','Danger','Deviance and danger only'],
+        answer: 2, explain: '<strong>Dysfunction/impairment</strong> = losing the capacity to function in daily life (social, occupational, self-care).' },
+
+      { q: 'Trephination — drilling a hole in the skull — reflected the ancient belief that abnormal behavior was caused by:', type:'standard',
+        options: ['An imbalance of the four humors','Evil spirits that needed to be released','Brain disease','Unconscious conflicts','Problems in living'],
+        answer: 1, explain: '<strong>Trephination</strong> (and exorcism) aimed to release evil spirits. Humoral theory came later, with Hippocrates.' },
+
+      { q: 'Hippocrates attributed mental disorders mainly to:', type:'standard',
+        options: ['Possession by Satan','An imbalance of the four bodily humors','Unconscious sexual conflict','Learned maladaptive behavior','Deviant social labeling'],
+        answer: 1, explain: 'Hippocrates proposed <strong>natural, physical causes</strong> — an imbalance of yellow bile, black bile, blood, and phlegm (e.g., too much black bile → depression).' },
+
+      { q: 'Philippe Pinel and William Tuke are best associated with:', type:'standard',
+        options: ['The somatogenic perspective','Moral treatment — humane, respectful care','Psychoanalysis','The discovery of psychotropic drugs','Demonology'],
+        answer: 1, explain: 'Pinel (La Bicêtre) and Tuke (York Retreat) pioneered <strong>moral treatment</strong> — unchaining patients and providing humane conditions.' },
+
+      { q: 'Dorothea Dix is best known for:', type:'standard',
+        options: ['Founding psychoanalysis','A U.S. reform campaign that led to 32 mental hospitals being built','Developing the theory of the four humors','Conducting the Rosenhan study','Introducing the lobotomy'],
+        answer: 1, explain: 'Dix, a Massachusetts schoolteacher, lobbied legislatures and Congress; her efforts led to <strong>32 state mental hospitals</strong>.' },
+
+      { q: 'The <em>somatogenic</em> perspective holds that abnormal behavior:', type:'standard',
+        options: ['Is caused by psychological factors','Has biological or physical causes','Is a myth, as Szasz argued','Results only from unconscious conflict','Is simply deviance from norms'],
+        answer: 1, explain: '<strong>Somatogenic</strong> = biological causes (e.g., Kraepelin\'s diagnostic categories; general paresis from syphilis). <em>Psychogenic</em> = psychological causes.' },
+
+      { q: 'Thomas Szasz is best known for arguing that:', type:'standard',
+        options: ['Mental illness has clear biological roots','Mental illness is a "myth" — really problems in living, not a disease','Moral treatment can cure all disorders','The four humors explain abnormality','Hypnosis reveals the unconscious'],
+        answer: 1, explain: 'In <em>The Myth of Mental Illness</em>, Szasz argued abnormal behavior is a social phenomenon / problems in living, and opposed involuntary commitment.' },
+
+      { q: 'In an experiment, the variable the researcher manipulates is the ______ variable, and the variable that is measured is the ______ variable.', type:'standard',
+        options: ['dependent; independent','independent; dependent','confounding; dependent','correlational; experimental','placebo; blind'],
+        answer: 1, explain: 'The <strong>independent</strong> variable is manipulated; the <strong>dependent</strong> variable is measured. Confounds are extraneous variables you try to control.' },
+
+      { q: 'A correlation coefficient (r) of −0.90 indicates:', type:'standard',
+        options: ['A weak relationship in which one variable causes the other','A strong relationship in which, as one variable rises, the other falls','No relationship between the variables','A strong positive relationship','That the study used random assignment'],
+        answer: 1, explain: 'The sign shows <strong>direction</strong> (negative = inverse) and the magnitude (0.90) shows <strong>strength</strong>. Correlation does not prove causation.' },
+
+      { q: 'All of the following are true of correlational research EXCEPT:', type:'except',
+        options: ['It can show whether two variables are associated','It allows findings to be generalized','It can establish that one variable causes the other','It does not directly manipulate behavior','Correlations can be positive or negative'],
+        answer: 2, explain: '<strong>Correlation cannot establish causation</strong> — a third variable or a reversed direction may explain the association.' }
     ]
   }
 ];
