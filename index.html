@@ -764,8 +764,9 @@ function closeSheet(){document.getElementById('overflowSheet').classList.remove(
 /* ============================================================
    STATE + SEED
    ============================================================ */
-const LS_KEY='acc_state_v3';
+const LS_KEY='acc_overlay_v1';
 let state={};
+let SEED_BASE=null;
 function todayISO(off){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+(off||0));return d.toISOString().slice(0,10);}
 let _uid=0; const uid=()=> 'a'+(Date.now().toString(36))+(_uid++);
 
@@ -1140,15 +1141,70 @@ function seedState(){
   s.theme = dark ? 'dark' : 'light';
   return s;
 }
+/* Course/assignment DATA lives in seedState() (baked in — refreshes whenever the app
+   updates). The user's OWN changes — done/undone, final grades, added/edited/deleted
+   assignments, recorded grades, quiz scores, files, theme — are stored separately as a
+   small "overlay" so an app/data update never wipes progress. loadState re-merges the
+   overlay onto the fresh baked data; saveState re-derives the overlay by diffing against
+   the baked baseline (SEED_BASE). */
 function loadState(){
-  try{const raw=localStorage.getItem(LS_KEY); state = raw?JSON.parse(raw):seedState();}
-  catch(e){state=seedState();}
+  SEED_BASE = seedState();
+  let ov={};
+  try{ ov = JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ ov={}; }
+  state = applyOverlay(SEED_BASE, ov);
   if(!state.quizScores) state.quizScores={};
   if(!state.checklists) state.checklists={};
   if(!state.theme) state.theme='light';
   applyTheme();
 }
-function saveState(){ try{localStorage.setItem(LS_KEY, JSON.stringify(state));}catch(e){} }
+function applyOverlay(seed, ov){
+  const s = JSON.parse(JSON.stringify(seed));
+  s.theme = ov.theme || seed.theme;
+  s.pat = ov.pat || '';
+  s.quizScores = ov.quizScores || {};
+  s.grades = Array.isArray(ov.grades) ? ov.grades : [];
+  s.files = Array.isArray(ov.files) ? ov.files : [];
+  s.checklists = Object.assign({}, seed.checklists, ov.checklists||{});
+  const fg = ov.finalGrades || {};
+  s.courses.forEach(c=>{ if(fg[c.code]!==undefined) c.finalGrade = fg[c.code]; });
+  (ov.userCourses||[]).forEach(c=>{ if(!s.courses.find(x=>x.code===c.code)) s.courses.push(c); });
+  const removed = ov.removed||{}, edits = ov.edits||{}, status = ov.status||{};
+  s.assignments = s.assignments.filter(a=>!removed[a.id]).map(a=>{
+    if(edits[a.id]) Object.assign(a, edits[a.id]);
+    if(status[a.id]) a.status = status[a.id];
+    return a;
+  });
+  (ov.userAssignments||[]).forEach(a=> s.assignments.push(a));
+  return s;
+}
+function saveState(){
+  try{
+    const seed = SEED_BASE || seedState();
+    const byId = {}; seed.assignments.forEach(a=> byId[a.id]=a);
+    const seedCodes = new Set(seed.courses.map(c=>c.code));
+    const ov = { theme:state.theme, pat:state.pat||'', quizScores:state.quizScores||{},
+      grades:state.grades||[], files:state.files||[], checklists:state.checklists||{},
+      finalGrades:{}, status:{}, edits:{}, removed:{}, userAssignments:[], userCourses:[] };
+    (state.courses||[]).forEach(c=>{
+      if(!seedCodes.has(c.code)) ov.userCourses.push(c);
+      else if(c.finalGrade!=null) ov.finalGrades[c.code]=c.finalGrade;
+    });
+    const present=new Set();
+    (state.assignments||[]).forEach(a=>{
+      const base=byId[a.id];
+      if(!base){ ov.userAssignments.push(a); return; }
+      present.add(a.id);
+      if(a.status && a.status!==base.status) ov.status[a.id]=a.status;
+      const e={};
+      ['title','course','type','due','details','resources'].forEach(k=>{
+        if(JSON.stringify(a[k])!==JSON.stringify(base[k])) e[k]=a[k];
+      });
+      if(Object.keys(e).length) ov.edits[a.id]=e;
+    });
+    seed.assignments.forEach(a=>{ if(!present.has(a.id)) ov.removed[a.id]=true; });
+    localStorage.setItem(LS_KEY, JSON.stringify(ov));
+  }catch(e){}
+}
 
 /* ============================================================
    THEME
