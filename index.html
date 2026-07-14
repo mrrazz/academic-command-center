@@ -226,6 +226,8 @@ input,select,textarea{font-family:inherit}
 .pill.warn{background:var(--yellow-soft);color:var(--yellow)}.pill.warn .pd{background:var(--yellow)}
 .pill.soon{background:var(--orange-soft);color:var(--orange)}.pill.soon .pd{background:var(--orange)}
 .pill.over{background:var(--red-soft);color:var(--red)}.pill.over .pd{background:var(--red)}
+.fg-select{border:1px solid var(--border-2);background:var(--bg);color:var(--text);border-radius:9px;font-size:13px;font-weight:600;padding:7px 10px;flex:0 0 auto}
+.fg-select:focus{outline:none;border-color:var(--amber)}
 
 /* ---------- Quick launch ---------- */
 .launch{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
@@ -642,7 +644,9 @@ a.ad-res:hover{border-color:var(--amber-line);color:var(--amber-ink)}
 
       <!-- GRADES -->
       <section class="view" id="view-grades">
-        <div class="sec-head" style="margin-bottom:9px"><h2>Course standing</h2></div>
+        <div class="sec-head" style="margin-bottom:9px"><h2>Final course grades</h2></div>
+        <div id="finalGradesSlot"></div>
+        <div class="sec-head" style="margin:16px 0 9px"><h2>Course standing (per-item)</h2></div>
         <div id="gradeStanding"></div>
         <div class="sec-head" style="margin:16px 0 9px"><h2>Record a grade</h2></div>
         <div class="card">
@@ -820,6 +824,17 @@ function activeSorted(){return state.assignments.filter(a=>a.status!=='done').so
 function risk(g){if(g==null)return{l:'Not graded',c:''};if(g>=90)return{l:'On track',c:'good'};if(g>=83)return{l:'Watch',c:'warn'};if(g>=75)return{l:'At risk',c:'soon'};return{l:'Critical',c:'over'};}
 function letterGrade(g){if(g==null)return'—';if(g>=93)return'A';if(g>=90)return'A-';if(g>=87)return'B+';if(g>=83)return'B';if(g>=80)return'B-';if(g>=77)return'C+';if(g>=73)return'C';if(g>=70)return'C-';if(g>=60)return'D';return'F';}
 function gradeColor(g){if(g==null)return'var(--text3)';return g>=90?'var(--green)':g>=83?'var(--yellow)':g>=75?'var(--orange)':'var(--red)';}
+/* ---- final course grades (letter) + transfer GPA ---- */
+const GPA_POINTS={'A':4.0,'A-':3.7,'B+':3.3,'B':3.0,'B-':2.7,'C+':2.3,'C':2.0,'C-':1.7,'D+':1.3,'D':1.0,'D-':0.7,'F':0.0};
+const LETTER_GRADES=['A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'];
+function gpaColorNum(p){if(p==null)return'var(--text3)';return p>=3.7?'var(--green)':p>=3.0?'var(--yellow)':p>=2.0?'var(--orange)':'var(--red)';}
+function gpaColor(l){return gpaColorNum(GPA_POINTS[l]);}
+// what to show for a course's headline grade: final letter when complete, else the numeric standing
+function courseGrade(c){
+  if(c.finalGrade&&GPA_POINTS[c.finalGrade]!=null) return {big:c.finalGrade,color:gpaColor(c.finalGrade),letter:'Final grade',pill:{l:'Complete',c:'good'}};
+  const r=risk(c.grade); return {big:(c.grade==null?'—':c.grade),color:gradeColor(c.grade),letter:letterGrade(c.grade),pill:r};
+}
+function transferGPA(codes){const cs=state.courses.filter(c=>(!codes||codes.includes(c.code))&&c.finalGrade&&GPA_POINTS[c.finalGrade]!=null);if(!cs.length)return null;return cs.reduce((s,c)=>s+GPA_POINTS[c.finalGrade],0)/cs.length;}
 function nextDeadline(code){return state.assignments.filter(a=>a.course===code&&a.status!=='done').sort((a,b)=>daysUntil(a.due)-daysUntil(b.due))[0];}
 
 /* ============================================================
@@ -876,8 +891,8 @@ function renderDashboard(){
   }).join('')}</div>` : `<div class="rows"><div class="empty">${svg('smile')}<div class="big">Inbox zero.</div>No open assignments right now.</div></div>`;
   // grades
   document.getElementById('gradeSlot').innerHTML=`<div class="rows">${state.courses.map(c=>{
-    const r=risk(c.grade);
-    return `<div class="grade-row"><span class="gc" style="color:${courseColor(c.code)}">${esc(c.code)}</span><span class="gname">${esc(c.name)}</span><span class="gnum" style="color:${gradeColor(c.grade)}">${c.grade??'—'}</span><span class="pill ${r.c}"><span class="pd"></span>${r.l}</span></div>`;
+    const cg=courseGrade(c);
+    return `<div class="grade-row"><span class="gc" style="color:${courseColor(c.code)}">${esc(c.code)}</span><span class="gname">${esc(c.name)}</span><span class="gnum" style="color:${cg.color}">${cg.big}</span><span class="pill ${cg.pill.c}"><span class="pd"></span>${cg.pill.l}</span></div>`;
   }).join('')}</div>`;
   // quick launch
   const links=[
@@ -1000,7 +1015,7 @@ let openCourse=null;       // code of expanded card
 let tutorTab='quizzes';
 function renderCourses(){
   document.getElementById('coursesSlot').innerHTML = state.courses.map(c=>{
-    const r=risk(c.grade); const nd=nextDeadline(c.code); const isOpen=openCourse===c.code;
+    const cg=courseGrade(c); const nd=nextDeadline(c.code); const isOpen=openCourse===c.code;
     const nextTxt = nd? `<span class="mono">${esc(nd.title)}</span> · ${dueLabel(nd.due).txt}` : 'No upcoming deadline';
     return `<div class="course-card ${isOpen?'open':''}" style="--cc:${courseColor(c.code)}">
       <div class="cc-head">
@@ -1011,12 +1026,12 @@ function renderCourses(){
             <div class="cc-prof">${esc(c.prof||'')}</div>
           </div>
           <div class="cc-grade">
-            <div class="gnum" style="color:${gradeColor(c.grade)}">${c.grade??'—'}</div>
-            <div class="ml" style="margin-top:2px">${letterGrade(c.grade)}</div>
+            <div class="gnum" style="color:${cg.color}">${cg.big}</div>
+            <div class="ml" style="margin-top:2px">${cg.letter}</div>
           </div>
         </div>
         <div class="cc-meta">
-          <span class="pill ${r.c}"><span class="pd"></span>${r.l}</span>
+          <span class="pill ${cg.pill.c}"><span class="pd"></span>${cg.pill.l}</span>
           <span class="cc-next">${svg('clock')}${nextTxt}</span>
           <button class="tutor-btn" onclick="toggleTutor('${c.code}')">${svg('tutor')}Tutor${svg('chev','')}</button>
         </div>
@@ -1311,8 +1326,28 @@ const COURSE_GRADING = {
   'POL 211': { mode:'points', total:3200, categories:[{name:'Quiz',points:1000},{name:'Participation',points:1000},{name:'Research Paper',points:1200}] }
 };
 
+function renderFinalGrades(){
+  const slot=document.getElementById('finalGradesSlot'); if(!slot) return;
+  slot.innerHTML=`<div class="rows">`+state.courses.map(c=>{
+    const opts=`<option value="">— in progress —</option>`+LETTER_GRADES.map(l=>`<option value="${l}" ${c.finalGrade===l?'selected':''}>${l}  (${GPA_POINTS[l].toFixed(1)})</option>`).join('');
+    const done=c.finalGrade&&GPA_POINTS[c.finalGrade]!=null;
+    return `<div class="grade-row">
+      <span class="gc" style="color:${courseColor(c.code)}">${esc(c.code)}</span>
+      <span class="gname">${esc(c.name)}</span>
+      ${done?`<span class="pill good" style="margin-right:8px"><span class="pd"></span>Complete</span>`:''}
+      <select class="fg-select" onchange="setFinalGrade('${c.code}',this.value)">${opts}</select>
+    </div>`;
+  }).join('')+`</div>`;
+}
+function setFinalGrade(code,letter){
+  const c=state.courses.find(x=>x.code===code); if(!c) return;
+  c.finalGrade=letter||null; saveState();
+  renderGrades();
+  if(currentView==='degree') renderDegree();
+}
 function renderGrades(){
   if(!Array.isArray(state.grades)) state.grades=[];
+  renderFinalGrades();
   const standing=document.getElementById('gradeStanding');
   const listEl=document.getElementById('gradeList');
   if(!standing||!listEl) return; // grades view not mounted
@@ -1412,11 +1447,10 @@ const DEGREE_REQS = {
   bsw: [
     {status:'done', title:'SOC 110 Sociology',          sub:'Transferred from Monroe College'},
     {status:'done', title:'PSY 101 General Psychology',  sub:'PSY 105 transferred'},
-    {status:'ip',   title:'SOC Elective',               sub:'SOC 205 Social Problems — In Progress'},
-    {status:'ip',   title:'PSY Elective',               sub:'PSY 240 Abnormal Psychology — In Progress'},
-    {status:'ip',   title:'POL Elective',               sub:'POL 211 American Government — In Progress'},
-    {status:'ip',   title:'ECO Elective',               sub:'ECO 101 Macroeconomics — In Progress'},
-    {status:'ip',   title:'BIO Lab Science',            sub:'BIO 109 Concepts in Biology — In Progress'}
+    {status:'ip', course:'SOC 205', title:'SOC Elective', sub:'SOC 205 Social Problems'},
+    {status:'ip', course:'PSY 240', title:'PSY Elective', sub:'PSY 240 Abnormal Psychology'},
+    {status:'ip', course:'POL 211', title:'POL Elective', sub:'POL 211 American Government'},
+    {status:'ip', course:'ECO 101', title:'ECO Elective', sub:'ECO 101 Macroeconomics'}
   ]
 };
 function renderDegree(){
@@ -1425,10 +1459,21 @@ function renderDegree(){
   const S={done:{g:'✓',c:'var(--green)',bg:'var(--green-soft)',lbl:'DONE'},
            ip:{g:'▶',c:'var(--amber)',bg:'var(--amber-soft)',lbl:'IP'},
            todo:{g:'○',c:'var(--orange)',bg:'var(--orange-soft)',lbl:'TODO'}};
-  const row=r=>{const s=S[r.status];return `<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)">
+  const row=r=>{
+    let st=r.status, gradeChip='';
+    if(r.course){
+      const c=state.courses.find(x=>x.code===r.course);
+      if(c&&c.finalGrade&&GPA_POINTS[c.finalGrade]!=null){ st='done'; gradeChip=`<span class="chip" style="color:${gpaColor(c.finalGrade)};border-color:${gpaColor(c.finalGrade)};margin-right:6px">${esc(c.finalGrade)}</span>`; }
+      else if(c){ st='ip'; }
+    }
+    const s=S[st];
+    return `<div style="display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)">
     <span style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;flex-shrink:0;background:${s.bg};color:${s.c}">${s.g}</span>
     <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">${esc(r.title)}</div><div style="font-size:11px;color:var(--text3)">${esc(r.sub)}</div></div>
-    <span class="chip" style="color:${s.c};border-color:${s.c}">${s.lbl}</span></div>`; };
+    ${gradeChip}<span class="chip" style="color:${s.c};border-color:${s.c}">${s.lbl}</span></div>`; };
+  const bswCodes=DEGREE_REQS.bsw.filter(r=>r.course).map(r=>r.course);
+  const bswGPA=transferGPA(bswCodes);
+  const bswDone=state.courses.filter(c=>bswCodes.includes(c.code)&&c.finalGrade&&GPA_POINTS[c.finalGrade]!=null).length;
   const tile=(v,l,col)=>`<div style="text-align:center;background:var(--surface-2);border-radius:var(--radius-sm);padding:12px"><div class="mono" style="font-size:20px;font-weight:700;color:${col}">${v}</div><div style="font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">${l}</div></div>`;
   slot.innerHTML = `
     <div class="sec-head" style="margin-bottom:9px"><h2>MWCC Associate in Arts</h2></div>
@@ -1446,6 +1491,10 @@ function renderDegree(){
     <div class="sec-head" style="margin:16px 0 9px"><h2>Remaining MWCC requirements</h2></div>
     <div class="card" style="padding-top:2px;padding-bottom:2px">${DEGREE_REQS.mwcc.map(row).join('')}</div>
     <div class="sec-head" style="margin:16px 0 9px"><h2>Salem State BSW — support courses</h2></div>
+    <div class="card" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      ${tile(bswDone+' / '+bswCodes.length,'Courses complete','var(--text)')}
+      ${tile(bswGPA!=null?bswGPA.toFixed(2):'—','GPA (recorded)',gpaColorNum(bswGPA))}
+    </div>
     <div class="card" style="padding-top:2px;padding-bottom:2px">${DEGREE_REQS.bsw.map(row).join('')}</div>
     <div class="sec-head" style="margin:16px 0 9px"><h2>Transfer counselor</h2></div>
     <div class="card">
