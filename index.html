@@ -1013,9 +1013,9 @@ function seedState(){
       "course": "PSY 240",
       "title": "Assignment A (written)",
       "type": "writing",
-      "due": "2026-07-25",
+      "due": "2026-07-26",
       "status": "todo",
-      "details": "Upload Written Assignment A (choice of topics; 15% of grade). Accepted formats: .docx/.doc/.rtf/.odt only — NOT Pages or PDF. APA 7th; follow the rubric.",
+      "details": "Upload Written Assignment A (choice of topics from Ch 1 or Ch 3; 15% of grade). Due date extended by one day (per Week 2 announcement, 7/18) to Sunday, July 26. Accepted formats: .docx/.doc/.rtf/.odt only — NOT Pages or PDF. APA 7th; follow the rubric.",
       "resources": [
         "Blackboard | https://bb.mwcc.edu/webapps/bb-auth-provider-cas-BB5fdcf19eabe0d/execute/casLogin?cmd=login&authProviderId=_109_1&redirectUrl=https%3A%2F%2Fbb.mwcc.edu%2Fultra",
         "Writing Lab (Blackboard)"
@@ -1129,6 +1129,19 @@ function seedState(){
       "resources": [
         "Blackboard | https://bb.mwcc.edu/webapps/bb-auth-provider-cas-BB5fdcf19eabe0d/execute/casLogin?cmd=login&authProviderId=_109_1&redirectUrl=https%3A%2F%2Fbb.mwcc.edu%2Fultra"
       ]
+    },
+    {
+      "id": "acc00q",
+      "course": "PSY 240",
+      "title": "Extra Credit: APA Reference Page",
+      "type": "homework",
+      "due": "2026-07-21",
+      "status": "todo",
+      "details": "Optional extra credit — up to 10 bonus points on your lowest exam grade. Pick ONE topic from the list on the Extra Credit page (e.g. history of lobotomies, treatments for bipolar disorder, PTSD and disasters, etc.), find 10 scholarly peer-reviewed journal articles via the MWCC Library (Academic Search Complete, \"peer reviewed\" filter), and build an APA 7th-edition reference page using a citation builder (state which one you used). No reading required — just the reference page. NOTE: the posted document says \"Due: Tuesday, February 10\" — that is leftover boilerplate from a past term, not a real date. Best guess is the current Tuesday cadence (Jul 21) but VERIFY the actual due date with Prof. Murphy or the live Announcements before treating this as final.",
+      "resources": [
+        "Blackboard | https://bb.mwcc.edu/webapps/bb-auth-provider-cas-BB5fdcf19eabe0d/execute/casLogin?cmd=login&authProviderId=_109_1&redirectUrl=https%3A%2F%2Fbb.mwcc.edu%2Fultra",
+        "MWCC Library | https://library.mwcc.edu/home"
+      ]
     }
   ],
   "files": [],
@@ -1141,12 +1154,6 @@ function seedState(){
   s.theme = dark ? 'dark' : 'light';
   return s;
 }
-/* Course/assignment DATA lives in seedState() (baked in — refreshes whenever the app
-   updates). The user's OWN changes — done/undone, final grades, added/edited/deleted
-   assignments, recorded grades, quiz scores, files, theme — are stored separately as a
-   small "overlay" so an app/data update never wipes progress. loadState re-merges the
-   overlay onto the fresh baked data; saveState re-derives the overlay by diffing against
-   the baked baseline (SEED_BASE). */
 function loadState(){
   SEED_BASE = seedState();
   let ov={};
