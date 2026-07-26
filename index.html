@@ -2174,7 +2174,7 @@ const QUIZ_BANK = [
     id: 'psy240-ch1',
     course: 'PSY 240',
     name: 'Ch 1 — Abnormal Psychology: Past & Present',
-    topic: 'Defining abnormality (the 4 Ds), history of treatment, research methods (practice)',
+    topic: 'Defining abnormality (4 Ds), cultural humility, shifting views & deinstitutionalization, research methods & ethics (practice)',
     questions: [
       { q: 'The "four Ds" commonly used to define abnormal behavior are:', type:'standard',
         options: ['Deviance, distress, dysfunction, and danger','Deviance, distress, dysfunction, and diagnosis','Deviance, denial, dysfunction, and danger','Distress, dysfunction, danger, and disability','Deviance, distress, delusion, and danger'],
@@ -2226,7 +2226,154 @@ const QUIZ_BANK = [
 
       { q: 'All of the following are true of correlational research EXCEPT:', type:'except',
         options: ['It can show whether two variables are associated','It allows findings to be generalized','It can establish that one variable causes the other','It does not directly manipulate behavior','Correlations can be positive or negative'],
-        answer: 2, explain: '<strong>Correlation cannot establish causation</strong> — a third variable or a reversed direction may explain the association.' }
+        answer: 2, explain: '<strong>Correlation cannot establish causation</strong> — a third variable or a reversed direction may explain the association.' },
+
+      { q: 'Why is cultural humility important for clinicians?', type:'standard',
+        options: ['It speeds up diagnosis','It lets clinicians avoid learning about other cultures','What counts as abnormal is shaped by culture, so clinicians must recognize the limits of their own perspective','It is required by insurance companies','It guarantees a clinician can never misjudge a client'],
+        answer: 2, explain: 'What is considered "abnormal" is <strong>culturally bound</strong>. Cultural humility means recognizing the limits of one\'s own cultural lens — not avoiding, mastering, or being immune to error.' },
+
+      { q: 'Which two past treatments reflect a demonological view of abnormality?', type:'standard',
+        options: ['Trephination and exorcism','Psychoanalysis and hypnosis','Lobotomy and medication','Humors and bloodletting','Moral treatment and milieu therapy'],
+        answer: 0, explain: 'The <strong>demonological</strong> view blamed evil spirits. <em>Trephination</em> (drilling the skull) and <em>exorcism</em> aimed to release them. Humors/bloodletting are somatogenic; the others are later psychological or biological approaches.' },
+
+      { q: 'The 19th-century discovery that general paresis was caused by syphilis supported which view?', type:'standard',
+        options: ['Psychogenic','Demonological','Somatogenic','Humanistic','Behavioral'],
+        answer: 2, explain: 'Finding a clear <strong>physical cause</strong> (syphilis) for a mental disorder (general paresis) was landmark evidence for the <strong>somatogenic</strong> — biological — view.' },
+
+      { q: 'Work with hypnotism and hysterical disorders helped establish which view of abnormality?', type:'standard',
+        options: ['Somatogenic','Psychogenic','Demonological','Biological','Sociocultural'],
+        answer: 1, explain: 'Showing that hysterical symptoms could be produced and removed through <strong>hypnosis</strong> pointed to psychological causes — the <strong>psychogenic</strong> view (Mesmer, Charcot, Breuer, Freud).' },
+
+      { q: 'Which development occurred in the mental health field during the 1950s?', type:'standard',
+        options: ['Discovery of psychotropic medications','Invention of the MRI','Publication of the first DSM-5','End of all institutional care','Founding of the first asylums'],
+        answer: 0, explain: 'The 1950s brought the first effective <strong>psychotropic drugs</strong> (e.g., antipsychotics), transforming treatment and enabling deinstitutionalization. DSM-5 came in 2013; asylums long predate the 1950s.' },
+
+      { q: 'Moving patients out of large state hospitals into the community is called:', type:'standard',
+        options: ['Trephination','Deinstitutionalization','Confounding','Standardization','Prevention'],
+        answer: 1, explain: '<strong>Deinstitutionalization</strong> = releasing patients from large state mental hospitals into community care, spurred by new medications and reform beginning in the 1960s.' },
+
+      { q: 'How did Covid-19 most affect the mental health field?', type:'standard',
+        options: ['It ended in-person therapy permanently','It dramatically accelerated telemental health','It had no measurable effect','It eliminated the need for medication','It reduced the overall demand for mental health care'],
+        answer: 1, explain: 'COVID-19 rapidly expanded <strong>telemental health</strong> (therapy by phone/video). Demand for care <em>rose</em> rather than fell.' },
+
+      { q: 'Which research method is the ONLY one that can demonstrate cause and effect?', type:'standard',
+        options: ['Case study','Correlational method','Experimental method','Naturalistic observation','Epidemiological study'],
+        answer: 2, explain: 'Only the <strong>experiment</strong> — manipulating an independent variable while controlling confounds — can establish causation. Case, correlational, and epidemiological methods show only association.' },
+
+      { q: 'Which techniques help guard against confounds in an experiment?', type:'standard',
+        options: ['Case studies and interviews','Control group, random assignment, and blind design','Larger sample only','Cultural humility','Using a single participant'],
+        answer: 1, explain: 'Confounds are controlled with a <strong>control group, random assignment, and blind/double-blind design</strong>. A bigger sample alone does not remove confounds.' },
+
+      { q: 'What is the primary purpose of an Institutional Review Board (IRB)?', type:'standard',
+        options: ['To fund research','To protect the rights and safety of human participants','To publish results','To diagnose participants','To design the experiment for the researcher'],
+        answer: 1, explain: 'An <strong>IRB</strong> reviews studies to safeguard the rights, safety, and welfare of human participants — informed consent, risk minimization, and ethical treatment.' },
+
+      { q: 'In community-based participatory research (CBPR), the community members are:', type:'standard',
+        options: ['Only subjects to be observed','Partners in the research','Excluded from the process','Paid to stay uninvolved','Limited to reviewing the final report'],
+        answer: 1, explain: 'In <strong>CBPR</strong>, community members are equal <strong>partners</strong> — helping shape the questions, methods, and use of findings, not merely subjects to be studied.' }
+    ]
+  },
+  {
+    id: 'psy240-ch4-5',
+    course: 'PSY 240',
+    name: 'Ch 4 & 5 — Anxiety/OCD + Trauma & Dissociative',
+    topic: 'Anxiety & OCD-related disorders (Ch 4); stress, PTSD & dissociative disorders (Ch 5) (practice)',
+    questions: [
+      { q: 'Generalized anxiety disorder involves excessive worry lasting at least:', type:'standard',
+        options: ['2 weeks','1 month','3 months','6 months','1 year'],
+        answer: 3, explain: 'DSM-5 requires excessive, hard-to-control worry occurring more days than not for at least <strong>6 months</strong>.' },
+
+      { q: 'Low activity of which neurotransmitter is linked to generalized anxiety disorder?', type:'standard',
+        options: ['Dopamine','GABA','Serotonin','Norepinephrine','Glutamate'],
+        answer: 1, explain: '<strong>GABA</strong> is the brain\'s main inhibitory (calming) neurotransmitter; low GABA activity is associated with GAD.' },
+
+      { q: 'The cognitive-behavioral concept describing an inability to tolerate not knowing what will happen is called:', type:'standard',
+        options: ['Repression','Intolerance of uncertainty','Reactivity','Deviance','Learned helplessness'],
+        answer: 1, explain: 'The <strong>intolerance-of-uncertainty</strong> theory holds that some people find any uncertainty deeply upsetting and use worry as a way to cope with it.' },
+
+      { q: 'Which describes agoraphobia?', type:'standard',
+        options: ['Fear of a specific animal','Fear of public/open situations where escape or help would be difficult','Fear of social judgment','Fear of contamination','Fear of a single traumatic memory'],
+        answer: 1, explain: '<strong>Agoraphobia</strong> = fear of being in public, open, or enclosed situations where escape or help would be hard if panic-like symptoms occurred.' },
+
+      { q: 'Which is NOT one of the three exposure techniques for specific phobias?', type:'except',
+        options: ['Systematic desensitization','Flooding','Modeling','Free association','In vivo exposure'],
+        answer: 3, explain: 'The exposure treatments for phobias are <strong>systematic desensitization, flooding, and modeling</strong> (in vivo exposure is exposure-based too). <strong>Free association</strong> is a psychodynamic technique, not an exposure method.' },
+
+      { q: 'According to cognitive-behavioral theorists, phobias are maintained largely by:', type:'standard',
+        options: ['Genetics alone','Avoidance, which prevents the fear from extinguishing','Low serotonin','Repression','Secondary gain from attention'],
+        answer: 1, explain: '<strong>Avoidance</strong> keeps a phobia alive: by escaping the feared object the person never learns it is safe, so the fear is never extinguished.' },
+
+      { q: 'NFL player Ricky Williams was used as an example of which disorder?', type:'standard',
+        options: ['OCD','Panic disorder','Social anxiety disorder','PTSD','Generalized anxiety disorder'],
+        answer: 2, explain: 'The textbook uses NFL player <strong>Ricky Williams</strong> to illustrate <strong>social anxiety disorder</strong> — intense fear of social or performance scrutiny.' },
+
+      { q: 'In panic disorder, cognitive-behavioral theorists say sufferers:', type:'standard',
+        options: ['Repress childhood memories','Misinterpret bodily sensations as catastrophic','Have too much GABA','Lack social skills','Have an overactive parasympathetic system'],
+        answer: 1, explain: 'CB theorists argue panic sufferers <strong>catastrophically misinterpret</strong> normal bodily sensations (e.g., a racing heart) as signs of disaster, which fuels the panic spiral.' },
+
+      { q: 'In OCD, the repetitive behaviors performed to reduce anxiety are called:', type:'standard',
+        options: ['Obsessions','Compulsions','Delusions','Phobias','Intrusions'],
+        answer: 1, explain: '<strong>Obsessions</strong> are intrusive thoughts; <strong>compulsions</strong> are the repetitive behaviors or mental acts performed to relieve the anxiety those obsessions cause.' },
+
+      { q: 'Which neurotransmitter is most implicated in OCD?', type:'standard',
+        options: ['GABA','Dopamine','Serotonin','Acetylcholine','Norepinephrine'],
+        answer: 2, explain: 'Low <strong>serotonin</strong> activity (plus abnormal activity in the orbitofrontal cortex and caudate) is most implicated in OCD; SSRIs are a first-line medication.' },
+
+      { q: 'What does ERP, the signature OCD treatment, stand for?', type:'standard',
+        options: ['Emotional Response Processing','Exposure and Response Prevention','Extended Recovery Program','Exposure and Relaxation Practice','Exposure and Reinforcement Protocol'],
+        answer: 1, explain: '<strong>ERP = Exposure and Response Prevention</strong>: the person faces anxiety triggers (exposure) while refraining from the compulsive ritual (response prevention), breaking the obsession–compulsion cycle.' },
+
+      { q: 'Which is one of the four OCD-related disorders?', type:'standard',
+        options: ['Panic disorder','Hoarding disorder','PTSD','Dissociative amnesia','Social anxiety disorder'],
+        answer: 1, explain: 'The four OCD-related disorders are <strong>hoarding disorder</strong>, hair-pulling (trichotillomania), skin-picking (excoriation), and body dysmorphic disorder.' },
+
+      { q: 'Which OCD-related disorder is brand new to the DSM-5 with no DSM-IV equivalent?', type:'standard',
+        options: ['Trichotillomania','Hoarding disorder','Excoriation (skin-picking) disorder','Body dysmorphic disorder','Obsessive-compulsive disorder'],
+        answer: 2, explain: '<strong>Excoriation (skin-picking) disorder</strong> was added as an entirely new diagnosis in DSM-5. Trichotillomania and body dysmorphic disorder existed in DSM-IV; excoriation did not.' },
+
+      { q: 'Trichotillomania moved from Impulse-Control Disorders in DSM-IV to which DSM-5 category?', type:'standard',
+        options: ['Anxiety Disorders','Obsessive-Compulsive and Related Disorders','Dissociative Disorders','Mood Disorders','Impulse-Control Disorders'],
+        answer: 1, explain: 'In DSM-IV, trichotillomania (hair-pulling) sat under Impulse-Control Disorders; DSM-5 moved it into the new <strong>Obsessive-Compulsive and Related Disorders</strong> category.' },
+
+      { q: 'Why do two people react differently to the same stressor?', type:'standard',
+        options: ['One is older','Mainly how they appraise the stressor and their coping resources','The weather','Random chance only','Only their genetic makeup'],
+        answer: 1, explain: 'The stress response depends on how a person <strong>appraises</strong> the event and their perceived ability and resources to cope — so the same stressor affects people differently.' },
+
+      { q: 'The main difference between acute stress disorder and PTSD is:', type:'standard',
+        options: ['The type of trauma','Duration of symptoms (under 1 month vs. more than 1 month)','The person\'s age','One is physical, one is mental','Whether medication is required'],
+        answer: 1, explain: 'ASD and PTSD share nearly identical symptoms; the key difference is <strong>duration</strong> — ASD lasts up to 1 month (from ~3 days), while PTSD persists <strong>more than 1 month</strong>.' },
+
+      { q: 'Which is an exposure-based therapy used to treat PTSD?', type:'standard',
+        options: ['EMDR','Trephination','Free association','Systematic bloodletting','Dream analysis'],
+        answer: 0, explain: '<strong>EMDR</strong> (eye movement desensitization and reprocessing), along with flooding, is an exposure-based therapy used for PTSD.' },
+
+      { q: 'Which is one of the three main dissociative disorders?', type:'standard',
+        options: ['Panic disorder','Dissociative identity disorder','Hoarding disorder','Social anxiety disorder','Acute stress disorder'],
+        answer: 1, explain: 'The three main dissociative disorders are <strong>dissociative amnesia</strong> (including fugue), <strong>dissociative identity disorder</strong>, and <strong>depersonalization-derealization disorder</strong>.' },
+
+      { q: 'A person forgets an entire event but recalls some parts of it. This amnesia pattern is:', type:'standard',
+        options: ['Localized','Selective','Generalized','Continuous','Systematized'],
+        answer: 1, explain: '<strong>Selective</strong> amnesia = remembering some, but not all, events from a period. (Localized = all events in a period; generalized = extends back before the event; continuous = forgetting continues forward.)' },
+
+      { q: 'Dissociative fugue is best described as:', type:'standard',
+        options: ['Forgetting a single traumatic image','Forgetting plus traveling/fleeing, sometimes with a new identity','Feeling detached from one\'s body','Having multiple personalities','Reliving the trauma in flashbacks'],
+        answer: 1, explain: '<strong>Dissociative fugue</strong> is an extreme form of dissociative amnesia: the person forgets their identity and travels or flees, sometimes assuming a new identity.' },
+
+      { q: 'The MOST common relationship among subpersonalities in DID is:', type:'standard',
+        options: ['Mutually amnesic','Mutually cognizant','One-way amnesic','Fully integrated','Co-conscious in all cases'],
+        answer: 2, explain: '<strong>One-way amnesic</strong> relationships are most common: some subpersonalities are aware of others, but the awareness is not mutual (the aware ones are "co-conscious").' },
+
+      { q: 'A major weakness in the research supporting explanations of DID is that:', type:'standard',
+        options: ['It relies heavily on case studies','It uses too many control groups','It is all done on animals','It ignores biology entirely','It uses only double-blind experiments'],
+        answer: 0, explain: 'Support for the leading explanations of DID leans heavily on <strong>case studies</strong>, which are hard to generalize and cannot establish cause and effect.' },
+
+      { q: 'Which is one of the three key goals of DID treatment?', type:'standard',
+        options: ['Increase the number of subpersonalities','Integrate/fuse the subpersonalities into one identity','Encourage amnesia','Avoid recovering memories','Strengthen the host against the others'],
+        answer: 1, explain: 'The three treatment goals are recognizing the disorder, recovering memories, and <strong>integrating (fusing)</strong> the subpersonalities into one unified identity.' },
+
+      { q: 'What feature separates depersonalization-derealization disorder from psychosis?', type:'standard',
+        options: ['The person has hallucinations','Reality testing stays intact; the person knows the unreal feeling is a perception','It only happens in children','It cannot be treated','It always includes multiple identities'],
+        answer: 1, explain: 'In depersonalization-derealization disorder, <strong>reality testing stays intact</strong> — the person knows the sense of unreality is a subjective perception, not fact, unlike in psychosis.' }
     ]
   },
   {
