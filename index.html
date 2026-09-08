@@ -779,35 +779,40 @@ function seedState(){
       "name": "Social Problems",
       "prof": "Prof. Lynn Barrieau",
       "grade": null,
-      "finalGrade": null
+      "finalGrade": null,
+      "hidden": true
     },
     {
       "code": "POL 211",
       "name": "American Government",
       "prof": "Prof. Shane Martin",
       "grade": null,
-      "finalGrade": null
+      "finalGrade": null,
+      "hidden": true
     },
     {
       "code": "PSY 240",
       "name": "Abnormal Psychology",
       "prof": "Prof. Sheila Murphy",
       "grade": null,
-      "finalGrade": null
+      "finalGrade": null,
+      "hidden": true
     },
     {
       "code": "BIO 109",
       "name": "Concepts in Biology",
       "prof": "Prof. Packard",
       "grade": null,
-      "finalGrade": null
+      "finalGrade": null,
+      "hidden": true
     },
     {
       "code": "ECO 101",
       "name": "Macroeconomics",
       "prof": "Prof. Michael Greenwood",
       "grade": null,
-      "finalGrade": "A-"
+      "finalGrade": "A-",
+      "hidden": true
     }
   ],
   "assignments": [
@@ -1108,14 +1113,14 @@ function renderDashboard(){
     return `<button class="row" onclick="go('assignments')"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${dl.txt}</span></button>`;
   }).join('')}</div>` : `<div class="rows"><div class="empty">${svg('smile')}<div class="big">Inbox zero.</div>No open assignments right now.</div></div>`;
   // grades
-  document.getElementById('gradeSlot').innerHTML=`<div class="rows">${state.courses.map(c=>{
+  document.getElementById('gradeSlot').innerHTML=`<div class="rows">${state.courses.filter(c=>!c.hidden).map(c=>{
     const cg=courseGrade(c);
     return `<div class="grade-row"><span class="gc" style="color:${courseColor(c.code)}">${esc(c.code)}</span><span class="gname">${esc(c.name)}</span><span class="gnum" style="color:${cg.color}">${cg.big}</span><span class="pill ${cg.pill.c}"><span class="pd"></span>${cg.pill.l}</span></div>`;
   }).join('')}</div>`;
   // quick launch
   const links=[
     {n:'Blackboard', s:'LMS', u:'https://bb.mwcc.edu/webapps/bb-auth-provider-cas-BB5fdcf19eabe0d/execute/casLogin?cmd=login&authProviderId=_109_1&redirectUrl=https%3A%2F%2Fbb.mwcc.edu%2Fultra', g:'Bb'},
-    {n:'MyEconLab', s:'ECO 101', u:'https://www.pearson.com/mylab', g:'ML'},
+    {n:'ArcGIS Online', s:'EAS 130', u:'https://themount.maps.arcgis.com/home/index.html', g:'AG'},
     {n:'Claude', s:'AI tutor', u:'https://claude.ai', g:'Cl'},
     {n:'Netlify', s:'Deploy', u:'https://app.netlify.com', g:'Nf'},
     {n:'MWCC Portal', s:'Records', u:'https://mwcc.edu', g:'MW'},
@@ -1469,7 +1474,7 @@ function resetData(){if(confirm('Reset everything to the starting data? This cle
    ============================================================ */
 function openModal(html){const m=document.getElementById('modalRoot');m.innerHTML=`<div class="modal">${html}</div>`;m.classList.add('open');}
 function closeModal(){document.getElementById('modalRoot').classList.remove('open');}
-function courseOptions(sel){return state.courses.map(c=>`<option value="${esc(c.code)}" ${c.code===sel?'selected':''}>${esc(c.code)} — ${esc(c.name)}</option>`).join('');}
+function courseOptions(sel){return state.courses.filter(c=>!c.hidden).map(c=>`<option value="${esc(c.code)}" ${c.code===sel?'selected':''}>${esc(c.code)} — ${esc(c.name)}</option>`).join('');}
 
 function fabAction(){ if(currentView==='files') openFileModal(); else openAsgModal(); }
 
@@ -1546,7 +1551,7 @@ const COURSE_GRADING = {
 
 function renderFinalGrades(){
   const slot=document.getElementById('finalGradesSlot'); if(!slot) return;
-  slot.innerHTML=`<div class="rows">`+state.courses.map(c=>{
+  slot.innerHTML=`<div class="rows">`+state.courses.filter(c=>!c.hidden).map(c=>{
     const opts=`<option value="">— in progress —</option>`+LETTER_GRADES.map(l=>`<option value="${l}" ${c.finalGrade===l?'selected':''}>${l}  (${GPA_POINTS[l].toFixed(1)})</option>`).join('');
     const done=c.finalGrade&&GPA_POINTS[c.finalGrade]!=null;
     return `<div class="grade-row">
@@ -1570,9 +1575,9 @@ function renderGrades(){
   const listEl=document.getElementById('gradeList');
   if(!standing||!listEl) return; // grades view not mounted
   const cSel=document.getElementById('g_course');
-  if(cSel && !cSel.options.length) cSel.innerHTML = state.courses.map(c=>`<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
+  if(cSel && !cSel.options.length) cSel.innerHTML = state.courses.filter(c=>!c.hidden).map(c=>`<option value="${esc(c.code)}">${esc(c.code)}</option>`).join('');
 
-  standing.innerHTML = state.courses.map(c=>{
+  standing.innerHTML = state.courses.filter(c=>!c.hidden).map(c=>{
     const code=c.code, cc=courseColor(code);
     const gs=state.grades.filter(g=>g.course===code);
     const grading=COURSE_GRADING[code];
