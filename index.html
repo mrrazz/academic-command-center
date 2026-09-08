@@ -1454,6 +1454,7 @@ function renderSettings(){
       <div class="set-item">
         <div class="sl">Backup &amp; restore</div><div class="sd">Everything lives in this browser. Export a copy, import it on another device, or start fresh.</div>
         <div class="set-actions">
+          <button class="btn" onclick="exportCalendar()">Export to Apple Calendar (.ics)</button>
           <button class="btn" onclick="exportData()">Export JSON</button>
           <button class="btn" onclick="document.getElementById('importFile').click()">Import</button>
           <button class="btn btn-danger" onclick="resetData()">Reset app</button>
@@ -1466,6 +1467,54 @@ function setTheme(t){state.theme=t;applyTheme();saveState();renderSettings();}
 function savePat(){const v=document.getElementById('patInput').value.trim();if(v){state.pat=v;saveState();renderSettings();initFiles();}}
 function clearPat(){state.pat='';saveState();renderSettings();}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc-backup-'+todayISO()+'.json';a.click();}
+function exportCalendar(){
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const fmtDT=s=>{
+    if(!s) return null;
+    // accept "2026-09-15T23:59" or "2026-09-15"
+    const d=new Date(s.includes('T')?s:s+'T23:59:00');
+    if(isNaN(d)) return null;
+    return d.toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  };
+  const esc=s=>(s||'').replace(/[\\;,]/g,'\\$&').replace(/\n/g,'\\n');
+  const open=state.assignments.filter(a=>a.status!=='done'&&a.due);
+  if(!open.length){alert('No open assignments to export.');return;}
+  const events=open.map(a=>{
+    const dt=fmtDT(a.due);
+    if(!dt) return '';
+    // alarm 1 day before
+    return [
+      'BEGIN:VEVENT',
+      'UID:acc-'+a.id+'@acc',
+      'DTSTAMP:'+stamp,
+      'DTSTART:'+dt,
+      'DTEND:'+dt,
+      'SUMMARY:'+esc(a.course+' — '+a.title),
+      'DESCRIPTION:'+esc(a.details||''),
+      'BEGIN:VALARM',
+      'TRIGGER:-P1D',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Due tomorrow: '+esc(a.title),
+      'END:VALARM',
+      'END:VEVENT'
+    ].join('\r\n');
+  }).filter(Boolean);
+  const ics=[
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Academic Command Center//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Academic Command Center',
+    ...events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='academic-command-center-'+todayISO()+'.ics';
+  a.click();
+}
 function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);saveState();applyTheme();go('dashboard');}catch(err){alert('Could not read that file.');}};r.readAsText(f);}
 function resetData(){if(confirm('Reset everything to the starting data? This clears your local changes.')){state=seedState();saveState();applyTheme();go('dashboard');}}
 
