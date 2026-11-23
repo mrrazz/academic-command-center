@@ -752,10 +752,14 @@ function go(view){
   const inOverflow = NAV.find(n=>n.id===view && !n.primary);
   const moreBtn=document.getElementById('moreBtn'); if(moreBtn) moreBtn.classList.toggle('active', !!inOverflow);
   const fab=document.getElementById('fab'); if(fab) fab.style.display = (['dashboard','assignments','planner'].includes(view))?'grid':'none';
-  const R={assignments:renderAssignments,courses:renderCourses,planner:renderPlanner,files:initFiles,contacts:renderContacts,settings:renderSettings,dashboard:renderDashboard,grades:renderGrades,degree:renderDegree};
-  (R[view]||(()=>{}))();
+  refresh();
   document.querySelector('.content').scrollTo?.(0,0);
   window.scrollTo(0,0);
+}
+// re-render the current view in place (after a change made from a modal, a day rollover, etc.)
+function refresh(){
+  const R={assignments:renderAssignments,courses:renderCourses,planner:renderPlanner,files:initFiles,contacts:renderContacts,settings:renderSettings,dashboard:renderDashboard,grades:renderGrades,degree:renderDegree};
+  (R[currentView]||(()=>{}))();
 }
 function toggleSidebar(){document.getElementById('app').classList.toggle('collapsed');}
 function openSheet(){document.getElementById('overflowSheet').classList.add('open');}
@@ -1392,7 +1396,12 @@ function applyOverlay(seed, ov){
   (ov.userCourses||[]).forEach(c=>{ if(!s.courses.find(x=>x.code===c.code)) s.courses.push(c); });
   const removed = ov.removed||{}, edits = ov.edits||{}, status = ov.status||{};
   s.assignments = s.assignments.filter(a=>!removed[a.id]).map(a=>{
-    if(edits[a.id]) Object.assign(a, edits[a.id]);
+    // an edit carries the baked value it was made against ({__v,__b}); if the baked data
+    // has since changed (e.g. a sweep moved the due date), the new baked value wins.
+    Object.entries(edits[a.id]||{}).forEach(([k,e])=>{
+      if(e&&typeof e==='object'&&'__v' in e){ if(JSON.stringify(a[k])===JSON.stringify(e.__b)) a[k]=e.__v; }
+      else a[k]=e; // legacy overlay entry (plain value)
+    });
     if(status[a.id]) a.status = status[a.id];
     return a;
   });
@@ -1404,13 +1413,14 @@ function saveState(){
   try{
     const seed = SEED_BASE || seedState();
     const byId = {}; seed.assignments.forEach(a=> byId[a.id]=a);
-    const seedCodes = new Set(seed.courses.map(c=>c.code));
+    const seedCourse = {}; seed.courses.forEach(c=> seedCourse[c.code]=c);
     const ov = { theme:state.theme, pat:state.pat||'', quizScores:state.quizScores||{},
       grades:state.grades||[], files:state.files||[], checklists:state.checklists||{},
       finalGrades:{}, status:{}, edits:{}, removed:{}, userAssignments:[], userCourses:[] };
     (state.courses||[]).forEach(c=>{
-      if(!seedCodes.has(c.code)) ov.userCourses.push(c);
-      else if(c.finalGrade!=null) ov.finalGrades[c.code]=c.finalGrade;
+      const base=seedCourse[c.code];
+      if(!base) ov.userCourses.push(c);
+      else if((c.finalGrade||null)!==(base.finalGrade||null)) ov.finalGrades[c.code]=c.finalGrade||null; // null = cleared
     });
     const present=new Set();
     (state.assignments||[]).forEach(a=>{
@@ -1420,13 +1430,16 @@ function saveState(){
       if(a.status && a.status!==base.status) ov.status[a.id]=a.status;
       const e={};
       ['title','course','type','due','details','resources'].forEach(k=>{
-        if(JSON.stringify(a[k])!==JSON.stringify(base[k])) e[k]=a[k];
+        if(JSON.stringify(a[k])!==JSON.stringify(base[k])) e[k]={__v:a[k], __b:base[k]};
       });
       if(Object.keys(e).length) ov.edits[a.id]=e;
     });
     seed.assignments.forEach(a=>{ if(!present.has(a.id)) ov.removed[a.id]=true; });
     localStorage.setItem(LS_KEY, JSON.stringify(ov));
-  }catch(e){}
+  }catch(e){
+    console.error('saveState failed',e);
+    if(!saveState.warned){saveState.warned=true;alert('Your changes couldn\'t be saved on this device (storage is full or blocked). They\'ll be lost when you close the app.');}
+  }
 }
 
 /* ============================================================
@@ -1447,11 +1460,15 @@ const COURSE_TINT={'SOC 205':'#6B7E9E','ECO 101':'#6E9B77','POL 211':'#8C7EA0','
 function courseColor(course){ return COURSE_TINT[course] || 'var(--text3)'; }
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function courseName(code){const c=(state.courses||[]).find(c=>c.code===code);return c?c.name:code;}
-function daysUntil(iso){const d=new Date(iso+'T00:00:00');const t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/86400000);}
-function fmtDue(iso){const d=new Date(iso+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
-function dueLabel(iso){const n=daysUntil(iso);if(n<0)return {txt:Math.abs(n)+'d late',cls:'over'};if(n===0)return {txt:'Today',cls:'soon'};if(n===1)return {txt:'Tomorrow',cls:'soon'};if(n<=3)return {txt:fmtDue(iso),cls:'soon'};return {txt:fmtDue(iso),cls:''};}
+// no due date = Infinity: sorts last, never overdue/soon
+function daysUntil(iso){if(!iso)return Infinity;const d=new Date(iso+'T00:00:00');const t=new Date();t.setHours(0,0,0,0);return Math.round((d-t)/86400000);}
+function cmpDue(a,b){const x=daysUntil(a.due),y=daysUntil(b.due);return x===y?0:x<y?-1:1;}
+function fmtDue(iso){if(!iso)return 'No date';const d=new Date(iso+'T00:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function dueLabel(iso){if(!iso)return {txt:'No date',cls:''};const n=daysUntil(iso);if(n<0)return {txt:Math.abs(n)+'d late',cls:'over'};if(n===0)return {txt:'Today',cls:'soon'};if(n===1)return {txt:'Tomorrow',cls:'soon'};if(n<=3)return {txt:fmtDue(iso),cls:'soon'};return {txt:fmtDue(iso),cls:''};}
 function urgencyClass(a){if(a.status==='done')return 'done';const n=daysUntil(a.due);if(n<0)return 'over';if(n<=3)return 'soon';return 'ok';}
-function activeSorted(){return state.assignments.filter(a=>a.status!=='done').sort((a,b)=>daysUntil(a.due)-daysUntil(b.due));}
+// assignments for courses still showing (finished/hidden courses drop out everywhere)
+function liveAsg(){const hid=new Set(state.courses.filter(c=>c.hidden).map(c=>c.code));return state.assignments.filter(a=>!hid.has(a.course));}
+function activeSorted(){return liveAsg().filter(a=>a.status!=='done').sort(cmpDue);}
 function risk(g){if(g==null)return{l:'Not graded',c:''};if(g>=90)return{l:'On track',c:'good'};if(g>=83)return{l:'Watch',c:'warn'};if(g>=75)return{l:'At risk',c:'soon'};return{l:'Critical',c:'over'};}
 function letterGrade(g){if(g==null)return'—';if(g>=93)return'A';if(g>=90)return'A-';if(g>=87)return'B+';if(g>=83)return'B';if(g>=80)return'B-';if(g>=77)return'C+';if(g>=73)return'C';if(g>=70)return'C-';if(g>=60)return'D';return'F';}
 function gradeColor(g){if(g==null)return'var(--text3)';return g>=90?'var(--green)':g>=83?'var(--yellow)':g>=75?'var(--orange)':'var(--red)';}
@@ -1466,13 +1483,18 @@ function courseGrade(c){
   const r=risk(c.grade); return {big:(c.grade==null?'—':c.grade),color:gradeColor(c.grade),letter:letterGrade(c.grade),pill:r};
 }
 function transferGPA(codes){const cs=state.courses.filter(c=>(!codes||codes.includes(c.code))&&c.finalGrade&&GPA_POINTS[c.finalGrade]!=null);if(!cs.length)return null;return cs.reduce((s,c)=>s+GPA_POINTS[c.finalGrade],0)/cs.length;}
-function nextDeadline(code){return state.assignments.filter(a=>a.course===code&&a.status!=='done').sort((a,b)=>daysUntil(a.due)-daysUntil(b.due))[0];}
+function nextDeadline(code){return state.assignments.filter(a=>a.course===code&&a.status!=='done').sort(cmpDue)[0];}
 
 /* ============================================================
    CLOCK / HEADER
    ============================================================ */
+let clockDay=null;
 function updateClock(){
   const now=new Date();
+  // app left open past midnight (or resumed next day): due labels are date-relative, so re-render
+  const day=now.toDateString();
+  if(clockDay&&day!==clockDay) refresh();
+  clockDay=day;
   const el=document.getElementById('topDate');
   if(el) el.textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
   const h=now.getHours();
@@ -1496,7 +1518,7 @@ function renderDashboard(){
           <div class="hero-title">${esc(a.title)}</div>
           <div class="hero-sub"><span class="tag">${esc(a.course)}</span> · due <span class="hero-due ${dl.cls}">${dl.txt}</span></div>
         </div>
-        <button class="hero-jump" onclick="go('assignments')">Open ${svg('jump')}</button>
+        <button class="hero-jump" onclick="openAsgDetail('${a.id}')">Open ${svg('jump')}</button>
       </div>
     </div>`;
   } else {
@@ -1506,9 +1528,10 @@ function renderDashboard(){
     </div>`;
   }
   // stats
-  const over=state.assignments.filter(a=>a.status!=='done'&&daysUntil(a.due)<0).length;
-  const soon=state.assignments.filter(a=>a.status!=='done'&&daysUntil(a.due)>=0&&daysUntil(a.due)<=3).length;
-  const done=state.assignments.filter(a=>a.status==='done').length;
+  const live=liveAsg();
+  const over=live.filter(a=>a.status!=='done'&&daysUntil(a.due)<0).length;
+  const soon=live.filter(a=>a.status!=='done'&&daysUntil(a.due)>=0&&daysUntil(a.due)<=3).length;
+  const done=live.filter(a=>a.status==='done').length;
   document.getElementById('statsSlot').innerHTML=`<div class="stats">
     <div class="stat over"><span class="spark"></span><div class="num mono">${over}</div><div class="lbl">Overdue</div></div>
     <div class="stat soon"><span class="spark"></span><div class="num mono">${soon}</div><div class="lbl">Due soon</div></div>
@@ -1518,7 +1541,7 @@ function renderDashboard(){
   const pr=list.slice(0,5);
   document.getElementById('prioritySlot').innerHTML = pr.length? `<div class="rows">${pr.map(a=>{
     const dl=dueLabel(a.due); const u=urgencyClass(a);
-    return `<button class="row" onclick="go('assignments')"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${dl.txt}</span></button>`;
+    return `<button class="row" onclick="openAsgDetail('${a.id}')"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${dl.txt}</span></button>`;
   }).join('')}</div>` : `<div class="rows"><div class="empty">${svg('smile')}<div class="big">Inbox zero.</div>No open assignments right now.</div></div>`;
   // grades
   document.getElementById('gradeSlot').innerHTML=`<div class="rows">${state.courses.filter(c=>!c.hidden).map(c=>{
@@ -1555,7 +1578,7 @@ function renderAssignments(){
   document.getElementById('asgChips').innerHTML=filters.map(([k,l])=>`<button class="chip ${asgFilter===k?'active':''}" onclick="setAsgFilter('${k}')">${l}</button>`).join('');
   const typeChips=[['all','All types'],['homework','Homework'],['writing','Writing'],['discussion','Board Discussion']];
   document.getElementById('asgTypeChips').innerHTML=typeChips.map(([k,l])=>`<button class="chip ${asgTypeFilter===k?'active':''}" onclick="setAsgType('${k}')">${l}</button>`).join('');
-  let items=state.assignments.slice();
+  let items=liveAsg();
   items = items.filter(a=>{
     const n=daysUntil(a.due);
     if(asgTypeFilter!=='all' && asgType(a)!==asgTypeFilter) return false;
@@ -1564,7 +1587,7 @@ function renderAssignments(){
     if(asgFilter==='soon')return a.status!=='done'&&n>=0&&n<=3;
     if(asgFilter==='done')return a.status==='done';
     return true;
-  }).sort((a,b)=>{if((a.status==='done')!==(b.status==='done'))return a.status==='done'?1:-1;return daysUntil(a.due)-daysUntil(b.due);});
+  }).sort((a,b)=>{if((a.status==='done')!==(b.status==='done'))return a.status==='done'?1:-1;return cmpDue(a,b);});
   const slot=document.getElementById('asgSlot');
   if(!items.length){
     const empty = state.assignments.length
@@ -1585,11 +1608,11 @@ function renderAssignments(){
 }
 function setAsgFilter(k){asgFilter=k;renderAssignments();}
 function setAsgType(k){asgTypeFilter=k;renderAssignments();}
-function toggleAsg(id){const a=state.assignments.find(x=>x.id===id);if(!a)return;a.status=a.status==='done'?'todo':'done';saveState();renderAssignments();}
+function toggleAsg(id){const a=state.assignments.find(x=>x.id===id);if(!a)return;a.status=a.status==='done'?'todo':'done';saveState();refresh();}
 function deleteAsg(id){
   if(!confirm('Delete this assignment?'))return;
   state.assignments=state.assignments.filter(a=>a.id!==id);
-  saveState();closeModal();renderAssignments();
+  saveState();closeModal();refresh();
 }
 
 /* -- Assignment detail: what's being asked, resources, tutor mode -- */
@@ -1622,7 +1645,7 @@ function openAsgDetail(id){
       <button class="icon-btn" onclick="closeModal()" style="width:34px;height:34px;flex:0 0 auto">✕</button>
     </div>
     <div class="modal-body">
-      <div class="ad-due"><span class="ml">Due</span><span class="mono ${dn?'':dl.cls}" style="font-weight:600">${dn?'Done ✓':dl.txt+' · '+fmtDue(a.due)}</span></div>
+      <div class="ad-due"><span class="ml">Due</span><span class="mono ${dn?'':dl.cls}" style="font-weight:600">${dn?'Done ✓':!a.due?'No due date yet':dl.txt+' · '+fmtDue(a.due)}</span></div>
       <div class="ad-sec"><div class="ml">What's being asked</div>${detailHTML}</div>
       <div class="ad-sec"><div class="ml">Resources</div>${resHTML}</div>
       <button class="tutor-btn full" style="margin-top:16px" onclick="closeModal();openCourseTutor('${a.course}')">${svg('tutor')}Open tutor mode for ${esc(a.course)}</button>
@@ -1645,7 +1668,7 @@ function openCourseTutor(code){
 let openCourse=null;       // code of expanded card
 let tutorTab='quizzes';
 function renderCourses(){
-  document.getElementById('coursesSlot').innerHTML = state.courses.map(c=>{
+  document.getElementById('coursesSlot').innerHTML = state.courses.filter(c=>!c.hidden).map(c=>{
     const cg=courseGrade(c); const nd=nextDeadline(c.code); const isOpen=openCourse===c.code;
     const nextTxt = nd? `<span class="mono">${esc(nd.title)}</span> · ${dueLabel(nd.due).txt}` : 'No upcoming deadline';
     return `<div class="course-card ${isOpen?'open':''}" style="--cc:${courseColor(c.code)}">
@@ -1768,7 +1791,8 @@ function renderPlanner(){
     {key:'today', label:'Today',     test:a=>daysUntil(a.due)===0},
     {key:'tom',   label:'Tomorrow',  test:a=>daysUntil(a.due)===1},
     {key:'week',  label:'This week',  test:a=>daysUntil(a.due)>=2&&daysUntil(a.due)<=7},
-    {key:'later', label:'Later',      test:a=>daysUntil(a.due)>7}
+    {key:'later', label:'Later',      test:a=>a.due&&daysUntil(a.due)>7},
+    {key:'nodate',label:'No date yet',test:a=>!a.due}
   ];
   const slot=document.getElementById('plannerSlot');
   if(!open.length){slot.innerHTML=`<div class="rows"><div class="empty">${svg('smile')}<div class="big">Clear schedule.</div>Nothing on the horizon.</div></div>`;return;}
@@ -1779,7 +1803,7 @@ function renderPlanner(){
     return `<div class="plan-group">
       <div class="plan-label ${cls}"><span class="pl">${g.label}</span><span class="pd">${its.length}</span></div>
       <div class="rows">${its.map(a=>{const dl=dueLabel(a.due);const u=urgencyClass(a);
-        return `<div class="row"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${fmtDue(a.due)}</span></div>`;}).join('')}</div>
+        return `<div class="row" onclick="openAsgDetail('${a.id}')" style="cursor:pointer"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${fmtDue(a.due)}</span></div>`;}).join('')}</div>
     </div>`;
   }).join('');
 }
@@ -1812,7 +1836,7 @@ function delFile(id){state.files=state.files.filter(f=>f.id!==id);saveState();in
    CONTACTS
    ============================================================ */
 function renderContacts(){
-  const profs=state.courses.map(c=>({name:c.prof||'—',role:c.code+' · '+c.name,init:(c.prof||'?').replace('Prof. ','').slice(0,2)}));
+  const profs=state.courses.filter(c=>!c.hidden).map(c=>({name:c.prof||'—',role:c.code+' · '+c.name,init:(c.prof||'?').replace('Prof. ','').slice(0,2)}));
   const support=[
     {name:'Academic Advising', role:'MWCC · Student Services', init:'AA'},
     {name:'Tutoring Center', role:'MWCC · Academic Support', init:'TC'},
@@ -1874,7 +1898,7 @@ function renderSettings(){
 function setTheme(t){state.theme=t;applyTheme();saveState();renderSettings();}
 function savePat(){const v=document.getElementById('patInput').value.trim();if(v){state.pat=v;saveState();renderSettings();initFiles();}}
 function clearPat(){state.pat='';saveState();renderSettings();}
-function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc-backup-'+todayISO()+'.json';a.click();}
+function exportData(){const blob=new Blob([JSON.stringify({...state,pat:undefined},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc-backup-'+todayISO()+'.json';a.click();}
 function exportCalendar(){
   const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
   const fmtDT=s=>{
@@ -1885,7 +1909,7 @@ function exportCalendar(){
     return d.toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
   };
   const esc=s=>(s||'').replace(/[\\;,]/g,'\\$&').replace(/\n/g,'\\n');
-  const open=state.assignments.filter(a=>a.status!=='done'&&a.due);
+  const open=liveAsg().filter(a=>a.status!=='done'&&a.due);
   if(!open.length){alert('No open assignments to export.');return;}
   const events=open.map(a=>{
     const dt=fmtDT(a.due);
@@ -1923,7 +1947,13 @@ function exportCalendar(){
   a.download='academic-command-center-'+todayISO()+'.ics';
   a.click();
 }
-function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);saveState();applyTheme();go('dashboard');}catch(err){alert('Could not read that file.');}};r.readAsText(f);}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{
+  let d; try{d=JSON.parse(r.result);}catch(err){d=null;}
+  e.target.value=''; // allow re-importing the same file
+  if(!d||!Array.isArray(d.courses)||!Array.isArray(d.assignments)){alert('That isn\'t a Command Center backup — nothing was changed.');return;}
+  state={...d, pat:d.pat||state.pat, quizScores:d.quizScores||{}, checklists:d.checklists||{}, grades:Array.isArray(d.grades)?d.grades:[], files:Array.isArray(d.files)?d.files:[], theme:d.theme||state.theme};
+  saveState();applyTheme();go('dashboard');
+};r.readAsText(f);}
 function resetData(){if(confirm('Reset everything to the starting data? This clears your local changes.')){state=seedState();saveState();applyTheme();go('dashboard');}}
 
 /* ============================================================
@@ -1958,7 +1988,7 @@ function saveAsg(id){
     course:document.getElementById('m_course').value,
     title:t,
     type:document.getElementById('m_type').value,
-    due:document.getElementById('m_due').value||todayISO(1),
+    due:document.getElementById('m_due').value||(id?null:todayISO(1)), // editing: blank stays "no date"
     details:document.getElementById('m_details').value.trim(),
     resources:document.getElementById('m_res').value.split('\n').map(s=>s.trim()).filter(Boolean)
   };
@@ -1966,7 +1996,7 @@ function saveAsg(id){
   if(existing) Object.assign(existing,data);
   else state.assignments.push({id:uid(),status:'todo',...data});
   saveState();closeModal();
-  if(currentView==='assignments')renderAssignments(); else go('assignments');
+  if(existing||currentView==='assignments')refresh(); else go('assignments');
 }
 
 function openCourseModal(){
@@ -2008,7 +2038,8 @@ const COURSE_GRADING = {
 
 function renderFinalGrades(){
   const slot=document.getElementById('finalGradesSlot'); if(!slot) return;
-  slot.innerHTML=`<div class="rows">`+state.courses.filter(c=>!c.hidden).map(c=>{
+  // all courses, including finished (hidden) ones — this is where their final grade gets set
+  slot.innerHTML=`<div class="rows">`+state.courses.map(c=>{
     const opts=`<option value="">— in progress —</option>`+LETTER_GRADES.map(l=>`<option value="${l}" ${c.finalGrade===l?'selected':''}>${l}  (${GPA_POINTS[l].toFixed(1)})</option>`).join('');
     const done=c.finalGrade&&GPA_POINTS[c.finalGrade]!=null;
     return `<div class="grade-row">
@@ -2044,11 +2075,11 @@ function renderGrades(){
     let right;
     if(!gs.length){ right=`<span style="font-size:12px;color:var(--text3)">No grades yet</span>`; }
     else{
-      const hasW=gs.some(g=>g.weight!=null);
-      const avg=hasW?(()=>{const tw=gs.reduce((s,g)=>s+(g.weight||1),0);return Math.round(gs.reduce((s,g)=>s+g.pct*(g.weight||1),0)/tw);})():Math.round(gs.reduce((s,g)=>s+g.pct,0)/gs.length);
+      const avg=standingAvg(gs);
       right=`<span style="display:flex;align-items:center;gap:8px"><b class="mono" style="font-size:15px;color:${gradeColor(avg)}">${avg}%</b><span style="font-size:12px;font-weight:700;color:${gradeColor(avg)}">${letterGrade(avg)}</span></span>`;
     }
-    const sub = gs.length?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${gs.length} grade${gs.length>1?'s':''} recorded${gs.some(g=>g.weight!=null)?' · weighted avg':''}</div>`:'';
+    const nW=gs.filter(g=>g.weight!=null).length, nU=gs.length-nW;
+    const sub = gs.length?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${gs.length} grade${gs.length>1?'s':''} recorded${nW?' · weighted by category'+(nU?` · ${nU} unweighted not counted`:''):''}</div>`:'';
     return `<div class="card" style="margin-bottom:10px;border-left:3px solid ${cc}">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <span style="font-weight:700;font-size:13px;color:${cc}">${esc(code)}</span>${right}
@@ -2069,6 +2100,19 @@ function renderGrades(){
       </div>`; }).join('');
   }
   updateGradeCategories();
+}
+
+// Current standing. A category's weight applies to the category as a whole, not to each item:
+// average items within a category, then weight the categories. Unweighted items are only
+// used when nothing is weighted (can't mix them meaningfully).
+function standingAvg(gs){
+  const w=gs.filter(g=>g.weight!=null);
+  if(!w.length) return Math.round(gs.reduce((s,g)=>s+g.pct,0)/gs.length);
+  const b={};
+  w.forEach(g=>{const k=g.cat||('w:'+g.weight);(b[k]=b[k]||{w:g.weight,ps:[]}).ps.push(g.pct);});
+  const cats=Object.values(b), tw=cats.reduce((s,c)=>s+c.w,0);
+  if(!tw) return Math.round(w.reduce((s,g)=>s+g.pct,0)/w.length);
+  return Math.round(cats.reduce((s,c)=>s+c.w*(c.ps.reduce((x,y)=>x+y,0)/c.ps.length),0)/tw);
 }
 
 function updateGradeCategories(){
@@ -2103,7 +2147,8 @@ function addGrade(){
   const weight=wr!==''?parseFloat(wr):null;
   if(!name||isNaN(score)||isNaN(outof)||outof<=0){ alert('Enter an assignment name, score, and a valid "out of" value.'); return; }
   if(!Array.isArray(state.grades)) state.grades=[];
-  state.grades.push({id:uid(),course,name,score,outof,pct:Math.round((score/outof)*100),weight});
+  const cat=document.getElementById('g_cat').value||null;
+  state.grades.push({id:uid(),course,name,score,outof,pct:Math.round((score/outof)*100),weight,cat});
   saveState();
   ['g_name','g_score','g_outof','g_weight'].forEach(id=>document.getElementById(id).value='');
   renderGrades();
@@ -3085,6 +3130,7 @@ initFiles();
 renderDashboard();
 updateClock();
 setInterval(updateClock, 60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateClock();}); // timers pause while a PWA is backgrounded
 if(document.getElementById("all-grades-list")) renderGrades();
 updateGradeCategories();
 
