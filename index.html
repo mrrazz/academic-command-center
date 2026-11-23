@@ -281,7 +281,6 @@ input,select,textarea{font-family:inherit}
 .tutor-body{padding:14px 14px 16px}
 
 /* ---------- Quiz engine (preserved class names, restyled) ---------- */
-.section-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--text3);margin-bottom:9px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px}
 .quiz-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);
@@ -341,9 +340,8 @@ input,select,textarea{font-family:inherit}
   padding:0 0 12px;
 }
 #quiz-back-btn:hover{color:var(--amber)}
-#study-sub{display:none}
 
-/* ---------- Key terms / flashcards / checklist ---------- */
+/* ---------- Key terms / flashcards ---------- */
 .term{padding:12px 2px;border-bottom:1px solid var(--border)}
 .term:last-child{border-bottom:none}
 .term .tt-term{font-size:14px;font-weight:600;color:var(--text)}
@@ -362,16 +360,6 @@ input,select,textarea{font-family:inherit}
 .flip-front{font-size:14px;font-weight:600}
 .flip-front .fhint{position:absolute;bottom:8px;right:10px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:600}
 .flip-back{transform:rotateY(180deg);background:var(--surface-2);font-size:12px;color:var(--text2);line-height:1.45}
-
-.check{display:flex;align-items:center;gap:11px;padding:12px 4px;border-bottom:1px solid var(--border);cursor:pointer}
-.check:last-child{border-bottom:none}
-.check .box{width:20px;height:20px;flex:0 0 auto;border-radius:6px;border:1.6px solid var(--border-2);display:grid;place-items:center;transition:.14s}
-.check .box svg{width:12px;height:12px;color:#fff;opacity:0}
-.check.on .box{background:var(--amber);border-color:var(--amber)}
-[data-theme="dark"] .check.on .box svg{color:#1a1206}
-.check.on .box svg{opacity:1}
-.check .ctext{font-size:13.5px;font-weight:500}
-.check.on .ctext{color:var(--text3);text-decoration:line-through}
 
 /* ---------- Assignments filters ---------- */
 .chips{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
@@ -400,37 +388,6 @@ a.ad-res:hover{border-color:var(--amber-line);color:var(--amber-ink)}
 .ad-res-text{color:var(--text2);font-weight:400}
 .modal-body textarea{resize:vertical;min-height:64px;line-height:1.5}
 .tutor-btn.full{margin-left:0;width:100%;justify-content:center;padding:11px 13px}
-
-/* ---------- Planner ---------- */
-.plan-group{margin-bottom:18px}
-.plan-label{display:flex;align-items:baseline;gap:9px;margin:0 2px 9px}
-.plan-label .pl{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.plan-label .pd{font-family:var(--mono);font-size:11px;color:var(--text3)}
-.plan-label.over .pl{color:var(--red)}
-.plan-label.today .pl{color:var(--amber-ink)}
-
-/* ---------- Files ---------- */
-.file-row{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--border)}
-.file-row:last-child{border-bottom:none}
-.file-ico{width:34px;height:34px;flex:0 0 auto;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;color:var(--text3);font-family:var(--mono);font-size:9px;font-weight:700}
-.file-name{flex:1;font-size:13.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.file-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px}
-.file-del{width:32px;height:32px;border-radius:8px;border:none;background:none;color:var(--text3);display:grid;place-items:center}
-.file-del:hover{color:var(--red);background:var(--red-soft)}
-.file-del svg{width:15px;height:15px}
-.notice{display:flex;gap:12px;padding:15px;border-radius:var(--radius-sm);background:var(--amber-soft);border:1px solid var(--amber-line);align-items:flex-start}
-.notice svg{width:20px;height:20px;color:var(--amber);flex:0 0 auto;margin-top:1px}
-.notice .nt{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
-.notice .nb{font-size:12.5px;color:var(--text2);line-height:1.5}
-.notice .nb a{font-weight:600}
-
-/* ---------- Contacts ---------- */
-.contact{display:flex;align-items:center;gap:13px;padding:13px 14px;border-bottom:1px solid var(--border)}
-.contact:last-child{border-bottom:none}
-.avatar{width:38px;height:38px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--surface-2);color:var(--text2)}
-.contact .cn{font-size:14px;font-weight:600}
-.contact .cr{font-size:12px;color:var(--text3);margin-top:1px}
-.contact .clink{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--amber)}
 
 /* ---------- Settings ---------- */
 .set-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
@@ -528,8 +485,6 @@ a.ad-res:hover{border-color:var(--amber-line);color:var(--amber-ink)}
   .course-card.open{grid-column:1 / -1}
   .launch{grid-template-columns:repeat(3,1fr)}
 }
-@media(min-width:900px){ .mobile-only{display:none} }
-@media(max-width:899px){ .desktop-only{display:none} }
 
 /* ---------- Modal ---------- */
 .modal-root{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.45);backdrop-filter:blur(3px)}
@@ -622,21 +577,6 @@ a.ad-res:hover{border-color:var(--amber-line);color:var(--amber-ink)}
         <div class="courses-grid" id="coursesSlot"></div>
       </section>
 
-      <!-- PLANNER -->
-      <section class="view" id="view-planner">
-        <div id="plannerSlot"></div>
-      </section>
-
-      <!-- FILES -->
-      <section class="view" id="view-files">
-        <div id="filesSlot"></div>
-      </section>
-
-      <!-- CONTACTS -->
-      <section class="view" id="view-contacts">
-        <div id="contactsSlot"></div>
-      </section>
-
       <!-- SETTINGS -->
       <section class="view" id="view-settings">
         <div id="settingsSlot"></div>
@@ -695,21 +635,16 @@ const ICONS = {
   dashboard:'<path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"/>',
   assignments:'<rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8.5 9l2 2 4-4M8.5 15h6" stroke-linecap="round" stroke-linejoin="round"/>',
   courses:'<path d="M3 6.5l9-3.5 9 3.5-9 3.5z"/><path d="M6 8.5v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" stroke-linecap="round"/>',
-  planner:'<rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M3.5 9h17M8 3v3M16 3v3" stroke-linecap="round"/>',
-  files:'<path d="M4 6.5A1.5 1.5 0 015.5 5H10l2 2.2h6.5A1.5 1.5 0 0120 8.7v9.3a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 18z" stroke-linejoin="round"/>',
-  contacts:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.4 3.1-5.6 7-5.6s7 2.2 7 5.6" stroke-linecap="round"/>',
   settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 7l2.1 1.2M17.7 15.8l2.1 1.2M4.2 17l2.1-1.2M17.7 8.2l2.1-1.2" stroke-linecap="round"/>',
   more:'<circle cx="5.5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.5" cy="12" r="1.6"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8" stroke-linecap="round"/>',
   moon:'<path d="M20 13.5A8 8 0 1110.5 4a6.3 6.3 0 009.5 9.5z" stroke-linejoin="round"/>',
-  calendar:'<rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M3.5 9h17M8 3v3M16 3v3" stroke-linecap="round"/>',
   jump:'<path d="M5 12h13M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>',
   tutor:'<path d="M6 9l6-3.5L18 9l-6 3.5z"/><path d="M9 11v3.5c0 .9 1.3 1.5 3 1.5s3-.6 3-1.5V11" stroke-linecap="round"/><path d="M6 19h.01" /><path d="M6 9l-.5 5" stroke-linecap="round"/>',
   chev:'<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>',
   check:'<path d="M5 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/>',
   clock:'<circle cx="12" cy="12" r="8"/><path d="M12 8v4.4l2.8 1.6" stroke-linecap="round"/>',
   trash:'<path d="M4 7h16M9 7V5h6v2M6 7l1 12.5h10L18 7" stroke-linecap="round" stroke-linejoin="round"/>',
-  info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01" stroke-linecap="round"/>',
   smile:'<path d="M5 13l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/>',
   grades:'<path d="M4 20h16M7.5 20v-6M12 20V8M16.5 20v-9" stroke-linecap="round"/>',
   degree:'<path d="M12 4L2 9l10 5 10-5z" stroke-linejoin="round"/><path d="M20 9.4v4.6M6 11.5V15c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4v-3.5" stroke-linecap="round"/>'
@@ -723,11 +658,8 @@ const NAV = [
   {id:'dashboard',   label:'Dashboard',   icon:'dashboard',   primary:true},
   {id:'assignments', label:'Assignments', icon:'assignments', primary:true},
   {id:'courses',     label:'Courses',     icon:'courses',     primary:true},
-  {id:'planner',     label:'Planner',     icon:'planner',     primary:true},
-  {id:'grades',      label:'Grades',      icon:'grades',      primary:false},
+  {id:'grades',      label:'Grades',      icon:'grades',      primary:true},
   {id:'degree',      label:'Degree',      icon:'degree',      primary:false},
-  {id:'files',       label:'Files',       icon:'files',       primary:false},
-  {id:'contacts',    label:'Contacts',    icon:'contacts',    primary:false},
   {id:'settings',    label:'Settings',    icon:'settings',    primary:false}
 ];
 let currentView='dashboard';
@@ -751,14 +683,14 @@ function go(view){
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active', b.dataset.nav===view));
   const inOverflow = NAV.find(n=>n.id===view && !n.primary);
   const moreBtn=document.getElementById('moreBtn'); if(moreBtn) moreBtn.classList.toggle('active', !!inOverflow);
-  const fab=document.getElementById('fab'); if(fab) fab.style.display = (['dashboard','assignments','planner'].includes(view))?'grid':'none';
+  const fab=document.getElementById('fab'); if(fab) fab.style.display = (['dashboard','assignments'].includes(view))?'grid':'none';
   refresh();
   document.querySelector('.content').scrollTo?.(0,0);
   window.scrollTo(0,0);
 }
 // re-render the current view in place (after a change made from a modal, a day rollover, etc.)
 function refresh(){
-  const R={assignments:renderAssignments,courses:renderCourses,planner:renderPlanner,files:initFiles,contacts:renderContacts,settings:renderSettings,dashboard:renderDashboard,grades:renderGrades,degree:renderDegree};
+  const R={assignments:renderAssignments,courses:renderCourses,settings:renderSettings,dashboard:renderDashboard,grades:renderGrades,degree:renderDegree};
   (R[currentView]||(()=>{}))();
 }
 function toggleSidebar(){document.getElementById('app').classList.toggle('collapsed');}
@@ -1379,18 +1311,14 @@ function loadState(){
   try{ ov = JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ ov={}; }
   state = applyOverlay(SEED_BASE, ov);
   if(!state.quizScores) state.quizScores={};
-  if(!state.checklists) state.checklists={};
   if(!state.theme) state.theme='light';
   applyTheme();
 }
 function applyOverlay(seed, ov){
   const s = JSON.parse(JSON.stringify(seed));
   s.theme = ov.theme || seed.theme;
-  s.pat = ov.pat || '';
   s.quizScores = ov.quizScores || {};
   s.grades = Array.isArray(ov.grades) ? ov.grades : [];
-  s.files = Array.isArray(ov.files) ? ov.files : [];
-  s.checklists = Object.assign({}, seed.checklists, ov.checklists||{});
   const fg = ov.finalGrades || {};
   s.courses.forEach(c=>{ if(fg[c.code]!==undefined) c.finalGrade = fg[c.code]; });
   (ov.userCourses||[]).forEach(c=>{ if(!s.courses.find(x=>x.code===c.code)) s.courses.push(c); });
@@ -1414,8 +1342,7 @@ function saveState(){
     const seed = SEED_BASE || seedState();
     const byId = {}; seed.assignments.forEach(a=> byId[a.id]=a);
     const seedCourse = {}; seed.courses.forEach(c=> seedCourse[c.code]=c);
-    const ov = { theme:state.theme, pat:state.pat||'', quizScores:state.quizScores||{},
-      grades:state.grades||[], files:state.files||[], checklists:state.checklists||{},
+    const ov = { theme:state.theme, quizScores:state.quizScores||{}, grades:state.grades||[],
       finalGrades:{}, status:{}, edits:{}, removed:{}, userAssignments:[], userCourses:[] };
     (state.courses||[]).forEach(c=>{
       const base=seedCourse[c.code];
@@ -1553,7 +1480,6 @@ function renderDashboard(){
     {n:'Blackboard', s:'LMS', u:'https://bb.mwcc.edu/webapps/bb-auth-provider-cas-BB5fdcf19eabe0d/execute/casLogin?cmd=login&authProviderId=_109_1&redirectUrl=https%3A%2F%2Fbb.mwcc.edu%2Fultra', g:'Bb'},
     {n:'ArcGIS Online', s:'EAS 130', u:'https://themount.maps.arcgis.com/home/index.html', g:'AG'},
     {n:'Claude', s:'AI tutor', u:'https://claude.ai', g:'Cl'},
-    {n:'Netlify', s:'Deploy', u:'https://app.netlify.com', g:'Nf'},
     {n:'MWCC Portal', s:'Records', u:'https://mwcc.edu', g:'MW'},
     {n:'Salem State', s:'Transfer', u:'https://salemstate.edu', g:'SS'}
   ];
@@ -1692,7 +1618,7 @@ function renderCourses(){
       </div>
       <div class="tutor" id="tutor-${cssId(c.code)}">
         <div class="tutor-tabs">
-          ${['quizzes','resources','terms','flashcards','checklist'].map(t=>`<button class="tt ${tutorTab===t?'active':''}" data-tt="${t}" onclick="setTutorTab('${c.code}','${t}')">${tabLabel(t)}</button>`).join('')}
+          ${['quizzes','terms','flashcards'].map(t=>`<button class="tt ${tutorTab===t?'active':''}" data-tt="${t}" onclick="setTutorTab('${c.code}','${t}')">${tabLabel(t)}</button>`).join('')}
         </div>
         <div class="tutor-body" id="tbody-${cssId(c.code)}"></div>
       </div>
@@ -1701,7 +1627,7 @@ function renderCourses(){
   if(openCourse) renderTutorBody(openCourse);
 }
 function cssId(code){return code.replace(/\s+/g,'-');}
-function tabLabel(t){return {quizzes:'Quizzes',resources:'Resources',terms:'Key Terms',flashcards:'Flashcards',checklist:'Checklist'}[t];}
+function tabLabel(t){return {quizzes:'Quizzes',terms:'Key Terms',flashcards:'Flashcards'}[t];}
 function toggleTutor(code){
   if(openCourse===code){openCourse=null;}
   else {openCourse=code; tutorTab='quizzes';}
@@ -1716,10 +1642,8 @@ function renderTutorBody(code){
   const body=document.getElementById('tbody-'+cssId(code));
   if(!body)return;
   if(tutorTab==='quizzes')      body.innerHTML=tutorQuizzesHTML(code);
-  else if(tutorTab==='resources')body.innerHTML=tutorResourcesHTML(code);
   else if(tutorTab==='terms')    body.innerHTML=tutorTermsHTML(code);
   else if(tutorTab==='flashcards')body.innerHTML=tutorFlashHTML(code);
-  else if(tutorTab==='checklist')body.innerHTML=tutorChecklistHTML(code);
 }
 
 /* -- Quizzes tab: builds the surface the preserved engine drives (#quiz-list etc.) -- */
@@ -1735,8 +1659,7 @@ function tutorQuizzesHTML(code){
       <div class="quiz-meta">${total} questions · 5 options each${bestPct!=null?' · best '+bestPct+'%':' · not attempted'}</div>
     </div>`;
   }).join('') : `<div class="empty" style="padding:20px 6px">No practice quizzes for ${esc(code)} yet.<br>Question banks drop in here as they're authored.</div>`;
-  return `<span id="study-sub"></span>
-    <button id="quiz-back-btn" onclick="closeQuiz()">&larr; Back to quizzes</button>
+  return `<button id="quiz-back-btn" onclick="closeQuiz()">&larr; Back to quizzes</button>
     <div id="quiz-list">${listHTML}</div>
     <div id="quiz-runner" style="display:none">
       <div class="quiz-progress"><div id="quiz-progress-fill"></div></div>
@@ -1744,19 +1667,6 @@ function tutorQuizzesHTML(code){
       <div id="quiz-submit-wrap"><button class="btn btn-primary" onclick="submitQuiz()">Grade quiz</button></div>
       <div id="quiz-result-wrap"></div>
     </div>`;
-}
-function tutorResourcesHTML(code){
-  const res=(typeof STUDY_RESOURCES!=='undefined'?STUDY_RESOURCES:[]).filter(r=>r.course===code);
-  if(!res.length) return `<div class="empty" style="padding:20px 6px">No study resources for ${esc(code)} yet.<br>Chapter questions and guides land here later.</div>`;
-  return res.map(r=>{
-    const nq=r.chapters.reduce((s,c)=>s+c.qs.length,0);
-    return `<div class="quiz-card" onclick="toggleResource('${r.id}')" style="cursor:pointer;border-left:3px solid ${courseColor(r.course)};">
-      <div class="quiz-card-head"><div><div class="quiz-card-title">${r.name}</div><div class="quiz-card-sub">${r.kind}${r.tag?' · '+r.tag:''}</div></div>
-      <div class="quiz-best" id="res-caret-${r.id}" style="color:var(--text3);">▸</div></div>
-      <div class="quiz-meta">${r.chapters.length} chapters · ${nq} questions</div>
-      <div id="res-body-${r.id}" style="display:none;margin-top:10px;" onclick="event.stopPropagation()">${renderResourceBody(r)}</div>
-    </div>`;
-  }).join('');
 }
 function tutorTermsHTML(code){
   const set=KEY_TERMS.find(k=>k.course===code);
@@ -1773,105 +1683,17 @@ function tutorFlashHTML(code){
       <div class="flip-face flip-back">${esc(t.definition)}</div>
     </div></div>`).join('')}</div>`;
 }
-function tutorChecklistHTML(code){
-  const items=(state.checklists&&state.checklists[code])||[];
-  if(!items.length) return `<div class="empty" style="padding:20px 6px">No checklist items yet.</div>`;
-  return `<div class="ml" style="margin:0 2px 6px">This week</div>` + items.map((it,i)=>
-    `<div class="check ${it.done?'on':''}" onclick="toggleCheck('${code}',${i})"><span class="box">${svg('check')}</span><span class="ctext">${esc(it.t)}</span></div>`).join('');
-}
-function toggleCheck(code,i){state.checklists[code][i].done=!state.checklists[code][i].done;saveState();renderTutorBody(code);}
-
-/* ============================================================
-   PLANNER  (calm agenda, grouped)
-   ============================================================ */
-function renderPlanner(){
-  const open=activeSorted();
-  const groups=[
-    {key:'over',  label:'Overdue',   test:a=>daysUntil(a.due)<0},
-    {key:'today', label:'Today',     test:a=>daysUntil(a.due)===0},
-    {key:'tom',   label:'Tomorrow',  test:a=>daysUntil(a.due)===1},
-    {key:'week',  label:'This week',  test:a=>daysUntil(a.due)>=2&&daysUntil(a.due)<=7},
-    {key:'later', label:'Later',      test:a=>a.due&&daysUntil(a.due)>7},
-    {key:'nodate',label:'No date yet',test:a=>!a.due}
-  ];
-  const slot=document.getElementById('plannerSlot');
-  if(!open.length){slot.innerHTML=`<div class="rows"><div class="empty">${svg('smile')}<div class="big">Clear schedule.</div>Nothing on the horizon.</div></div>`;return;}
-  slot.innerHTML=groups.map(g=>{
-    const its=open.filter(g.test);
-    if(!its.length) return '';
-    const cls=g.key==='over'?'over':g.key==='today'?'today':'';
-    return `<div class="plan-group">
-      <div class="plan-label ${cls}"><span class="pl">${g.label}</span><span class="pd">${its.length}</span></div>
-      <div class="rows">${its.map(a=>{const dl=dueLabel(a.due);const u=urgencyClass(a);
-        return `<div class="row" onclick="openAsgDetail('${a.id}')" style="cursor:pointer"><span class="sdot ${u}"></span><span class="ctag">${esc(a.course.split(' ')[0])}</span><span class="rtitle">${esc(a.title)}</span><span class="rdue ${dl.cls}">${fmtDue(a.due)}</span></div>`;}).join('')}</div>
-    </div>`;
-  }).join('');
-}
-
-/* ============================================================
-   FILES  (GitHub PAT-backed private manager scaffold)
-   ============================================================ */
-function initFiles(){
-  const slot=document.getElementById('filesSlot');
-  if(!slot)return;
-  let html='';
-  if(!state.pat){
-    html+=`<div class="notice" style="margin-bottom:14px">${svg('info')}<div><div class="nt">Private files aren't connected</div><div class="nb">Add a GitHub token in <a onclick="go('settings')">Settings</a> to sync your private study files. Files below are stored locally until then.</div></div></div>`;
-  }
-  const files=state.files||[];
-  html+=`<div class="sec-head" style="margin-bottom:9px"><h2>Files${state.pat?' · synced':''}</h2><a class="link" onclick="openFileModal()">+ Add</a></div>`;
-  if(!files.length){
-    html+=`<div class="rows"><div class="empty">${svg('files')}<div class="big">No files yet.</div>Add course PDFs, notes, and data.</div></div>`;
-  }else{
-    html+=`<div class="rows">${files.map(f=>{
-      const ext=(f.name.split('.').pop()||'').toUpperCase().slice(0,4);
-      return `<div class="file-row"><div class="file-ico">${ext}</div><div style="flex:1;min-width:0"><div class="file-name">${esc(f.name)}</div><div class="file-sub">${esc(f.course||'—')} · ${esc(f.size||'')} · ${fmtDue(f.date)}</div></div><button class="file-del" onclick="delFile('${f.id}')">${svg('trash')}</button></div>`;
-    }).join('')}</div>`;
-  }
-  slot.innerHTML=html;
-}
-function delFile(id){state.files=state.files.filter(f=>f.id!==id);saveState();initFiles();}
-
-/* ============================================================
-   CONTACTS
-   ============================================================ */
-function renderContacts(){
-  const profs=state.courses.filter(c=>!c.hidden).map(c=>({name:c.prof||'—',role:c.code+' · '+c.name,init:(c.prof||'?').replace('Prof. ','').slice(0,2)}));
-  const support=[
-    {name:'Academic Advising', role:'MWCC · Student Services', init:'AA'},
-    {name:'Tutoring Center', role:'MWCC · Academic Support', init:'TC'},
-    {name:'IT Help Desk', role:'MWCC · Technology', init:'IT'},
-    {name:'Library', role:'MWCC · Research help', init:'LB'}
-  ];
-  document.getElementById('contactsSlot').innerHTML=`
-    <div class="sec-head" style="margin-bottom:9px"><h2>Professors</h2></div>
-    <div class="rows" style="margin-bottom:16px">${profs.map(p=>contactRow(p)).join('')}</div>
-    <div class="sec-head" style="margin-bottom:9px"><h2>Campus support</h2></div>
-    <div class="rows">${support.map(p=>contactRow(p)).join('')}</div>`;
-}
-function contactRow(p){return `<div class="contact"><div class="avatar">${esc((p.init||'?').toUpperCase())}</div><div style="min-width:0"><div class="cn">${esc(p.name)}</div><div class="cr">${esc(p.role)}</div></div><span class="clink">Email</span></div>`;}
 
 /* ============================================================
    SETTINGS
    ============================================================ */
 function renderSettings(){
-  const patSet=!!state.pat;
   document.getElementById('settingsSlot').innerHTML=`
     <div class="sec-head" style="margin-bottom:9px"><h2>Appearance</h2></div>
     <div class="set-block" style="margin-bottom:18px">
       <div class="set-item">
         <div class="sl">Theme</div><div class="sd">Light for daytime reading, dark for night sessions. Saved on this device.</div>
         <div class="seg"><button class="${state.theme==='light'?'active':''}" onclick="setTheme('light')">Light</button><button class="${state.theme==='dark'?'active':''}" onclick="setTheme('dark')">Dark</button></div>
-      </div>
-    </div>
-
-    <div class="sec-head" style="margin-bottom:9px"><h2>Private files (GitHub)</h2></div>
-    <div class="set-block" style="margin-bottom:18px">
-      <div class="set-item">
-        <div class="sl">Access token ${patSet?'· <span style="color:var(--green)">connected</span>':''}</div>
-        <div class="sd">A personal access token syncs your private study files. Stored locally in this browser only.</div>
-        <label class="field"><input type="password" id="patInput" placeholder="${patSet?'••••••••••••  (saved)':'ghp_…'}" value=""></label>
-        <div class="set-actions"><button class="btn btn-primary" onclick="savePat()">Save token</button>${patSet?'<button class="btn btn-danger" onclick="clearPat()">Disconnect</button>':''}</div>
       </div>
     </div>
 
@@ -1896,9 +1718,7 @@ function renderSettings(){
     </div>`;
 }
 function setTheme(t){state.theme=t;applyTheme();saveState();renderSettings();}
-function savePat(){const v=document.getElementById('patInput').value.trim();if(v){state.pat=v;saveState();renderSettings();initFiles();}}
-function clearPat(){state.pat='';saveState();renderSettings();}
-function exportData(){const blob=new Blob([JSON.stringify({...state,pat:undefined},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc-backup-'+todayISO()+'.json';a.click();}
+function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='acc-backup-'+todayISO()+'.json';a.click();}
 function exportCalendar(){
   const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
   const fmtDT=s=>{
@@ -1951,7 +1771,7 @@ function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileRe
   let d; try{d=JSON.parse(r.result);}catch(err){d=null;}
   e.target.value=''; // allow re-importing the same file
   if(!d||!Array.isArray(d.courses)||!Array.isArray(d.assignments)){alert('That isn\'t a Command Center backup — nothing was changed.');return;}
-  state={...d, pat:d.pat||state.pat, quizScores:d.quizScores||{}, checklists:d.checklists||{}, grades:Array.isArray(d.grades)?d.grades:[], files:Array.isArray(d.files)?d.files:[], theme:d.theme||state.theme};
+  state={...d, quizScores:d.quizScores||{}, grades:Array.isArray(d.grades)?d.grades:[], theme:d.theme||state.theme};
   saveState();applyTheme();go('dashboard');
 };r.readAsText(f);}
 function resetData(){if(confirm('Reset everything to the starting data? This clears your local changes.')){state=seedState();saveState();applyTheme();go('dashboard');}}
@@ -1963,7 +1783,7 @@ function openModal(html){const m=document.getElementById('modalRoot');m.innerHTM
 function closeModal(){document.getElementById('modalRoot').classList.remove('open');}
 function courseOptions(sel){return state.courses.filter(c=>!c.hidden).map(c=>`<option value="${esc(c.code)}" ${c.code===sel?'selected':''}>${esc(c.code)} — ${esc(c.name)}</option>`).join('');}
 
-function fabAction(){ if(currentView==='files') openFileModal(); else openAsgModal(); }
+function fabAction(){ openAsgModal(); }
 
 function openAsgModal(id){
   const edit=id?state.assignments.find(a=>a.id===id):null;
@@ -2012,29 +1832,12 @@ function openCourseModal(){
 }
 function saveCourse(){const code=document.getElementById('c_code').value.trim();const name=document.getElementById('c_name').value.trim();if(!code||!name){return;}
   state.courses.push({code,name,prof:document.getElementById('c_prof').value.trim(),grade:Math.max(0,Math.min(100,parseInt(document.getElementById('c_grade').value)||0))});
-  if(!state.checklists[code])state.checklists[code]=[];
   saveState();closeModal();renderSettings();}
 
-function openFileModal(){
-  openModal(`
-    <div class="modal-head"><h3>Add file</h3><button class="icon-btn" onclick="closeModal()" style="width:34px;height:34px">✕</button></div>
-    <div class="modal-body">
-      <label class="fl">File name</label><label class="field"><input id="f_name" placeholder="e.g. POL211_paper.pdf"></label>
-      <label class="fl">Course</label><label class="field"><select id="f_course">${courseOptions()}</select></label>
-      <label class="fl">Size</label><label class="field"><input id="f_size" placeholder="e.g. 120 KB"></label>
-    </div>
-    <div class="modal-foot"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveFile()">Add</button></div>`);
-}
-function saveFile(){const n=document.getElementById('f_name').value.trim();if(!n){return;}
-  state.files.unshift({id:uid(),name:n,course:document.getElementById('f_course').value,size:document.getElementById('f_size').value.trim()||'—',date:todayISO()});
-  saveState();closeModal();initFiles();}
 
-/* stubs referenced by preserved startup */
-const COURSE_GRADING = {
-  'SOC 205': { mode:'percent', categories:[{name:'Chapter Questions',weight:25},{name:'Discussion Board',weight:25},{name:'Midterm',weight:25},{name:'Final',weight:25}] },
-  'ECO 101': { mode:'percent', categories:[{name:'Quiz',weight:30},{name:'Midterm',weight:35},{name:'Final',weight:35}] },
-  'POL 211': { mode:'points', total:3200, categories:[{name:'Quiz',points:1000},{name:'Participation',points:1000},{name:'Research Paper',points:1200}] }
-};
+// Per-course grade categories for the Grades page: { mode:'percent', categories:[{name,weight}] }
+// or { mode:'points', total, categories:[{name,points}] }. Summer 2026 entries removed (courses finished).
+const COURSE_GRADING = {};
 
 function renderFinalGrades(){
   const slot=document.getElementById('finalGradesSlot'); if(!slot) return;
@@ -2242,39 +2045,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
    KEY_TERMS (new)
    ============================================================ */
 const KEY_TERMS = [
-  { course: 'POL 211', terms: [
-    { term: 'Federalism', definition: 'A system of government where power is divided between a central authority and constituent units.' },
-    { term: 'Cloture', definition: 'A Senate procedure requiring 60 votes to end debate and force a vote on legislation.' },
-    { term: 'Gerrymandering', definition: 'Drawing electoral district boundaries to favor a particular party or group.' }
-  ]},
-  { course: 'ECO 101', terms: [
-    { term: 'Knowledge Capital', definition: 'The accumulated knowledge in a society generated through R&D and education that drives long-run growth.' },
-    { term: 'Secular Stagnation', definition: 'A prolonged period of slow economic growth caused by chronically weak private demand.' },
-    { term: 'Real GDP', definition: 'Gross domestic product adjusted for inflation, measuring actual changes in output.' }
-  ]},
-  { course: 'SOC 205', terms: [
-    { term: 'Social Problem', definition: 'A condition that a significant number of people believe to be a problem requiring collective action.' },
-    { term: 'Structural Racism', definition: 'Systemic policies and practices that produce racially disparate outcomes across institutions.' },
-    { term: 'Conflict Theory', definition: 'A sociological perspective that views society as defined by conflict over scarce resources.' }
-  ]},
-  { course: 'BIO 109', terms: [
-    { term: 'Homeostasis', definition: 'The tendency of a system to maintain internal stability despite external changes.' },
-    { term: 'Mitosis', definition: 'Cell division producing two genetically identical daughter cells.' },
-    { term: 'Ecosystem', definition: 'A community of living organisms interacting with their physical environment.' }
-  ]},
-  { course: 'PSY 240', terms: [
-    { term: 'DSM-5', definition: 'The Diagnostic and Statistical Manual of Mental Disorders, 5th edition — the standard classification system for mental disorders.' },
-    { term: 'The Four Ds', definition: 'The criteria used to judge abnormality: Deviance, Distress, Dysfunction, and Danger.' },
-    { term: 'Deviance', definition: 'Straying from a society\'s norms — behavior that is statistically or culturally atypical.' },
-    { term: 'Distress', definition: 'Unpleasant, upsetting suffering (psychological and/or physical). Alone it is not enough to label behavior abnormal.' },
-    { term: 'Dysfunction', definition: 'Impairment that interferes with daily functioning — social, occupational, or self-care.' },
-    { term: 'Danger', definition: 'Behavior that poses a threat of harm to oneself or others. The 4th D; usually the exception, not the rule.' },
-    { term: 'Moral treatment', definition: 'A 19th-century movement (Pinel, Tuke, Dix) toward humane, respectful care of the mentally ill.' },
-    { term: 'Somatogenic perspective', definition: 'The view that abnormal behavior has biological/physical causes (e.g., Kraepelin).' },
-    { term: 'Psychogenic perspective', definition: 'The view that abnormal behavior has psychological causes (e.g., Freud, hypnosis).' },
-    { term: 'Comorbidity', definition: 'The simultaneous presence of two or more disorders in a single individual.' },
-    { term: 'Etiology', definition: 'The cause or origin of a disease or condition.' }
-  ]}
+  // Summer 2026 entries removed 2026-11-23 (courses finished; recoverable from git history before this commit)
 ];
 
 // ============================================
@@ -2322,680 +2093,16 @@ const KEY_TERMS = [
    }
 */
 const QUIZ_BANK = [
-  {
-    id: 'pol211-q5',
-    course: 'POL 211',
-    name: 'Quiz 5 — Congress',
-    topic: 'The Legislative Branch',
-    questions: [
-      { q: 'The Constitution requires that all bills for raising revenue originate in:', type:'standard',
-        options: ['The Senate', 'The House of Representatives', 'The Rules Committee', 'The Appropriations Committee', 'A joint session of Congress'],
-        answer: 1, explain: '<strong>Article I, Section 7</strong> — revenue (tax) bills must begin in the House. The Senate may amend them, but cannot originate them.' },
-
-      { q: 'Cloture, the procedure used to cut off a filibuster and end debate in the Senate, currently requires:', type:'standard',
-        options: ['A simple majority of 51 votes', 'A two-thirds vote of those present', '60 votes (three-fifths of the full Senate)', 'A unanimous consent agreement', 'Approval of the Rules Committee'],
-        answer: 2, explain: 'Under <strong>Senate Rule XXII</strong>, ending debate on legislation takes three-fifths of the full Senate = <strong>60 votes</strong>. Don\'t confuse with the two-thirds threshold used for treaties or overriding a veto.' },
-
-      { q: 'Reapportionment refers to:', type:'standard',
-        options: ['Redrawing district boundaries within a state', 'Reassigning members to new committees', 'The reallocation of House seats among the states after each census', 'Drawing districts to favor one political party', 'Adjusting the number of senators per state'],
-        answer: 2, explain: '<strong>Reapportionment</strong> = redistributing the 435 House seats among the states by population every 10 years. Compare: <em>redistricting</em> (drawing the lines) and <em>gerrymandering</em> (drawing them to favor a group).' },
-
-      { q: 'All of the following are powers exercised by the House of Representatives alone EXCEPT:', type:'except',
-        options: ['Originating revenue bills', 'Bringing articles of impeachment', 'Choosing the president if no candidate wins an Electoral College majority', 'Confirming presidential appointments', 'Initiating the impeachment process'],
-        answer: 3, explain: '<strong>Confirmation of appointments is a Senate power.</strong> Originating revenue bills, impeaching, and choosing the president in a deadlocked Electoral College all belong to the House.' },
-
-      { q: 'The Speaker of the House is:', type:'standard',
-        options: ['Elected by the full House and, by custom, the leader of the majority party', 'Appointed by the president', 'The longest-serving member of the majority party', 'Selected by the Rules Committee', 'Chosen by a joint session of Congress'],
-        answer: 0, explain: 'The whole House formally elects the Speaker, but because the majority party has the votes, the Speaker is effectively the majority party\'s leader.' },
-
-      { q: 'The "power of the purse" refers to Congress\'s constitutional authority to:', type:'standard',
-        options: ['Declare war', 'Levy taxes and control federal spending', 'Confirm judicial appointments', 'Regulate interstate commerce', 'Override presidential vetoes'],
-        answer: 1, explain: 'The <strong>power of the purse</strong> is Congress\'s control over taxing and spending — a central check on the executive branch.' },
-
-      { q: 'A conference committee is best described as:', type:'standard',
-        options: ['A standing committee that reviews the annual budget', 'A temporary joint committee that reconciles differing House and Senate versions of a bill', 'A committee that schedules debate on the floor', 'A select committee that investigates scandals', 'The Committee of the Whole'],
-        answer: 1, explain: 'When the two chambers pass different versions of the same bill, a <strong>conference committee</strong> (members from both chambers) works out a single compromise version.' },
-
-      { q: 'The advantages of incumbency in congressional elections are attributed to all of the following EXCEPT:', type:'except',
-        options: ['Greater name recognition', 'Casework and constituency service', 'The franking privilege', 'Superior access to campaign funds', 'Constitutional term limits'],
-        answer: 4, explain: 'There are <strong>no term limits</strong> on members of Congress — that would <em>reduce</em> incumbency, not cause it. The others all help incumbents win re-election.' },
-
-      { q: 'According to the textbook, ______ gerrymandering has been struck down by the courts, while federal courts have declined to police ______ gerrymandering.', type:'standard',
-        options: ['partisan; racial', 'racial; partisan', 'incumbent; geographic', 'geographic; incumbent', 'gender-based; racial'],
-        answer: 1, explain: '<strong>Racial</strong> gerrymandering violates the 14th Amendment and Voting Rights Act. In <em>Rucho v. Common Cause</em> (2019) the Supreme Court held <strong>partisan</strong> gerrymandering claims are non-justiciable in federal court.' },
-
-      { q: 'Congressional oversight is best defined as:', type:'standard',
-        options: ['The power to declare laws unconstitutional', 'Congress\'s monitoring of the bureaucracy to ensure laws are carried out as intended', 'The Senate\'s review of treaties', 'The president\'s supervision of executive agencies', 'The Rules Committee\'s control over floor debate'],
-        answer: 1, explain: '<strong>Oversight</strong> is Congress checking the executive branch and agencies — through hearings, investigations, and budget control — to make sure its laws are faithfully executed.' },
-
-      { q: 'Giving each state two senators regardless of its population reflects the constitutional principle of:', type:'standard',
-        options: ['Proportional representation', 'Equal representation of the states in the Senate', 'Descriptive representation', 'Substantive representation', 'Malapportionment'],
-        answer: 1, explain: 'The <strong>Great (Connecticut) Compromise</strong> gave every state equal representation in the Senate and population-based representation in the House.' },
-
-      { q: 'In the House, the committee that sets the terms of debate — time limits and whether amendments are allowed — is the:', type:'standard',
-        options: ['Ways and Means Committee', 'Appropriations Committee', 'Rules Committee', 'Budget Committee', 'Committee of the Whole'],
-        answer: 2, explain: 'The <strong>Rules Committee</strong> is powerful because it controls the conditions under which a bill reaches the floor — including how long it is debated and whether it can be amended.' },
-
-      { q: 'A member of Congress who votes according to her own judgment of the national interest, even against constituents\' expressed wishes, is acting as a:', type:'standard',
-        options: ['Delegate', 'Trustee', 'Whip', 'Politico', 'Partisan'],
-        answer: 1, explain: 'A <strong>trustee</strong> uses independent judgment; a <strong>delegate</strong> mirrors constituents\' stated preferences; a <em>politico</em> blends both.' },
-
-      { q: 'A treaty negotiated by the president takes effect only if it is approved by:', type:'standard',
-        options: ['A simple majority of the House', 'A simple majority of the Senate', 'Two-thirds of the Senate', 'Two-thirds of both chambers', 'The Senate Foreign Relations Committee'],
-        answer: 2, explain: '<strong>Article II</strong> — treaties require the advice and consent of <strong>two-thirds of the Senate</strong>. (Contrast the 60-vote cloture threshold and the simple majority for most legislation.)' },
-
-      { q: 'The constitutional process for removing a federal official from office is:', type:'standard',
-        options: ['The Senate impeaches and the House convicts', 'The House impeaches and the Senate tries and convicts', 'Either chamber may impeach and the Supreme Court convicts', 'The House impeaches and the Supreme Court convicts', 'A joint session votes to convict'],
-        answer: 1, explain: 'The <strong>House impeaches</strong> (brings charges by majority vote); the <strong>Senate tries</strong> the case and convicts with a two-thirds vote.' },
-
-      { q: 'The detailed work of gathering information, holding hearings, and revising legislation falls primarily to:', type:'standard',
-        options: ['The Committee of the Whole', 'Standing committees', 'Conference committees', 'Party caucuses', 'The Rules Committee'],
-        answer: 1, explain: '<strong>Standing committees</strong> are the permanent, subject-area workhorses of Congress where most bills are studied and marked up.' },
-
-      { q: 'The single best explanation for the decline of bipartisan cooperation in Congress in recent decades is:', type:'standard',
-        options: ['An increasing number of members who refuse to identify with either party', 'Rising party polarization and ideological sorting', 'The public paying less attention to Congress', 'The Supreme Court limiting congressional power', 'Recent reforms that weakened the filibuster'],
-        answer: 1, explain: 'The parties have become more internally unified and further apart ideologically — <strong>polarization and hyperpartisanship</strong> — making cross-party deals harder.' },
-
-      { q: 'The number of seats a state holds in the House of Representatives:', type:'standard',
-        options: ['Is fixed at two per state', 'Is set by the state legislature', 'Is reapportioned according to population after each decennial census', 'Was permanently frozen by a constitutional amendment', 'Increases automatically at every election'],
-        answer: 2, explain: 'Total House seats are capped at 435; how they are divided among the states is <strong>reapportioned every ten years</strong> based on the census.' },
-
-      { q: 'The "necessary and proper" (elastic) clause gives Congress the power to:', type:'standard',
-        options: ['Regulate commerce among the states', 'Make the laws needed to carry out its enumerated powers', 'Declare acts of the president unconstitutional', 'Override state constitutions at will', 'Levy any tax without limit'],
-        answer: 1, explain: 'Article I, Section 8 — the <strong>elastic clause</strong> is the basis of Congress\'s <em>implied powers</em>, letting it pass laws needed to execute its listed powers.' },
-
-      { q: 'The president\'s party usually loses seats in midterm elections; the size of that loss is most strongly associated with:', type:'standard',
-        options: ['Whether the president campaigns nationally for candidates', 'The president\'s approval rating and the state of the economy', 'How the Supreme Court has ruled on the president\'s policies', 'Whether the president\'s party controls both chambers', 'The number of open (retirement) seats that cycle'],
-        answer: 1, explain: 'Midterm losses track the <strong>president\'s standing with the public</strong> and <strong>the economy</strong> — the two dominate the size of the swing.' }
-    ]
-  },
-  {
-    id: 'eco101-ch21',
-    course: 'ECO 101',
-    name: 'Ch 21 Review — Economic Growth',
-    topic: 'Long-Run Economic Growth (practice, source-grounded)',
-    questions: [
-      { q: 'In the theory of economic growth, "knowledge capital" is best defined as:', type:'standard',
-        options: ['The accumulated knowledge available to a society, generated largely through research and development and education', 'The total value of a firm\'s patents and copyrights as recorded on its balance sheet', 'The physical machinery and equipment used to produce new technology', 'The financial capital firms raise specifically to fund research', 'The stock of skilled workers a single firm employs in a given year'],
-        answer: 0, explain: 'In endogenous growth theory, <strong>knowledge capital</strong> is the accumulated knowledge from R&D and education, treated as a factor of production. Unlike physical capital it is <em>non-rival</em> — many firms can use the same idea at once — which is why it drives long-run growth.' },
-
-      { q: 'Firms tend to invest LESS than the socially optimal amount in research and development mainly because:', type:'standard',
-        options: ['Competing firms often capture much of the return from one firm\'s research, so private benefits fall short of social benefits', 'The private benefits of research usually exceed its social benefits', 'Patents let a single firm capture all of the returns from its research', 'Government subsidies make private research unnecessary', 'Corporate income taxes on research profits have been eliminated'],
-        answer: 0, explain: 'R&D creates <strong>positive externalities (spillovers)</strong>: rivals imitate or build on new knowledge, so <strong>social benefit &gt; private benefit</strong>. Weighing only its private return, the firm underinvests.' },
-
-      { q: 'Which set of government policies would most likely increase the accumulation of knowledge capital?', type:'standard',
-        options: ['Protect intellectual property, subsidize R&D, and subsidize education', 'Protect intellectual property, subsidize R&D, and restrict the entry of foreign firms', 'Subsidize education, restrict foreign firms, and raise corporate taxes', 'Restrict foreign firms and eliminate patents to speed the spread of ideas', 'Subsidize R&D only, since education has no effect on knowledge capital'],
-        answer: 0, explain: 'Patents/copyrights restore the incentive to innovate, R&D subsidies offset the underinvestment problem, and education subsidies build the human capital that produces new knowledge. <strong>Restricting foreign firms does NOT build knowledge capital</strong> — it cuts the flow of ideas and competition.' },
-
-      { q: 'When economists describe secular stagnation as "structurally low private demand," they are pointing to:', type:'standard',
-        options: ['A persistent shortfall of investment demand relative to saving', 'A temporary drop in consumer confidence following a recession', 'A shift of consumer spending from domestic goods toward imports', 'A decline in government spending on infrastructure', 'A rapid rise in demand for new consumer technology'],
-        answer: 0, explain: '<strong>Secular stagnation</strong> is fundamentally a chronic <em>excess of saving over investment</em> — private demand stays weak because investment demand is structurally insufficient. It is not a confidence, imports, or government-spending story.' },
-
-      { q: 'Why might structurally low private demand result in secular stagnation?', type:'standard',
-        options: ['Persistently weak private demand keeps the economy below potential, producing sustained slow growth', 'Weak private demand raises inflation, which erodes future demand', 'Weak private demand forces exports down, reducing output', 'Weak private demand forces the government to cut spending', 'Weak private demand always triggers a financial crisis'],
-        answer: 0, explain: '<strong>Secular stagnation literally means a prolonged period of slow growth.</strong> Chronically weak private demand keeps output below potential year after year — that sustained shortfall <em>is</em> the stagnation.' },
-
-      { q: 'Which of the following are "deep structural factors" that could push the U.S. economy toward secular stagnation? I. People living longer and saving more for retirement. II. Slower population growth reducing investment demand. III. High-tech firms that require less physical capital.', type:'standard',
-        options: ['I, II, and III', 'I and II only', 'I and III only', 'II and III only', 'I only'],
-        answer: 0, explain: 'All three push saving up or investment demand down: longer lives → more saving; slower population growth → less need for new capital/housing; modern tech firms need <strong>less</strong> physical capital, driving down investment demand. Together they depress private demand.' },
-
-      { q: 'The Roman Empire built aqueducts that lasted centuries yet had near-zero growth in income per capita. The precondition for sustained growth it most clearly lacked was:', type:'standard',
-        options: ['Continuous technological change', 'Property rights', 'The rule of law', 'A stable currency', 'An educated elite'],
-        answer: 0, explain: 'Rome\'s engineering feats were <strong>one-time</strong> achievements, not a process of <em>continuous</em> innovation. Sustained growth requires ongoing technological change that keeps raising productivity — episodic brilliance is not enough.' },
-
-      { q: 'If the Roman Empire had achieved sustained economic growth beginning roughly 2,000 years ago, today\'s standard of living would most likely be:', type:'standard',
-        options: ['Substantially higher, because growth compounds over time', 'Slightly higher than it is now', 'About the same as it is now', 'Lower, because natural resources would be exhausted', 'Impossible to compare in any way'],
-        answer: 0, explain: 'Because growth <strong>compounds</strong>, even a modest sustained rate maintained over ~2,000 years would produce an enormous cumulative increase — living standards today would be <strong>substantially higher</strong>.' },
-
-      { q: 'When a central bank forecasts that GDP will "grow by 2.3 percent this year," it is almost certainly referring to:', type:'standard',
-        options: ['Real GDP, because growth figures are meant to capture changes in output, not prices', 'Nominal GDP, because readers care more about inflation than output', 'Real GDP, because nominal GDP cannot be forecast', 'Nominal GDP, because that is the convention among journalists', 'Either one, since they grow at the same rate'],
-        answer: 0, explain: 'A GDP <em>growth</em> figure is meant to measure changes in actual <strong>output</strong>, so it strips out price changes — that is exactly what <strong>real GDP</strong> does.' },
-
-      { q: 'If a country\'s real GDP is projected to grow 2.3% while its population is still growing, real GDP per capita will:', type:'standard',
-        options: ['Grow more slowly than 2.3%', 'Grow more quickly than 2.3%', 'Grow at exactly 2.3%', 'Fall, regardless of the population growth rate', 'Be impossible to estimate without exact population figures'],
-        answer: 0, explain: 'Per capita growth ≈ real GDP growth − population growth. As long as population is rising, per capita GDP expands <strong>more slowly</strong> than total real GDP. (You don\'t need the exact population to know the direction.)' },
-
-      { q: 'With real GDP forecast to grow 2.3%, living standards — real GDP per capita — in that country:', type:'standard',
-        options: ['Definitely fell if population grew faster than 2.3%, and definitely rose if population grew slower than 2.3%', 'Definitely rose as long as real GDP growth was positive', 'Definitely fell if the population grew at all that year', 'Definitely rose if population grew faster than 2.3%', 'Cannot be judged without knowing nominal GDP'],
-        answer: 0, explain: 'Living standards = real GDP <strong>per capita</strong>. With real GDP up 2.3%: if population grew faster than 2.3%, per-capita growth is negative (fell); if slower, it is positive (rose). Positive real GDP growth alone is <em>not</em> enough.' },
-
-      { q: 'When the volume of world trade declines, the people and industries hurt the MOST are likely to be:', type:'standard',
-        options: ['Labor-intensive export industries in developing nations', 'Labor-intensive export industries in developed nations', 'Capital-intensive export industries in developing nations', 'Import-competing industries in developed nations', 'No one, since consumers simply buy domestic goods'],
-        answer: 0, explain: 'Developing nations\' comparative advantage is in <strong>labor-intensive</strong> goods they export to developed nations. Shrinking trade removes the export markets those industries depend on, so they lose the most.' },
-
-      { q: 'Which group tends to BENEFIT when world trade declines?', type:'standard',
-        options: ['Domestic industries that compete with imports, because they face less foreign competition', 'Domestic industries that primarily export, because prices rise', 'All domestic firms, without exception', 'Foreign exporters, because scarcity raises their prices', 'No one benefits when trade declines'],
-        answer: 0, explain: 'Trade always creates winners and losers. When trade falls, <strong>import-competing</strong> domestic industries gain from reduced foreign competition. Domestic <em>exporters</em>, by contrast, are hurt.' },
-
-      { q: 'The personal benefit you get from a free Google search is generally NOT counted in GDP because:', type:'standard',
-        options: ['GDP measures the market value of goods and services people pay for, and the search is free', 'Google keeps its search data proprietary', 'Google\'s advertising profit is excluded from GDP', 'Search benefits are counted, but under investment rather than consumption', 'The information has no real economic value'],
-        answer: 0, explain: 'GDP captures only <strong>priced market transactions</strong>. Because you pay nothing for the search, the value you receive (consumer surplus) is diffused through the economy and goes largely uncounted — Manyika\'s point: "we have all these benefits but we\'re not paying for them."' },
-
-      { q: 'The argument that the recent U.S. productivity slowdown "is really a measurement problem" is supported by the observation that:', type:'standard',
-        options: ['Real but unpriced benefits from free digital services are hard to measure and go largely uncounted in GDP', 'Freed-up time from digital tools is already fully captured in productivity data', 'Google discloses all of its data, so nothing is missed', 'Productivity is measured perfectly, so the slowdown must be genuine', 'Digital services are counted twice, overstating productivity'],
-        answer: 0, explain: 'If real gains from free/unpriced digital services aren\'t showing up in GDP, then measured productivity <strong>understates</strong> true productivity — so the slowdown may be mismeasurement. This is consistent with the free-search answer above.' },
-
-      { q: 'Colaba plans to hire more workers to meet rising demand for its product. Christopher argues this will only raise the wage bill and cut profits. Which fact would MOST weaken his argument?', type:'standard',
-        options: ['Colaba recently restructured its shop floor, shortening the production cycle and cutting defective units', 'Colaba already uses an efficient assembly-line method it adopted years ago', 'The distribution network for the product is highly fragmented', 'Turnover on Colaba\'s R&D team is above the industry average', 'Colaba\'s earnings growth has slowed over the last few quarters'],
-        answer: 0, explain: 'Rising <strong>labor productivity</strong> is what makes added workers profitable rather than pure cost. Only the shop-floor improvement shows workers now producing more sellable output; the efficient assembly line is a pre-existing static fact, and the rest are neutral or strengthen his case.' }
-    ]
-  },
-  {
-    id: 'psy240-ch1',
-    course: 'PSY 240',
-    name: 'Ch 1 — Abnormal Psychology: Past & Present',
-    topic: 'Defining abnormality (4 Ds), cultural humility, shifting views & deinstitutionalization, research methods & ethics (practice)',
-    questions: [
-      { q: 'The "four Ds" commonly used to define abnormal behavior are:', type:'standard',
-        options: ['Deviance, distress, dysfunction, and danger','Deviance, distress, dysfunction, and diagnosis','Deviance, denial, dysfunction, and danger','Distress, dysfunction, danger, and disability','Deviance, distress, delusion, and danger'],
-        answer: 0, explain: 'The four Ds are <strong>Deviance, Distress, Dysfunction, and Danger</strong>. Danger is the 4th D many clinicians add; it is not part of the DSM-5 core definition.' },
-
-      { q: 'In the four-D model, <em>deviance</em> refers to behavior that is:', type:'standard',
-        options: ['Harmful to oneself or others','Different from a society\'s norms — statistically or culturally atypical','Unpleasant and distressing to the person','Interfering with daily functioning','Caused by a biological imbalance'],
-        answer: 1, explain: '<strong>Deviance</strong> = straying from social/cultural norms (a norm-based, statistical idea). Danger, distress, and dysfunction are the other three Ds.' },
-
-      { q: 'Which of the four Ds is generally the "exception, not the rule" and is NOT part of the DSM-5 definition, although clinicians often add it?', type:'standard',
-        options: ['Deviance','Distress','Dysfunction','Danger','Diagnosis'],
-        answer: 3, explain: '<strong>Danger</strong> is added by many clinicians but is not in the DSM-5 definition. Most people with mental disorders are not dangerous — danger is the exception, not the rule.' },
-
-      { q: 'A person who can no longer hold a job, keep up hygiene, or pay bills because of their symptoms is primarily showing which D?', type:'standard',
-        options: ['Deviance','Distress','Dysfunction / impairment','Danger','Deviance and danger only'],
-        answer: 2, explain: '<strong>Dysfunction/impairment</strong> = losing the capacity to function in daily life (social, occupational, self-care).' },
-
-      { q: 'Trephination — drilling a hole in the skull — reflected the ancient belief that abnormal behavior was caused by:', type:'standard',
-        options: ['An imbalance of the four humors','Evil spirits that needed to be released','Brain disease','Unconscious conflicts','Problems in living'],
-        answer: 1, explain: '<strong>Trephination</strong> (and exorcism) aimed to release evil spirits. Humoral theory came later, with Hippocrates.' },
-
-      { q: 'Hippocrates attributed mental disorders mainly to:', type:'standard',
-        options: ['Possession by Satan','An imbalance of the four bodily humors','Unconscious sexual conflict','Learned maladaptive behavior','Deviant social labeling'],
-        answer: 1, explain: 'Hippocrates proposed <strong>natural, physical causes</strong> — an imbalance of yellow bile, black bile, blood, and phlegm (e.g., too much black bile → depression).' },
-
-      { q: 'Philippe Pinel and William Tuke are best associated with:', type:'standard',
-        options: ['The somatogenic perspective','Moral treatment — humane, respectful care','Psychoanalysis','The discovery of psychotropic drugs','Demonology'],
-        answer: 1, explain: 'Pinel (La Bicêtre) and Tuke (York Retreat) pioneered <strong>moral treatment</strong> — unchaining patients and providing humane conditions.' },
-
-      { q: 'Dorothea Dix is best known for:', type:'standard',
-        options: ['Founding psychoanalysis','A U.S. reform campaign that led to 32 mental hospitals being built','Developing the theory of the four humors','Conducting the Rosenhan study','Introducing the lobotomy'],
-        answer: 1, explain: 'Dix, a Massachusetts schoolteacher, lobbied legislatures and Congress; her efforts led to <strong>32 state mental hospitals</strong>.' },
-
-      { q: 'The <em>somatogenic</em> perspective holds that abnormal behavior:', type:'standard',
-        options: ['Is caused by psychological factors','Has biological or physical causes','Is a myth, as Szasz argued','Results only from unconscious conflict','Is simply deviance from norms'],
-        answer: 1, explain: '<strong>Somatogenic</strong> = biological causes (e.g., Kraepelin\'s diagnostic categories; general paresis from syphilis). <em>Psychogenic</em> = psychological causes.' },
-
-      { q: 'Thomas Szasz is best known for arguing that:', type:'standard',
-        options: ['Mental illness has clear biological roots','Mental illness is a "myth" — really problems in living, not a disease','Moral treatment can cure all disorders','The four humors explain abnormality','Hypnosis reveals the unconscious'],
-        answer: 1, explain: 'In <em>The Myth of Mental Illness</em>, Szasz argued abnormal behavior is a social phenomenon / problems in living, and opposed involuntary commitment.' },
-
-      { q: 'In an experiment, the variable the researcher manipulates is the ______ variable, and the variable that is measured is the ______ variable.', type:'standard',
-        options: ['dependent; independent','independent; dependent','confounding; dependent','correlational; experimental','placebo; blind'],
-        answer: 1, explain: 'The <strong>independent</strong> variable is manipulated; the <strong>dependent</strong> variable is measured. Confounds are extraneous variables you try to control.' },
-
-      { q: 'A correlation coefficient (r) of −0.90 indicates:', type:'standard',
-        options: ['A weak relationship in which one variable causes the other','A strong relationship in which, as one variable rises, the other falls','No relationship between the variables','A strong positive relationship','That the study used random assignment'],
-        answer: 1, explain: 'The sign shows <strong>direction</strong> (negative = inverse) and the magnitude (0.90) shows <strong>strength</strong>. Correlation does not prove causation.' },
-
-      { q: 'All of the following are true of correlational research EXCEPT:', type:'except',
-        options: ['It can show whether two variables are associated','It allows findings to be generalized','It can establish that one variable causes the other','It does not directly manipulate behavior','Correlations can be positive or negative'],
-        answer: 2, explain: '<strong>Correlation cannot establish causation</strong> — a third variable or a reversed direction may explain the association.' },
-
-      { q: 'Why is cultural humility important for clinicians?', type:'standard',
-        options: ['It speeds up diagnosis','It lets clinicians avoid learning about other cultures','What counts as abnormal is shaped by culture, so clinicians must recognize the limits of their own perspective','It is required by insurance companies','It guarantees a clinician can never misjudge a client'],
-        answer: 2, explain: 'What is considered "abnormal" is <strong>culturally bound</strong>. Cultural humility means recognizing the limits of one\'s own cultural lens — not avoiding, mastering, or being immune to error.' },
-
-      { q: 'Which two past treatments reflect a demonological view of abnormality?', type:'standard',
-        options: ['Trephination and exorcism','Psychoanalysis and hypnosis','Lobotomy and medication','Humors and bloodletting','Moral treatment and milieu therapy'],
-        answer: 0, explain: 'The <strong>demonological</strong> view blamed evil spirits. <em>Trephination</em> (drilling the skull) and <em>exorcism</em> aimed to release them. Humors/bloodletting are somatogenic; the others are later psychological or biological approaches.' },
-
-      { q: 'The 19th-century discovery that general paresis was caused by syphilis supported which view?', type:'standard',
-        options: ['Psychogenic','Demonological','Somatogenic','Humanistic','Behavioral'],
-        answer: 2, explain: 'Finding a clear <strong>physical cause</strong> (syphilis) for a mental disorder (general paresis) was landmark evidence for the <strong>somatogenic</strong> — biological — view.' },
-
-      { q: 'Work with hypnotism and hysterical disorders helped establish which view of abnormality?', type:'standard',
-        options: ['Somatogenic','Psychogenic','Demonological','Biological','Sociocultural'],
-        answer: 1, explain: 'Showing that hysterical symptoms could be produced and removed through <strong>hypnosis</strong> pointed to psychological causes — the <strong>psychogenic</strong> view (Mesmer, Charcot, Breuer, Freud).' },
-
-      { q: 'Which development occurred in the mental health field during the 1950s?', type:'standard',
-        options: ['Discovery of psychotropic medications','Invention of the MRI','Publication of the first DSM-5','End of all institutional care','Founding of the first asylums'],
-        answer: 0, explain: 'The 1950s brought the first effective <strong>psychotropic drugs</strong> (e.g., antipsychotics), transforming treatment and enabling deinstitutionalization. DSM-5 came in 2013; asylums long predate the 1950s.' },
-
-      { q: 'Moving patients out of large state hospitals into the community is called:', type:'standard',
-        options: ['Trephination','Deinstitutionalization','Confounding','Standardization','Prevention'],
-        answer: 1, explain: '<strong>Deinstitutionalization</strong> = releasing patients from large state mental hospitals into community care, spurred by new medications and reform beginning in the 1960s.' },
-
-      { q: 'How did Covid-19 most affect the mental health field?', type:'standard',
-        options: ['It ended in-person therapy permanently','It dramatically accelerated telemental health','It had no measurable effect','It eliminated the need for medication','It reduced the overall demand for mental health care'],
-        answer: 1, explain: 'COVID-19 rapidly expanded <strong>telemental health</strong> (therapy by phone/video). Demand for care <em>rose</em> rather than fell.' },
-
-      { q: 'Which research method is the ONLY one that can demonstrate cause and effect?', type:'standard',
-        options: ['Case study','Correlational method','Experimental method','Naturalistic observation','Epidemiological study'],
-        answer: 2, explain: 'Only the <strong>experiment</strong> — manipulating an independent variable while controlling confounds — can establish causation. Case, correlational, and epidemiological methods show only association.' },
-
-      { q: 'Which techniques help guard against confounds in an experiment?', type:'standard',
-        options: ['Case studies and interviews','Control group, random assignment, and blind design','Larger sample only','Cultural humility','Using a single participant'],
-        answer: 1, explain: 'Confounds are controlled with a <strong>control group, random assignment, and blind/double-blind design</strong>. A bigger sample alone does not remove confounds.' },
-
-      { q: 'What is the primary purpose of an Institutional Review Board (IRB)?', type:'standard',
-        options: ['To fund research','To protect the rights and safety of human participants','To publish results','To diagnose participants','To design the experiment for the researcher'],
-        answer: 1, explain: 'An <strong>IRB</strong> reviews studies to safeguard the rights, safety, and welfare of human participants — informed consent, risk minimization, and ethical treatment.' },
-
-      { q: 'In community-based participatory research (CBPR), the community members are:', type:'standard',
-        options: ['Only subjects to be observed','Partners in the research','Excluded from the process','Paid to stay uninvolved','Limited to reviewing the final report'],
-        answer: 1, explain: 'In <strong>CBPR</strong>, community members are equal <strong>partners</strong> — helping shape the questions, methods, and use of findings, not merely subjects to be studied.' }
-    ]
-  },
-  {
-    id: 'psy240-ch4-5',
-    course: 'PSY 240',
-    name: 'Ch 4 & 5 — Anxiety/OCD + Trauma & Dissociative',
-    topic: 'Anxiety & OCD-related disorders (Ch 4); stress, PTSD & dissociative disorders (Ch 5) (practice)',
-    questions: [
-      { q: 'Generalized anxiety disorder involves excessive worry lasting at least:', type:'standard',
-        options: ['2 weeks','1 month','3 months','6 months','1 year'],
-        answer: 3, explain: 'DSM-5 requires excessive, hard-to-control worry occurring more days than not for at least <strong>6 months</strong>.' },
-
-      { q: 'Low activity of which neurotransmitter is linked to generalized anxiety disorder?', type:'standard',
-        options: ['Dopamine','GABA','Serotonin','Norepinephrine','Glutamate'],
-        answer: 1, explain: '<strong>GABA</strong> is the brain\'s main inhibitory (calming) neurotransmitter; low GABA activity is associated with GAD.' },
-
-      { q: 'The cognitive-behavioral concept describing an inability to tolerate not knowing what will happen is called:', type:'standard',
-        options: ['Repression','Intolerance of uncertainty','Reactivity','Deviance','Learned helplessness'],
-        answer: 1, explain: 'The <strong>intolerance-of-uncertainty</strong> theory holds that some people find any uncertainty deeply upsetting and use worry as a way to cope with it.' },
-
-      { q: 'Which describes agoraphobia?', type:'standard',
-        options: ['Fear of a specific animal','Fear of public/open situations where escape or help would be difficult','Fear of social judgment','Fear of contamination','Fear of a single traumatic memory'],
-        answer: 1, explain: '<strong>Agoraphobia</strong> = fear of being in public, open, or enclosed situations where escape or help would be hard if panic-like symptoms occurred.' },
-
-      { q: 'Which is NOT one of the three exposure techniques for specific phobias?', type:'except',
-        options: ['Systematic desensitization','Flooding','Modeling','Free association','In vivo exposure'],
-        answer: 3, explain: 'The exposure treatments for phobias are <strong>systematic desensitization, flooding, and modeling</strong> (in vivo exposure is exposure-based too). <strong>Free association</strong> is a psychodynamic technique, not an exposure method.' },
-
-      { q: 'According to cognitive-behavioral theorists, phobias are maintained largely by:', type:'standard',
-        options: ['Genetics alone','Avoidance, which prevents the fear from extinguishing','Low serotonin','Repression','Secondary gain from attention'],
-        answer: 1, explain: '<strong>Avoidance</strong> keeps a phobia alive: by escaping the feared object the person never learns it is safe, so the fear is never extinguished.' },
-
-      { q: 'NFL player Ricky Williams was used as an example of which disorder?', type:'standard',
-        options: ['OCD','Panic disorder','Social anxiety disorder','PTSD','Generalized anxiety disorder'],
-        answer: 2, explain: 'The textbook uses NFL player <strong>Ricky Williams</strong> to illustrate <strong>social anxiety disorder</strong> — intense fear of social or performance scrutiny.' },
-
-      { q: 'In panic disorder, cognitive-behavioral theorists say sufferers:', type:'standard',
-        options: ['Repress childhood memories','Misinterpret bodily sensations as catastrophic','Have too much GABA','Lack social skills','Have an overactive parasympathetic system'],
-        answer: 1, explain: 'CB theorists argue panic sufferers <strong>catastrophically misinterpret</strong> normal bodily sensations (e.g., a racing heart) as signs of disaster, which fuels the panic spiral.' },
-
-      { q: 'In OCD, the repetitive behaviors performed to reduce anxiety are called:', type:'standard',
-        options: ['Obsessions','Compulsions','Delusions','Phobias','Intrusions'],
-        answer: 1, explain: '<strong>Obsessions</strong> are intrusive thoughts; <strong>compulsions</strong> are the repetitive behaviors or mental acts performed to relieve the anxiety those obsessions cause.' },
-
-      { q: 'Which neurotransmitter is most implicated in OCD?', type:'standard',
-        options: ['GABA','Dopamine','Serotonin','Acetylcholine','Norepinephrine'],
-        answer: 2, explain: 'Low <strong>serotonin</strong> activity (plus abnormal activity in the orbitofrontal cortex and caudate) is most implicated in OCD; SSRIs are a first-line medication.' },
-
-      { q: 'What does ERP, the signature OCD treatment, stand for?', type:'standard',
-        options: ['Emotional Response Processing','Exposure and Response Prevention','Extended Recovery Program','Exposure and Relaxation Practice','Exposure and Reinforcement Protocol'],
-        answer: 1, explain: '<strong>ERP = Exposure and Response Prevention</strong>: the person faces anxiety triggers (exposure) while refraining from the compulsive ritual (response prevention), breaking the obsession–compulsion cycle.' },
-
-      { q: 'Which is one of the four OCD-related disorders?', type:'standard',
-        options: ['Panic disorder','Hoarding disorder','PTSD','Dissociative amnesia','Social anxiety disorder'],
-        answer: 1, explain: 'The four OCD-related disorders are <strong>hoarding disorder</strong>, hair-pulling (trichotillomania), skin-picking (excoriation), and body dysmorphic disorder.' },
-
-      { q: 'Which OCD-related disorder is brand new to the DSM-5 with no DSM-IV equivalent?', type:'standard',
-        options: ['Trichotillomania','Hoarding disorder','Excoriation (skin-picking) disorder','Body dysmorphic disorder','Obsessive-compulsive disorder'],
-        answer: 2, explain: '<strong>Excoriation (skin-picking) disorder</strong> was added as an entirely new diagnosis in DSM-5. Trichotillomania and body dysmorphic disorder existed in DSM-IV; excoriation did not.' },
-
-      { q: 'Trichotillomania moved from Impulse-Control Disorders in DSM-IV to which DSM-5 category?', type:'standard',
-        options: ['Anxiety Disorders','Obsessive-Compulsive and Related Disorders','Dissociative Disorders','Mood Disorders','Impulse-Control Disorders'],
-        answer: 1, explain: 'In DSM-IV, trichotillomania (hair-pulling) sat under Impulse-Control Disorders; DSM-5 moved it into the new <strong>Obsessive-Compulsive and Related Disorders</strong> category.' },
-
-      { q: 'Why do two people react differently to the same stressor?', type:'standard',
-        options: ['One is older','Mainly how they appraise the stressor and their coping resources','The weather','Random chance only','Only their genetic makeup'],
-        answer: 1, explain: 'The stress response depends on how a person <strong>appraises</strong> the event and their perceived ability and resources to cope — so the same stressor affects people differently.' },
-
-      { q: 'The main difference between acute stress disorder and PTSD is:', type:'standard',
-        options: ['The type of trauma','Duration of symptoms (under 1 month vs. more than 1 month)','The person\'s age','One is physical, one is mental','Whether medication is required'],
-        answer: 1, explain: 'ASD and PTSD share nearly identical symptoms; the key difference is <strong>duration</strong> — ASD lasts up to 1 month (from ~3 days), while PTSD persists <strong>more than 1 month</strong>.' },
-
-      { q: 'Which is an exposure-based therapy used to treat PTSD?', type:'standard',
-        options: ['EMDR','Trephination','Free association','Systematic bloodletting','Dream analysis'],
-        answer: 0, explain: '<strong>EMDR</strong> (eye movement desensitization and reprocessing), along with flooding, is an exposure-based therapy used for PTSD.' },
-
-      { q: 'Which is one of the three main dissociative disorders?', type:'standard',
-        options: ['Panic disorder','Dissociative identity disorder','Hoarding disorder','Social anxiety disorder','Acute stress disorder'],
-        answer: 1, explain: 'The three main dissociative disorders are <strong>dissociative amnesia</strong> (including fugue), <strong>dissociative identity disorder</strong>, and <strong>depersonalization-derealization disorder</strong>.' },
-
-      { q: 'A person forgets an entire event but recalls some parts of it. This amnesia pattern is:', type:'standard',
-        options: ['Localized','Selective','Generalized','Continuous','Systematized'],
-        answer: 1, explain: '<strong>Selective</strong> amnesia = remembering some, but not all, events from a period. (Localized = all events in a period; generalized = extends back before the event; continuous = forgetting continues forward.)' },
-
-      { q: 'Dissociative fugue is best described as:', type:'standard',
-        options: ['Forgetting a single traumatic image','Forgetting plus traveling/fleeing, sometimes with a new identity','Feeling detached from one\'s body','Having multiple personalities','Reliving the trauma in flashbacks'],
-        answer: 1, explain: '<strong>Dissociative fugue</strong> is an extreme form of dissociative amnesia: the person forgets their identity and travels or flees, sometimes assuming a new identity.' },
-
-      { q: 'The MOST common relationship among subpersonalities in DID is:', type:'standard',
-        options: ['Mutually amnesic','Mutually cognizant','One-way amnesic','Fully integrated','Co-conscious in all cases'],
-        answer: 2, explain: '<strong>One-way amnesic</strong> relationships are most common: some subpersonalities are aware of others, but the awareness is not mutual (the aware ones are "co-conscious").' },
-
-      { q: 'A major weakness in the research supporting explanations of DID is that:', type:'standard',
-        options: ['It relies heavily on case studies','It uses too many control groups','It is all done on animals','It ignores biology entirely','It uses only double-blind experiments'],
-        answer: 0, explain: 'Support for the leading explanations of DID leans heavily on <strong>case studies</strong>, which are hard to generalize and cannot establish cause and effect.' },
-
-      { q: 'Which is one of the three key goals of DID treatment?', type:'standard',
-        options: ['Increase the number of subpersonalities','Integrate/fuse the subpersonalities into one identity','Encourage amnesia','Avoid recovering memories','Strengthen the host against the others'],
-        answer: 1, explain: 'The three treatment goals are recognizing the disorder, recovering memories, and <strong>integrating (fusing)</strong> the subpersonalities into one unified identity.' },
-
-      { q: 'What feature separates depersonalization-derealization disorder from psychosis?', type:'standard',
-        options: ['The person has hallucinations','Reality testing stays intact; the person knows the unreal feeling is a perception','It only happens in children','It cannot be treated','It always includes multiple identities'],
-        answer: 1, explain: 'In depersonalization-derealization disorder, <strong>reality testing stays intact</strong> — the person knows the sense of unreality is a subjective perception, not fact, unlike in psychosis.' }
-    ]
-  },
-  {
-    id: 'pol211-q6',
-    course: 'POL 211',
-    name: 'Quiz 6 — The Presidency (I)',
-    topic: 'The U.S. Presidency (OER Ch 3): powers & roles — practice',
-    questions: [
-      { q: 'Executive power is vested in the president by which article of the Constitution?', type:'standard',
-        options: ['Article I','Article II','Article III','The Bill of Rights','The Preamble'],
-        answer: 1, explain: '<strong>Article II</strong> vests executive power in the president. (Article I = Congress; Article III = the courts.)' },
-      { q: 'To be eligible for the presidency, a person must be at least ___ years old, a natural-born citizen, and a U.S. resident for ___ years.', type:'standard',
-        options: ['30; 9','35; 14','40; 10','25; 7','35; 9'],
-        answer: 1, explain: 'A president must be at least <strong>35</strong>, a <strong>natural-born citizen</strong>, and a U.S. resident for <strong>14</strong> years.' },
-      { q: 'As commander-in-chief, the president:', type:'standard',
-        options: ['May declare war unilaterally','Is the top civilian in charge of the armed forces','Commands only the National Guard','Needs Supreme Court approval to deploy troops','Appoints all officers without Senate input'],
-        answer: 1, explain: 'The president leads the military as its top <strong>civilian</strong> commander, but only <strong>Congress</strong> can declare war.' },
-      { q: 'The president\'s power to reject a bill and return it to Congress with objections is the:', type:'standard',
-        options: ['Line-item veto','Regular veto','Pocket veto','Executive privilege','Override'],
-        answer: 1, explain: 'The <strong>(regular) veto</strong> returns a bill with objections; Congress can override with a two-thirds vote in both chambers.' },
-      { q: 'A congressional override of a presidential veto requires:', type:'standard',
-        options: ['A simple majority in both chambers','A two-thirds vote in both chambers','A three-fifths Senate vote','A unanimous vote','The president\'s consent'],
-        answer: 1, explain: 'Overriding a veto takes <strong>two-thirds of both the House and the Senate</strong>.' },
-      { q: 'A "pocket veto" occurs when:', type:'standard',
-        options: ['The president signs a bill without comment','The president takes no action and Congress adjourns within 10 days, killing the bill','Congress overrides a veto','The president cancels part of a bill','The Court strikes down a law'],
-        answer: 1, explain: 'If the president neither signs nor returns a bill within 10 days and <strong>Congress adjourns</strong> in that window, the bill dies — a <strong>pocket veto</strong>, which cannot be overridden.' },
-      { q: 'The president\'s power to grant clemency for federal crimes is the power to:', type:'standard',
-        options: ['Impeach','Pardon','Filibuster','Indict','Veto'],
-        answer: 1, explain: 'The <strong>pardon</strong> power (Article II) grants clemency for federal offenses.' },
-      { q: 'A presidential directive that manages the executive branch and carries the force of law without congressional approval is a(n):', type:'standard',
-        options: ['Treaty','Executive order','Joint resolution','Constitutional amendment','Writ of certiorari'],
-        answer: 1, explain: 'An <strong>executive order</strong> directs the executive branch with the force of law, though courts or later presidents can undo it.' },
-      { q: 'Proposing legislation and delivering the State of the Union reflect the president\'s role as:', type:'standard',
-        options: ['Chief diplomat','Chief legislator','Commander-in-chief','Chief of state','Chief justice'],
-        answer: 1, explain: 'Setting the legislative agenda casts the president as <strong>chief legislator</strong>.' },
-      { q: 'Using the visibility and prestige of the office to rally public support for an agenda is called using the:', type:'standard',
-        options: ['Bully pulpit','Line-item veto','Executive privilege','Pocket veto','Franking privilege'],
-        answer: 0, explain: 'The <strong>bully pulpit</strong> is the president\'s use of public visibility to pressure Congress and shape opinion.' },
-      { q: 'A treaty the president negotiates takes effect only with the approval of:', type:'standard',
-        options: ['A majority of the House','Two-thirds of the Senate','The Supreme Court','A majority of the states','The Cabinet'],
-        answer: 1, explain: '<strong>Article II</strong> requires the advice and consent of <strong>two-thirds of the Senate</strong> to ratify a treaty.' },
-      { q: 'All of the following are formal (constitutional) powers of the president EXCEPT:', type:'except',
-        options: ['Vetoing legislation','Granting pardons','Nominating federal judges','Declaring war','Making treaties with Senate consent'],
-        answer: 3, explain: '<strong>Declaring war is Congress\'s power</strong> (Article I). The president commands the military but cannot declare war.' }
-    ]
-  },
-  {
-    id: 'pol211-q7',
-    course: 'POL 211',
-    name: 'Quiz 7 — The Presidency (II)',
-    topic: 'The U.S. Presidency (OER Ch 3): checks, succession & the office — practice',
-    questions: [
-      { q: 'An agreement with a foreign nation made by the president WITHOUT Senate ratification is a(n):', type:'standard',
-        options: ['Treaty','Executive agreement','Pardon','Veto','Writ'],
-        answer: 1, explain: 'An <strong>executive agreement</strong> needs no Senate vote, but (unlike a treaty) a later president can reverse it.' },
-      { q: 'The 22nd Amendment limits the president to:', type:'standard',
-        options: ['One term','Two elected terms','Three terms','No limit','A single six-year term'],
-        answer: 1, explain: 'The <strong>22nd Amendment</strong> caps a president at <strong>two elected terms</strong> (ratified after FDR\'s four).' },
-      { q: 'The 25th Amendment deals primarily with:', type:'standard',
-        options: ['Presidential succession and disability','Treaty ratification','The line-item veto','Term limits','Campaign finance'],
-        answer: 0, explain: 'The <strong>25th Amendment</strong> covers presidential <strong>succession, disability, and filling a VP vacancy</strong>.' },
-      { q: 'If the president dies, resigns, or is removed, who succeeds first?', type:'standard',
-        options: ['Speaker of the House','President pro tempore of the Senate','Secretary of State','The Vice President','The Chief Justice'],
-        answer: 3, explain: 'The <strong>Vice President</strong> is first in the line of succession, followed by the Speaker of the House.' },
-      { q: 'In the impeachment process, the House ______ and the Senate ______.', type:'standard',
-        options: ['convicts; impeaches','impeaches; tries and convicts','indicts; sentences','tries; impeaches','impeaches; pardons'],
-        answer: 1, explain: 'The <strong>House impeaches</strong> (brings charges by majority vote); the <strong>Senate tries</strong> the case and can convict.' },
-      { q: 'Conviction and removal of a president in an impeachment trial requires:', type:'standard',
-        options: ['A majority of the Senate','Two-thirds of the Senate','Two-thirds of the House','A unanimous Senate','A Supreme Court ruling'],
-        answer: 1, explain: 'Removal requires a <strong>two-thirds vote of the Senate</strong> to convict.' },
-      { q: 'The president\'s right to withhold certain communications from Congress or the courts is called:', type:'standard',
-        options: ['Executive privilege','Executive order','Executive agreement','Signing statement','The bully pulpit'],
-        answer: 0, explain: '<strong>Executive privilege</strong> is the (limited) power to keep some executive communications confidential.' },
-      { q: 'The cluster of agencies that directly support the president (OMB, NSC, and others) is the:', type:'standard',
-        options: ['Cabinet','Executive Office of the President','Congress','Supreme Court','Federal Reserve'],
-        answer: 1, explain: 'The <strong>Executive Office of the President (EOP)</strong> houses the agencies and staff that serve the president directly.' },
-      { q: 'The heads of the executive departments who advise the president form the:', type:'standard',
-        options: ['Cabinet','Electoral College','Joint Chiefs of Staff','White House Press Corps','National Security Council'],
-        answer: 0, explain: 'The <strong>Cabinet</strong> is made up of the department secretaries (plus other officials the president designates).' },
-      { q: 'The 1973 law meant to limit the president\'s ability to commit troops without congressional authorization is the:', type:'standard',
-        options: ['Patriot Act','War Powers Resolution','Espionage Act','Neutrality Act','Gulf of Tonkin Resolution'],
-        answer: 1, explain: 'The <strong>War Powers Resolution (1973)</strong> requires the president to notify Congress and limits deployments without authorization.' },
-      { q: 'A comment a president issues when signing a bill, stating how it will be interpreted or enforced, is a:', type:'standard',
-        options: ['Signing statement','Pocket veto','Executive order','Line-item veto','Amicus brief'],
-        answer: 0, explain: 'A <strong>signing statement</strong> records the president\'s interpretation of a law at signing.' },
-      { q: 'The line-item veto — letting a president cancel individual parts of a spending bill — was:', type:'standard',
-        options: ['Upheld by the Supreme Court','Declared unconstitutional in Clinton v. City of New York (1998)','Added by the 25th Amendment','Never proposed','Granted to governors by the Constitution'],
-        answer: 1, explain: 'In <em>Clinton v. City of New York</em> (1998) the Supreme Court struck down the federal <strong>line-item veto</strong> as unconstitutional.' }
-    ]
-  },
-  {
-    id: 'pol211-q8',
-    course: 'POL 211',
-    name: 'Quiz 8 — The Courts',
-    topic: 'The Federal and State Courts (OER Ch 4) — practice',
-    questions: [
-      { q: 'The power of courts to declare a law or executive action unconstitutional is called:', type:'standard',
-        options: ['Judicial restraint','Judicial review','Senatorial courtesy','Original jurisdiction','Stare decisis'],
-        answer: 1, explain: '<strong>Judicial review</strong> — the power to strike down laws that conflict with the Constitution — was established in <em>Marbury v. Madison</em> (1803).' },
-      { q: 'The principle of judicial review was established in the case of:', type:'standard',
-        options: ['Marbury v. Madison','McCulloch v. Maryland','Gibbons v. Ogden','Brown v. Board of Education','Dred Scott v. Sandford'],
-        answer: 0, explain: 'In <strong>Marbury v. Madison (1803)</strong>, Chief Justice John Marshall asserted the Supreme Court\'s power to review and invalidate acts that violate the Constitution.' },
-      { q: 'Federal judges, including Supreme Court justices, are:', type:'standard',
-        options: ['Elected by the voters','Nominated by the president and confirmed by the Senate','Appointed directly by Congress','Chosen by the state legislatures','Selected by the Chief Justice'],
-        answer: 1, explain: 'The president <em>nominates</em> and the <strong>Senate confirms</strong> federal judges.' },
-      { q: 'Federal judges hold their offices:', type:'standard',
-        options: ['For four-year terms','For ten-year terms','During "good behavior" — effectively for life','Until age 70','For renewable six-year terms'],
-        answer: 2, explain: '<strong>Article III</strong> gives judges tenure "during good behavior" — in practice a <strong>life appointment</strong> that shields them from political pressure.' },
-      { q: 'A court\'s authority to hear a case for the first time, before any appeal, is:', type:'standard',
-        options: ['Appellate jurisdiction','Original jurisdiction','Concurrent jurisdiction','Exclusive jurisdiction','Judicial review'],
-        answer: 1, explain: '<strong>Original jurisdiction</strong> = the power to hear a case first (trial). <em>Appellate</em> jurisdiction = the power to review a lower court\'s decision.' },
-      { q: 'The three tiers of the federal court system, from lowest to highest, are:', type:'standard',
-        options: ['District courts → courts of appeals → Supreme Court','Courts of appeals → district courts → Supreme Court','Supreme Court → circuit courts → district courts','State courts → district courts → Supreme Court','Magistrate courts → district courts → courts of appeals'],
-        answer: 0, explain: 'Cases start in <strong>U.S. district courts</strong> (trial), may be appealed to the <strong>courts of appeals (circuits)</strong>, then to the <strong>Supreme Court</strong>.' },
-      { q: 'Deciding cases based on precedent — letting prior rulings stand — is the principle of:', type:'standard',
-        options: ['Judicial review','Stare decisis','Senatorial courtesy','Habeas corpus','Original jurisdiction'],
-        answer: 1, explain: '<strong>Stare decisis</strong> ("let the decision stand") means courts follow <em>precedent</em>, promoting stability and predictability.' },
-      { q: 'When the Supreme Court agrees to hear a case, it issues a:', type:'standard',
-        options: ['Writ of habeas corpus','Writ of certiorari','Writ of mandamus','Injunction','Amicus brief'],
-        answer: 1, explain: 'A <strong>writ of certiorari</strong> orders a lower court to send up the case; the Court grants "cert" at its discretion (the "rule of four").' },
-      { q: 'The United States has a "dual court system," which means:', type:'standard',
-        options: ['There are two Supreme Courts','There are separate federal and state court systems','Every case is automatically heard twice','Civil and criminal courts are entirely separate','Trial and appellate courts never overlap'],
-        answer: 1, explain: 'The <strong>dual court system</strong> = parallel <strong>federal</strong> and <strong>state</strong> court systems, each with its own trial and appellate levels.' },
-      { q: 'A judge who believes courts should defer to the elected branches and rarely overturn laws is practicing:', type:'standard',
-        options: ['Judicial activism','Judicial review','Judicial restraint','Senatorial courtesy','Jurisprudence'],
-        answer: 2, explain: '<strong>Judicial restraint</strong> favors deference to the legislature; <em>judicial activism</em> is more willing to strike down laws or set new policy.' },
-      { q: 'A brief filed by an interested party who is not one of the litigants is a(n):', type:'standard',
-        options: ['Amicus curiae ("friend of the court") brief','Writ of certiorari','Majority opinion','Dissenting opinion','Per curiam opinion'],
-        answer: 0, explain: 'An <strong>amicus curiae</strong> brief lets outside groups offer arguments to influence the Court\'s decision.' },
-      { q: 'All of the following are true of the U.S. Supreme Court EXCEPT:', type:'except',
-        options: ['It has nine justices','Its justices have life tenure','It has both original and appellate jurisdiction','Its justices are elected to six-year terms','It is the highest court in the nation'],
-        answer: 3, explain: 'Justices are <strong>appointed</strong> for life (nominated by the president, confirmed by the Senate) — <strong>not elected</strong> to terms.' }
-    ]
-  },
-  {
-    id: 'pol211-q9',
-    course: 'POL 211',
-    name: 'Quiz 9 — Parties & Interest Groups',
-    topic: 'Political Parties and Interest Groups — practice',
-    questions: [
-      { q: 'A group that shares policy goals and organizes to win elections and control government is a:', type:'standard',
-        options: ['Interest group','Political party','Political action committee','Bureaucracy','Faction'],
-        answer: 1, explain: 'A <strong>political party</strong> runs candidates under a shared label to <em>win elections and control government</em> — unlike an interest group, which runs no candidates.' },
-      { q: 'The three components of a U.S. political party are the party in the electorate, the party organization, and the party in ______.', type:'standard',
-        options: ['the media','government','the courts','the bureaucracy','the interest groups'],
-        answer: 1, explain: 'The <strong>party in government</strong> — its elected officials — joins the party in the electorate (voters) and the party organization.' },
-      { q: 'The main structural reason the U.S. has a two-party system is:', type:'standard',
-        options: ['Proportional representation','Single-member districts with winner-take-all elections','A constitutional requirement for two parties','Compulsory voting','Multimember districts'],
-        answer: 1, explain: '<strong>Single-member, winner-take-all districts</strong> (Duverger\'s law) reward only first-place finishers, squeezing out third parties.' },
-      { q: 'A lasting shift in the party loyalties of the electorate is called a:', type:'standard',
-        options: ['Realignment','Primary','Caucus','Coalition','Filibuster'],
-        answer: 0, explain: 'A <strong>realignment</strong> is a durable change in which groups back which party, often around a critical election.' },
-      { q: 'In U.S. elections, third parties most often function to:', type:'standard',
-        options: ['Win the presidency','Raise issues and act as "spoilers" that pull votes from a major party','Control Congress','Appoint federal judges','Run the primary elections'],
-        answer: 1, explain: 'Third parties rarely win but <strong>introduce issues</strong> and can act as <strong>spoilers</strong>, drawing votes that affect which major party wins.' },
-      { q: 'An organization that seeks to influence policy WITHOUT running its own candidates for office is a(n):', type:'standard',
-        options: ['Political party','Interest group','Electoral college','Caucus','Coalition'],
-        answer: 1, explain: 'An <strong>interest group</strong> pursues policy goals by influencing officials and the public — it fields no candidates of its own.' },
-      { q: 'The effort to persuade government officials to support a particular policy is called:', type:'standard',
-        options: ['Filibustering','Lobbying','Gerrymandering','Logrolling','Casework'],
-        answer: 1, explain: '<strong>Lobbying</strong> is direct advocacy to lawmakers and officials on behalf of an interest.' },
-      { q: 'A Political Action Committee (PAC) primarily:', type:'standard',
-        options: ['Nominates presidential candidates','Raises and contributes money to campaigns','Writes federal legislation','Confirms federal judges','Conducts the census'],
-        answer: 1, explain: 'A <strong>PAC</strong> collects contributions and donates to campaigns to influence elections and policy.' },
-      { q: 'The theory that competition among many interest groups yields policy roughly serving the public interest is:', type:'standard',
-        options: ['Elitism','Pluralism','Federalism','Populism','Corporatism'],
-        answer: 1, explain: '<strong>Pluralism</strong> holds that many competing groups bargain, so no single interest dominates.' },
-      { q: 'The "free-rider problem" for interest groups refers to:', type:'standard',
-        options: ['People who enjoy a group\'s benefits without joining or paying','Lobbyists who accept bribes','Candidates who switch parties','Citizens who fail to vote','PACs that exceed contribution limits'],
-        answer: 0, explain: 'The <strong>free-rider problem</strong>: because a group\'s policy wins benefit everyone, individuals are tempted <em>not</em> to contribute yet still gain.' },
-      { q: 'All of the following are functions of political parties EXCEPT:', type:'except',
-        options: ['Recruiting and nominating candidates','Mobilizing voters to turn out','Organizing the government of officeholders','Officially certifying election results','Giving candidates a recognizable label/brand'],
-        answer: 3, explain: '<strong>Certifying election results</strong> is a job of government election officials, not of the parties.' }
-    ]
-  },
-  {
-    id: 'pol211-q10',
-    course: 'POL 211',
-    name: 'Quiz 10 — Public & Foreign Policy',
-    topic: 'Introduction to Public and Foreign Policy (OER Ch 6) — practice',
-    questions: [
-      { q: 'A foreign policy that seeks to avoid entanglement in other nations\' affairs is called:', type:'standard',
-        options: ['Internationalism','Isolationism','Interventionism','Containment','Détente'],
-        answer: 1, explain: '<strong>Isolationism</strong> avoids alliances and involvement abroad; <em>internationalism</em> favors active engagement.' },
-      { q: 'The primary foreign-policy tool of negotiation and dialogue between nations is:', type:'standard',
-        options: ['War','Diplomacy','Tariffs','Judicial review','The filibuster'],
-        answer: 1, explain: '<strong>Diplomacy</strong> — managing relations through negotiation — is the first-line tool of foreign policy.' },
-      { q: 'A formal international agreement that requires approval by two-thirds of the U.S. Senate is a:', type:'standard',
-        options: ['Executive agreement','Treaty','Joint resolution','Proclamation','Memorandum of understanding'],
-        answer: 1, explain: 'Under <strong>Article II</strong>, <strong>treaties</strong> require the advice and consent of <strong>two-thirds of the Senate</strong>.' },
-      { q: 'An executive agreement differs from a treaty in that it:', type:'standard',
-        options: ['Requires two-thirds Senate approval','Does not require Senate approval','Must be approved by the House','Is always permanent','Requires Supreme Court review'],
-        answer: 1, explain: 'An <strong>executive agreement</strong> is made by the president <em>without</em> Senate ratification (though a later president can reverse it).' },
-      { q: '"Hard" foreign-policy tools — as opposed to soft diplomacy — include:', type:'standard',
-        options: ['Cultural exchange programs','Foreign aid grants','Economic sanctions and military force','Treaty negotiations','State visits'],
-        answer: 2, explain: '<strong>Sanctions and military force</strong> are coercive ("hard") tools; diplomacy, aid, and exchange are "soft" tools.' },
-      { q: 'Policy that transfers resources from one group to another (e.g., via taxes and social programs) is:', type:'standard',
-        options: ['Distributive policy','Redistributive policy','Regulatory policy','Foreign policy','Monetary policy'],
-        answer: 1, explain: '<strong>Redistributive</strong> policy shifts resources between groups (e.g., progressive taxes funding welfare).' },
-      { q: 'Policy that provides benefits or subsidies to specific groups — often criticized as "pork" — is:', type:'standard',
-        options: ['Redistributive policy','Distributive policy','Regulatory policy','Monetary policy','Foreign policy'],
-        answer: 1, explain: '<strong>Distributive</strong> policy spreads benefits to particular groups or districts (grants, subsidies, earmarks).' },
-      { q: 'Programs such as Social Security and Medicare, which people are legally guaranteed if they qualify, are:', type:'standard',
-        options: ['Discretionary spending','Entitlements','Block grants','Earmarks','Categorical grants'],
-        answer: 1, explain: '<strong>Entitlements</strong> are mandatory-spending programs paid to anyone who meets the eligibility criteria.' },
-      { q: 'During the Cold War, the U.S. strategy of stopping the spread of communism was known as:', type:'standard',
-        options: ['Containment','Appeasement','Isolationism','Manifest destiny','Détente'],
-        answer: 0, explain: '<strong>Containment</strong> aimed to keep communism from expanding beyond where it already existed.' },
-      { q: 'All of the following are major actors in U.S. foreign policy EXCEPT:', type:'except',
-        options: ['The president','The Department of State','The Department of Defense','The National Security Council','The U.S. Postal Service'],
-        answer: 4, explain: 'The <strong>Postal Service</strong> has no foreign-policy role; the president, State, Defense, and the NSC are central foreign-policy actors.' }
-    ]
-  }
+  // Summer 2026 entries removed 2026-11-23 (courses finished; recoverable from git history before this commit)
 ];
 
 // ============================================
 // STUDY RESOURCES  (reference material embedded in the app — non-quiz)
 // ============================================
-/*
-  Study resources are read-only reference content shown on the Study page below
-  the quizzes. Add PRACTICE material we author here with the shape:
-  { id, course, name, kind, tag, chapters:[{ n, qs:[strings] }] }.
-
-  IMPORTANT (privacy rule): real course-provided material — exam questions,
-  the professor's actual assignment/chapter questions, anything literally from
-  the course — must NOT live here, because this repo is PUBLIC. Keep that
-  content LOCAL only (see ~/Downloads study folder). This array holds
-  practice-only content. (SOC 205 chapter questions were removed 2026-07-02.)
-*/
-const STUDY_RESOURCES = [];
-
 /* ============================================================
-   STUDY + QUIZ FUNCTIONS (existing — do not change)
+   STUDY + QUIZ FUNCTIONS 
    ============================================================ */
 let activeQuiz=null, quizOrder=[], quizAnswers=[], quizGraded=false;
-
-function renderStudy() {
-  closeQuiz();
-  const listEl = document.getElementById('quiz-list');
-  document.getElementById('study-sub').textContent = "Practice quizzes & study resources";
-
-  let html = '';
-
-  // ---- Practice quizzes (interactive MC) ----
-  html += `<div class="section-label">📝 Practice Quizzes</div>`;
-  if (!QUIZ_BANK.length) {
-    html += `<div class="card" style="text-align:center; color:var(--text2);">No practice quizzes yet.</div>`;
-  } else {
-    const byCourse = {};
-    QUIZ_BANK.forEach(qz => { (byCourse[qz.course] = byCourse[qz.course] || []).push(qz); });
-    Object.keys(byCourse).forEach(course => {
-      byCourse[course].forEach(qz => {
-        const best = state.quizScores?.[qz.id];
-        const total = qz.questions.length;
-        const bestPct = best != null ? Math.round((best / total) * 100) : null;
-        const bestColor = bestPct == null ? 'var(--text3)' : bestPct >= 80 ? 'var(--green)' : bestPct >= 60 ? 'var(--yellow)' : 'var(--red)';
-        html += `
-          <div class="quiz-card" onclick="openQuiz('${qz.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(course)};">
-            <div class="quiz-card-head">
-              <div>
-                <div class="quiz-card-title">${course} · ${qz.name}</div>
-                <div class="quiz-card-sub">${qz.topic}</div>
-              </div>
-              <div class="quiz-best" style="color:${bestColor};">${best != null ? best + '/' + total : '—'}</div>
-            </div>
-            <div class="quiz-meta">${total} questions · 5 options each${bestPct != null ? ' · best ' + bestPct + '%' : ' · not attempted'}</div>
-          </div>`;
-      });
-    });
-  }
-
-  // ---- Study resources (read-only reference: chapter questions, guides) ----
-  if (typeof STUDY_RESOURCES !== 'undefined' && STUDY_RESOURCES.length) {
-    html += `<div class="section-label" style="margin-top:12px;">📄 Study Resources</div>`;
-    STUDY_RESOURCES.forEach(r => {
-      const nq = r.chapters.reduce((s, c) => s + c.qs.length, 0);
-      html += `
-        <div class="quiz-card" onclick="toggleResource('${r.id}')" style="cursor:pointer; border-left:3px solid ${courseColor(r.course)};">
-          <div class="quiz-card-head">
-            <div>
-              <div class="quiz-card-title">${r.course} · ${r.name}</div>
-              <div class="quiz-card-sub">${r.kind}${r.tag ? ' · ' + r.tag : ''}</div>
-            </div>
-            <div class="quiz-best" id="res-caret-${r.id}" style="color:var(--text3);">▸</div>
-          </div>
-          <div class="quiz-meta">${r.chapters.length} chapters · ${nq} questions</div>
-          <div id="res-body-${r.id}" style="display:none; margin-top:10px;" onclick="event.stopPropagation()">${renderResourceBody(r)}</div>
-        </div>`;
-    });
-  }
-
-  listEl.innerHTML = html;
-}
-
-function renderResourceBody(r) {
-  return r.chapters.map(c => `
-    <div style="margin-bottom:12px;">
-      <div style="font-weight:700; font-size:13px; color:var(--text); margin-bottom:6px; font-family:'JetBrains Mono',monospace;">Chapter ${c.n}</div>
-      <ol style="margin:0; padding-left:18px; color:var(--text2); font-size:13px; line-height:1.55;">
-        ${c.qs.map(q => `<li style="margin-bottom:5px;">${q}</li>`).join('')}
-      </ol>
-    </div>`).join('');
-}
-
-function toggleResource(id) {
-  const body = document.getElementById('res-body-' + id);
-  const caret = document.getElementById('res-caret-' + id);
-  if (!body) return;
-  const open = body.style.display !== 'none';
-  body.style.display = open ? 'none' : 'block';
-  if (caret) caret.textContent = open ? '▸' : '▾';
-}
 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -3015,7 +2122,6 @@ function openQuiz(id) {
   document.getElementById('quiz-list').style.display = 'none';
   document.getElementById('quiz-runner').style.display = 'block';
   document.getElementById('quiz-back-btn').style.display = 'inline-block';
-  document.getElementById('study-sub').textContent = activeQuiz.name;
   document.getElementById('quiz-result-wrap').innerHTML = '';
   document.getElementById('quiz-submit-wrap').style.display = 'flex';
   renderQuizQuestions();
@@ -3114,7 +2220,7 @@ function submitQuiz() {
     </div>
     <div class="quiz-actions">
       <button class="btn" onclick="openQuiz('${activeQuiz.id}')">↻ Retake (reshuffle)</button>
-      <button class="btn btn-primary" onclick="renderStudy()">✓ Done</button>
+      <button class="btn btn-primary" onclick="closeQuiz();renderTutorBody(openCourse)">✓ Done</button>
     </div>`;
 
   renderQuizQuestions();
@@ -3126,13 +2232,10 @@ function submitQuiz() {
    ============================================================ */
 buildNav();
 loadState();
-initFiles();
 renderDashboard();
 updateClock();
 setInterval(updateClock, 60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateClock();}); // timers pause while a PWA is backgrounded
-if(document.getElementById("all-grades-list")) renderGrades();
-updateGradeCategories();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js');

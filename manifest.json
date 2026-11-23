@@ -1,11 +1,11 @@
 {
   "name": "Academic Command Center",
   "short_name": "Acad CC",
-  "description": "Michael Maxwell · MWCC Summer 2026",
+  "description": "Michael Maxwell · MWCC",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d0d",
-  "theme_color": "#a855f7",
+  "background_color": "#F4F5F7",
+  "theme_color": "#F4F5F7",
   "orientation": "portrait",
   "icons": [
     {
